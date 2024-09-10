@@ -8,10 +8,6 @@
 
 class BattleMove
 {
-public:
-    std::function<void()> DamageCalculator;
-    std::function<void()> SideEffect;
-
 protected:
     char *name;
     enum BattleElement Element;
@@ -20,13 +16,21 @@ protected:
 
 class BattleMovePassive : public BattleMove
 {
+public:
+    std::function<void()> Effect;
+
 private:
     int TurnDelay;
 };
 
 class BattleMoveActive : public BattleMove
 {
+public:
+    std::function<void()> DamageCalculator;
+    std::function<void()> SideEffect;
+
     // TODO: Les getters arrivent fort
+
 private:
     int Cost;
     bool IsBaseMove;

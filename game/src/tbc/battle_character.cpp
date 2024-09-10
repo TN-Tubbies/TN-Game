@@ -83,3 +83,46 @@ int BattleCharacter::GetDef()
 // ------------------------------------------------------------------------------------------------
 
 int TakeDamage();
+
+// ------------------------------------------------------------------------------------------------
+// BATTLE CHARACTER RELATED FUNCTIONS -------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
+
+std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> array)
+{
+    int length = array.size();
+    std::vector<std::vector<int>> unsorted(length);
+
+    for (int i = 0; i < length; i++)
+    {
+        std::vector<int> token(2);
+        token.push_back(i);
+        token.push_back(array[i].GetSpeed());
+        unsorted.push_back(token);
+    }
+
+    std::vector<std::vector<int>> sorted(length);
+    while (unsorted.size() > 0)
+    {
+        int max = 0;
+        int maxIndex = -1;
+        for (int i = 0; i < unsorted.size(); i++)
+        {
+            if (unsorted[i][1] > max)
+            {
+                max = unsorted[i][1];
+                maxIndex = i;
+            }
+        }
+        sorted.push_back(unsorted[maxIndex]);
+        unsorted.erase(unsorted.begin() + maxIndex);
+    }
+
+    std::vector<BattleCharacter> res(length);
+    for (int i = 0; i < sorted.size(); i++)
+    {
+        res.push_back(array[sorted[i][0]]);
+    }
+
+    return res;
+}

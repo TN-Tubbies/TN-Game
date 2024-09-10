@@ -5,9 +5,9 @@
 #include "battle_enumerators.h"
 #include "battle_move.h"
 
-#include <functional>
 #include <stdio.h>
 #include <string.h>
+#include <vector>
 
 // HP MaxHP Speed Atk Def + affinités de type
 
@@ -82,5 +82,7 @@ public:
     int GetSpeed();
     int GetDef();
 };
+
+std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> array);
 
 #endif
