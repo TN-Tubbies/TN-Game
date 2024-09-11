@@ -19,6 +19,7 @@ Battle_System *StartBattle(std::vector<BattleCharacter> playableCharacters, std:
     std::vector<BattleCharacter> merged(playableCharacters.size() + enemyCharacters.size());
     merge(playableCharacters.begin(), playableCharacters.end(), enemyCharacters.begin(), enemyCharacters.end(), merged.begin());
     NewBattle->currentCharacterOrder = merged;
+    NewBattle->battlefield = merged;
     return NewBattle;
 }
 

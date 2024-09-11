@@ -1,12 +1,12 @@
 #ifndef BATTLE_CHARACTER_H
 #define BATTLE_CHARACTER_H
 
-#include "battle_declarations.h"
-#include "battle_enumerators.h"
+#include "../battle_declarations.h"
+#include "../battle_enumerators.h"
 #include "battle_move.h"
 
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <vector>
 
 // HP MaxHP Speed Atk Def + affinités de type
@@ -24,7 +24,7 @@
 class BattleCharacter
 {
 protected:
-    char *name;
+    std::string name;
     enum CharacterType Type;
     enum BattleElement Element;
 
@@ -51,9 +51,9 @@ public:
     BattleMove Passive2;
 
     // Construct
+    BattleCharacter() {};
     BattleCharacter(
-        const char *name,
-        int lengthOfName,
+        std::string name,
         enum CharacterType Type,
         enum BattleElement Element,
         int HP,
@@ -73,7 +73,7 @@ public:
     ~BattleCharacter();
 
     // Getters
-    char *GetName();
+    std::string GetName();
     enum CharacterType GetType();
     enum BattleElement GetElement();
     int GetHP();
@@ -81,6 +81,8 @@ public:
     int GetAtk();
     int GetSpeed();
     int GetDef();
+
+    void TakeDamage(int damage);
 };
 
 std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> array);

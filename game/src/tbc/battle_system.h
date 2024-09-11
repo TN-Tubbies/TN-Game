@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "battle_enumerators.h"
-#include "battle_character.h"
+#include "components/battle_character.h"
 
 typedef struct _Battle_System
 {
@@ -22,6 +22,7 @@ typedef struct _Battle_System
     BattleCharacter *CurrentCharacter;
     std::vector<BattleCharacter> currentCharacterOrder;
 
+    std::vector<BattleCharacter> battlefield;
 } Battle_System;
 
 Battle_System *StartBattle(std::vector<BattleCharacter> playableCharacters, std::vector<BattleCharacter> enemyCharacters, int MaxTurnCount);

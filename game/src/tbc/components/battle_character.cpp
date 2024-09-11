@@ -3,8 +3,7 @@
 // ------------------------------------------------------------------------------------------------
 
 BattleCharacter::BattleCharacter(
-    const char *name,
-    int lengthOfName,
+    std::string name,
     enum CharacterType Type,
     enum BattleElement Element,
     int HP,
@@ -20,10 +19,7 @@ BattleCharacter::BattleCharacter(
     BattleMove Passive1,
     BattleMove Passive2)
 {
-    char *nameCpy = new char[lengthOfName];
-    strcpy(nameCpy, name);
-    this->name = nameCpy;
-
+    this->name = name;
     this->Type = Type;
     this->Element = Element;
     this->HP = HP;
@@ -42,12 +38,11 @@ BattleCharacter::BattleCharacter(
 
 BattleCharacter::~BattleCharacter()
 {
-    delete[] name;
 }
 
 // ------------------------------------------------------------------------------------------------
 
-char *BattleCharacter::GetName()
+std::string BattleCharacter::GetName()
 {
     return name;
 }
@@ -82,7 +77,17 @@ int BattleCharacter::GetDef()
 
 // ------------------------------------------------------------------------------------------------
 
-int TakeDamage();
+void BattleCharacter::TakeDamage(int damage)
+{
+    if (HP - damage < 0)
+    {
+        HP = 0;
+    }
+    else
+    {
+        HP -= damage;
+    }
+}
 
 // ------------------------------------------------------------------------------------------------
 // BATTLE CHARACTER RELATED FUNCTIONS -------------------------------------------------------------

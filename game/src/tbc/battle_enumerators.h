@@ -15,14 +15,21 @@ enum BattleTurnState
 // Move-related enumerators
 enum MoveTargetCategory
 {
+    MoveTargetCategory_None,
+    MoveTargetCategory_Self,
+    MoveTargetCategory_OneEnemy,
 };
 
 // Character-related enumerators
 enum BattleElement
 {
+    BattleElement_Null,
+    BattleElement_Physical,
+    BattleElement_Fire,
 };
 enum CharacterType
 {
+    CharacterType_DPS,
 };
 
 #endif
