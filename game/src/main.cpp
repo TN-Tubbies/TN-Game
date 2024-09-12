@@ -2,7 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
-#include "ui_init.h"
+#include "ui/ui_init.h"
 #include "defs.h"
 
 int main(void) {
@@ -11,6 +11,28 @@ int main(void) {
     Init_IMG();
     Init_MIX();
 
+    SDL_Texture *modernUI = ModernUILoad(renderer);
 
+    SDL_Event event;
+    int running = 1;
+
+    while (running) {
+        if (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    running = 0;
+                    continue;
+            }
+        }
+        //States update
+
+        // Rendering
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
+    }
+
+    SDL_DestroyTexture(modernUI);
+    TTF_CloseFont(jersey);
+    SDL_DestroyRenderer(renderer);
 }
 

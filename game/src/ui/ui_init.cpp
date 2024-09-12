@@ -4,7 +4,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include "ui_init.h"
-#include "defs.h"
+#include "../defs.h"
 
 SDL_Renderer *Init_SDL(void) {
     // SDL Initialisation //
@@ -39,7 +39,7 @@ TTF_Font* Init_TTF(void) {
     }
     atexit(TTF_Quit);
 
-    TTF_Font* jersey = TTF_OpenFont("assets/fonts/Jersey/Jersey20-Regular.ttf", 32);
+    TTF_Font* jersey = TTF_OpenFont("game/assets/fonts/Jersey/Jersey20-Regular.ttf", 32);
     if (jersey == NULL){
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load font: %s", TTF_GetError());
         exit(-1);
@@ -67,9 +67,12 @@ void Init_MIX(void) {
 }
 
 SDL_Texture* ModernUILoad(SDL_Renderer* renderer) {
-    SDL_Surface *ModernUI_full = IMG_Load("assets/art/tilesets/modernuserinterface-win/48x48/Modern_UI_Style_2_48x48.png");
+    SDL_Surface *ModernUI_full = IMG_Load("game/assets/images/modernuserinterface-win/48x48/Modern_UI_Style_2_48x48.png");
     if (ModernUI_full == NULL) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load image: %s", IMG_GetError());
+        exit(-1);
     }
     SDL_Texture *texModernUI_full = SDL_CreateTextureFromSurface(renderer, ModernUI_full);
+    SDL_FreeSurface(ModernUI_full);
+    return texModernUI_full;
 }
