@@ -33,11 +33,15 @@ enum BattleElement
     BattleElement_Grass,
     BattleElement_Wind,
     BattleElement_Earth,
-    BattleElement_Lightning
+    BattleElement_Lightening
 };
 enum CharacterType
 {
-    CharacterType_DPS,
+    CharacterType_Null,
+    CharacterType_Tank,
+    CharacterType_Healer,
+    CharacterType_Support,
+    CharacterType_DPS
 };
 enum CharacterStat
 {

@@ -34,6 +34,9 @@ BattleCharacter::BattleCharacter(
     this->Ultimate = Ultimate;
     this->Passive1 = Passive1;
     this->Passive2 = Passive2;
+
+    std::vector<BattleStatus> affectedStatus;
+    this->AffectedStatus = affectedStatus;
 }
 
 BattleCharacter::~BattleCharacter()
@@ -148,15 +151,15 @@ float BattleCharacter::GetElementReactionCoefficient(enum BattleElement Incoming
     {
         return low;
     }
-    else if (Element == BattleElement_Lightning && IncomingElement == BattleElement_Earth)
+    else if (Element == BattleElement_Lightening && IncomingElement == BattleElement_Earth)
     {
         return high;
     }
-    else if (Element == BattleElement_Lightning && IncomingElement == BattleElement_Lightning)
+    else if (Element == BattleElement_Lightening && IncomingElement == BattleElement_Lightening)
     {
         return low;
     }
-    else if (Element == BattleElement_Water && IncomingElement == BattleElement_Lightning)
+    else if (Element == BattleElement_Water && IncomingElement == BattleElement_Lightening)
     {
         return low;
     }
@@ -166,15 +169,16 @@ float BattleCharacter::GetElementReactionCoefficient(enum BattleElement Incoming
     }
 }
 
-void BattleCharacter::TakeDamage(int damage)
+void BattleCharacter::TakeDamage(int damage, enum BattleElement IncomingElement)
 {
-    if (HP - damage < 0)
+    int readDamage = (int)damage * GetElementReactionCoefficient(IncomingElement);
+    if (HP - readDamage < 0)
     {
         HP = 0;
     }
     else
     {
-        HP -= damage;
+        HP -= readDamage;
     }
 }
 
@@ -235,6 +239,22 @@ void BattleCharacter::ChangeStat(enum CharacterStat stat, int notch)
             break;
         default:
             break;
+        }
+    }
+}
+
+bool BattleCharacter::CheckIfAffected(BattleStatus status)
+{
+    return std::find(AffectedStatus.begin(), AffectedStatus.end(), status) != AffectedStatus.end();
+}
+void BattleCharacter::RemoveInactiveStatus()
+{
+    for (int i = 0; i < AffectedStatus.size(); i++)
+    {
+        if (!AffectedStatus[i].IsActive())
+        {
+            AffectedStatus.erase(AffectedStatus.begin() + i);
+            i--;
         }
     }
 }

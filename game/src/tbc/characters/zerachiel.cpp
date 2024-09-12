@@ -5,7 +5,7 @@ void ZerachielBaseMoveCalculator(std::vector<int> TargetID, std::vector<BattleCh
     for (int i = 0; i < TargetID.size(); i++)
     {
         BattleCharacter target = Field[TargetID[i]];
-        target.TakeDamage(1);
+        target.TakeDamage(1, BattleElement_Physical);
     }
 }
 void ZerachielBaseMoveEffect(std::vector<int> TargetID, std::vector<BattleCharacter> Field)
@@ -32,8 +32,34 @@ BattleMoveActive GetZerachielBaseMove(void)
 
 // ------------------------------------------------------------------------------------------------
 
+void ZerachielBaseMoveCalculator(std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+{
+    for (int i = 0; i < TargetID.size(); i++)
+    {
+        BattleCharacter target = Field[TargetID[i]];
+        target.TakeDamage(1, BattleElement_Light);
+    }
+}
+void ZerachielBaseMoveEffect(std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+{
+    for (int i = 0; i < TargetID.size(); i++)
+    {
+        BattleCharacter target = Field[TargetID[i]];
+        target.ChangeStat(CharacterStat_Def, -1);
+    }
+}
 BattleMoveActive GetZerachielMove1(void)
 {
+    return BattleMoveActive(
+        "Haché Menu",
+        "Consomme 20\% de la BS.\nVerrouille une cible, qui subira de Zerachiel M\% de dégâts supplémentaires par attaque. Augmente de N\% la vitesse de Zerachiel. Si la cible a plus de P\% de ses PV max au début du duel contre Zerachiel, elle ne pourra plus récupérer de PV jusqu'à la fin du duel, au bout de Q tours.",
+        BattleElement_Light,
+        MoveTargetCategory_OneEnemy,
+        ZerachielBaseMoveCalculator,
+        ZerachielBaseMoveEffect,
+        20,
+        true,
+        false);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -74,7 +100,7 @@ ZerachielUnit::ZerachielUnit(void)
 {
     std::string zerachielName = "Zerachiel";
     CharacterType zerachielType = CharacterType_DPS;
-    BattleElement zerachielElement = BattleElement_Fire;
+    BattleElement zerachielElement = BattleElement_Light;
 
     int MaxHP = 100;
     int HP = MaxHP;
