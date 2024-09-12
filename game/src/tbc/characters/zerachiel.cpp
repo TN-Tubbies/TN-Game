@@ -10,6 +10,11 @@ void ZerachielBaseMoveCalculator(std::vector<int> TargetID, std::vector<BattleCh
 }
 void ZerachielBaseMoveEffect(std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
+    for (int i = 0; i < TargetID.size(); i++)
+    {
+        BattleCharacter target = Field[TargetID[i]];
+        target.ChangeStat(CharacterStat_Def, -1);
+    }
 }
 BattleMoveActive GetZerachielBaseMove(void)
 {

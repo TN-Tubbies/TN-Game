@@ -25,11 +25,25 @@ enum BattleElement
 {
     BattleElement_Null,
     BattleElement_Physical,
+    BattleElement_Light,
+    BattleElement_Dark,
+    BattleElement_Quantum,
+    BattleElement_Water,
     BattleElement_Fire,
+    BattleElement_Grass,
+    BattleElement_Wind,
+    BattleElement_Earth,
+    BattleElement_Lightning
 };
 enum CharacterType
 {
     CharacterType_DPS,
+};
+enum CharacterStat
+{
+    CharacterStat_Atk,
+    CharacterStat_Def,
+    CharacterStat_Speed
 };
 
 #endif

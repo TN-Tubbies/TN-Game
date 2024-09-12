@@ -74,8 +74,97 @@ int BattleCharacter::GetDef()
 {
     return Def;
 }
+int BattleCharacter::GetStat(enum CharacterStat stat)
+{
+    switch (stat)
+    {
+    case CharacterStat::CharacterStat_Atk:
+        return Atk;
+    case CharacterStat::CharacterStat_Def:
+        return Def;
+    case CharacterStat::CharacterStat_Speed:
+        return Speed;
+    default:
+        return 0;
+    }
+}
 
 // ------------------------------------------------------------------------------------------------
+
+float BattleCharacter::GetElementReactionCoefficient(enum BattleElement IncomingElement)
+{
+    float low = 0.5f;
+    float high = 1.5f;
+    float classic = 1.0f;
+    if (Element == BattleElement_Light && IncomingElement == BattleElement_Light)
+    {
+        return low;
+    }
+    else if (Element == BattleElement_Light && IncomingElement == BattleElement_Dark)
+    {
+        return high;
+    }
+    else if (Element == BattleElement_Dark && IncomingElement == BattleElement_Light)
+    {
+        return high;
+    }
+    else if (Element == BattleElement_Dark && IncomingElement == BattleElement_Dark)
+    {
+        return low;
+    }
+    else if (Element == BattleElement_Water && IncomingElement == BattleElement_Water)
+    {
+        return low;
+    }
+    else if (Element == BattleElement_Fire && IncomingElement == BattleElement_Water)
+    {
+        return high;
+    }
+    else if (Element == BattleElement_Fire && IncomingElement == BattleElement_Fire)
+    {
+        return low;
+    }
+    else if (Element == BattleElement_Grass && IncomingElement == BattleElement_Fire)
+    {
+        return high;
+    }
+    else if (Element == BattleElement_Grass && IncomingElement == BattleElement_Grass)
+    {
+        return low;
+    }
+    else if (Element == BattleElement_Wind && IncomingElement == BattleElement_Grass)
+    {
+        return high;
+    }
+    else if (Element == BattleElement_Wind && IncomingElement == BattleElement_Wind)
+    {
+        return low;
+    }
+    else if (Element == BattleElement_Earth && IncomingElement == BattleElement_Wind)
+    {
+        return high;
+    }
+    else if (Element == BattleElement_Earth && IncomingElement == BattleElement_Earth)
+    {
+        return low;
+    }
+    else if (Element == BattleElement_Lightning && IncomingElement == BattleElement_Earth)
+    {
+        return high;
+    }
+    else if (Element == BattleElement_Lightning && IncomingElement == BattleElement_Lightning)
+    {
+        return low;
+    }
+    else if (Element == BattleElement_Water && IncomingElement == BattleElement_Lightning)
+    {
+        return low;
+    }
+    else
+    {
+        return classic;
+    }
+}
 
 void BattleCharacter::TakeDamage(int damage)
 {
@@ -86,6 +175,67 @@ void BattleCharacter::TakeDamage(int damage)
     else
     {
         HP -= damage;
+    }
+}
+
+void BattleCharacter::ChangeStat(enum CharacterStat stat, int notch)
+{
+    if (notch < 0)
+    {
+        float coef;
+        switch (notch)
+        {
+        case -1:
+            coef = 2 / 3;
+            break;
+        case -2:
+            coef = 1 / 2;
+            break;
+        case -3:
+            coef = 2 / 5;
+            break;
+        case -4:
+            coef = 1 / 3;
+            break;
+        case -5:
+            coef = 2 / 7;
+            break;
+        default:
+            coef = 1;
+            break;
+        }
+        switch (stat)
+        {
+        case CharacterStat_Atk:
+            Atk = (int)Atk * (coef);
+            break;
+        case CharacterStat_Def:
+            Def = (int)Def * (coef);
+            break;
+        case CharacterStat_Speed:
+            Speed = (int)Speed * (coef);
+            break;
+        default:
+            break;
+        }
+    }
+    else if (notch > 0)
+    {
+
+        switch (stat)
+        {
+        case CharacterStat_Atk:
+            Atk = (int)Atk * (1 + 0.5 * notch);
+            break;
+        case CharacterStat_Def:
+            Def = (int)Def * (1 + 0.5 * notch);
+            break;
+        case CharacterStat_Speed:
+            Speed = (int)Speed * (1 + 0.5 * notch);
+            break;
+        default:
+            break;
+        }
     }
 }
 

@@ -9,17 +9,8 @@
 #include <string>
 #include <vector>
 
-// HP MaxHP Speed Atk Def + affinités de type
-
-// Lumière <=> Ténèbres
-// Quantique
-// Eau => Feu => Bois => Vent => Terre => Foudre => Eau
-
 // Classes:
 // Débloque des équipements particuliers
-
-// Movepool
-// same movepool
 
 class BattleCharacter
 {
@@ -81,8 +72,11 @@ public:
     int GetAtk();
     int GetSpeed();
     int GetDef();
+    int GetStat(enum CharacterStat stat);
 
     void TakeDamage(int damage);
+    float GetElementReactionCoefficient(enum BattleElement IncomingElement);
+    void ChangeStat(enum CharacterStat stat, int notch);
 };
 
 std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> array);
