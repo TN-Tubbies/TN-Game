@@ -22,22 +22,21 @@ protected:
 class BattleMovePassive : public BattleMove
 {
 public:
-    std::function<void(std::vector<int> TargetID, std::vector<BattleCharacter> Field)> effect;
+    std::function<void(std::vector<BattleCharacter> Field)> effect;
 
-    BattleMovePassive(std::string name, std::string description, enum MoveTargetCategory moveTarget, std::function<void(std::vector<int> TargetID, std::vector<BattleCharacter> Field)> effect, int turnDelay);
+    BattleMovePassive(std::string name, std::string description, enum MoveTargetCategory moveTarget, std::function<void(std::vector<BattleCharacter> Field)> effect, enum PassiveTriggerCategory triggerCategory);
 
 private:
-    int turnDelay;
+    enum PassiveTriggerCategory triggerCategory;
 };
 
 class BattleMoveActive : public BattleMove
 {
 public:
-    std::function<void(std::vector<int> TargetID, std::vector<BattleCharacter> Field)> damageCalculator;
-    std::function<void(std::vector<int> TargetID, std::vector<BattleCharacter> Field)> sideEffect;
+    std::function<void(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> runFunction;
 
-    BattleMoveActive(std::string name, std::string description, enum BattleElement element, enum MoveTargetCategory moveTarget, std::function<void(std::vector<int> TargetID, std::vector<BattleCharacter> Field)> damageCalculator,
-                     std::function<void(std::vector<int> TargetID, std::vector<BattleCharacter> Field)> sideEffect, int cost, bool isBM, bool isU);
+    BattleMoveActive(std::string name, std::string description, enum BattleElement element, enum MoveTargetCategory moveTarget,
+                     std::function<void(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> sideEffect, int cost, bool isBM, bool isU);
 
     // TODO: Les getters arrivent fort
 

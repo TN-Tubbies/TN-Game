@@ -3,12 +3,15 @@
 
 #include <string>
 
+#include "battle_character.h"
+
 class BattleStatus
 {
 public:
     BattleStatus();
 
-    std::string getName();
+    std::string GetName();
+    BattleCharacter GetLinkedCharacter();
     void CheckTimer();
     bool DoRemoveAfterBattle();
     bool IsActive();
@@ -20,6 +23,7 @@ protected:
     int timerDuration;
 
     bool removeAfterBattle;
+    BattleCharacter linkedCharacter;
 };
 
 #endif

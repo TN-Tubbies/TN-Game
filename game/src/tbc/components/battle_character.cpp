@@ -6,6 +6,7 @@ BattleCharacter::BattleCharacter(
     std::string name,
     enum CharacterType Type,
     enum BattleElement Element,
+    bool isFriendly,
     int HP,
     int MaxHP,
     int Atk,
@@ -22,11 +23,12 @@ BattleCharacter::BattleCharacter(
     this->name = name;
     this->Type = Type;
     this->Element = Element;
+    this->isFriendly = isFriendly;
     this->HP = HP;
     this->MaxHP = MaxHP;
-    this->Atk = Atk;
-    this->Speed = Speed;
-    this->Def = Def;
+    this->BaseAtk = Atk;
+    this->BaseSpeed = Speed;
+    this->BaseDef = Def;
     this->BaseMove = BaseMove;
     this->Move1 = Move1;
     this->Move2 = Move2;
@@ -35,8 +37,19 @@ BattleCharacter::BattleCharacter(
     this->Passive1 = Passive1;
     this->Passive2 = Passive2;
 
+    this->CurrentAtk = Atk;
+    this->AtkChange = 0;
+    this->CurrentSpeed = Speed;
+    this->SpeedChange = 0;
+    this->CurrentDef = Def;
+    this->DefChange = 0;
+    this->LastDamageReceived = 0;
+
     std::vector<BattleStatus> affectedStatus;
     this->AffectedStatus = affectedStatus;
+
+    this->SkillBar = 0;
+    this->UltimateBar = 0;
 }
 
 BattleCharacter::~BattleCharacter()
@@ -45,52 +58,44 @@ BattleCharacter::~BattleCharacter()
 
 // ------------------------------------------------------------------------------------------------
 
-std::string BattleCharacter::GetName()
-{
-    return name;
-}
-enum CharacterType BattleCharacter::GetType()
-{
-    return Type;
-}
-enum BattleElement BattleCharacter::GetElement()
-{
-    return Element;
-}
-int BattleCharacter::GetHP()
-{
-    return HP;
-}
-int BattleCharacter::GetMaxHP()
-{
-    return MaxHP;
-}
-int BattleCharacter::GetAtk()
-{
-    return Atk;
-}
-int BattleCharacter::GetSpeed()
-{
-    return Speed;
-}
-int BattleCharacter::GetDef()
-{
-    return Def;
-}
-int BattleCharacter::GetStat(enum CharacterStat stat)
+std::string BattleCharacter::GetName() { return name; }
+enum CharacterType BattleCharacter::GetType() { return Type; }
+enum BattleElement BattleCharacter::GetElement() { return Element; }
+int BattleCharacter::GetHP() { return HP; }
+int BattleCharacter::GetMaxHP() { return MaxHP; }
+int BattleCharacter::GetBaseAtk() { return BaseAtk; }
+int BattleCharacter::GetBaseSpeed() { return BaseSpeed; }
+int BattleCharacter::GetBaseDef() { return BaseDef; }
+int BattleCharacter::GetBaseStat(enum CharacterStat stat)
 {
     switch (stat)
     {
     case CharacterStat::CharacterStat_Atk:
-        return Atk;
+        return BaseAtk;
     case CharacterStat::CharacterStat_Def:
-        return Def;
+        return BaseDef;
     case CharacterStat::CharacterStat_Speed:
-        return Speed;
+        return BaseSpeed;
     default:
         return 0;
     }
 }
+int BattleCharacter::GetCurrentStat(enum CharacterStat stat)
+{
+    switch (stat)
+    {
+    case CharacterStat::CharacterStat_Atk:
+        return CurrentAtk;
+    case CharacterStat::CharacterStat_Def:
+        return CurrentDef;
+    case CharacterStat::CharacterStat_Speed:
+        return CurrentSpeed;
+    default:
+        return 0;
+    }
+}
+bool BattleCharacter::IsFriendly() { return isFriendly; }
+int BattleCharacter::GetLastDamageReceived() { return LastDamageReceived; }
 
 // ------------------------------------------------------------------------------------------------
 
@@ -211,13 +216,13 @@ void BattleCharacter::ChangeStat(enum CharacterStat stat, int notch)
         switch (stat)
         {
         case CharacterStat_Atk:
-            Atk = (int)Atk * (coef);
+            CurrentAtk = (int)BaseAtk * (coef);
             break;
         case CharacterStat_Def:
-            Def = (int)Def * (coef);
+            CurrentDef = (int)BaseDef * (coef);
             break;
         case CharacterStat_Speed:
-            Speed = (int)Speed * (coef);
+            CurrentSpeed = (int)BaseSpeed * (coef);
             break;
         default:
             break;
@@ -225,27 +230,63 @@ void BattleCharacter::ChangeStat(enum CharacterStat stat, int notch)
     }
     else if (notch > 0)
     {
-
         switch (stat)
         {
         case CharacterStat_Atk:
-            Atk = (int)Atk * (1 + 0.5 * notch);
+            CurrentAtk = (int)BaseAtk * (1 + 0.5 * notch);
             break;
         case CharacterStat_Def:
-            Def = (int)Def * (1 + 0.5 * notch);
+            CurrentDef = (int)BaseDef * (1 + 0.5 * notch);
             break;
         case CharacterStat_Speed:
-            Speed = (int)Speed * (1 + 0.5 * notch);
+            CurrentSpeed = (int)BaseSpeed * (1 + 0.5 * notch);
             break;
         default:
             break;
         }
     }
 }
-
-bool BattleCharacter::CheckIfAffected(BattleStatus status)
+int BattleCharacter::GetChangeStat(enum CharacterStat stat)
 {
-    return std::find(AffectedStatus.begin(), AffectedStatus.end(), status) != AffectedStatus.end();
+    switch (stat)
+    {
+    case CharacterStat_Atk:
+        return AtkChange;
+    case CharacterStat_Def:
+        return DefChange;
+    case CharacterStat_Speed:
+        return SpeedChange;
+    default:
+        return 0;
+    }
+}
+
+void BattleCharacter::AddStatus(BattleStatus status) { AffectedStatus.push_back(status); }
+BattleStatus BattleCharacter::GetStatus(std::string statusName)
+{
+    for (int i = 0; i < AffectedStatus.size(); i++)
+    {
+        if (AffectedStatus[i].GetName() == statusName)
+        {
+            return AffectedStatus[i];
+        }
+    }
+    return BattleStatus(); // Return empty status if not found
+}
+bool BattleCharacter::CheckIfAffected(std::string statusName)
+{
+    bool res = false;
+
+    for (int i = 0; i < AffectedStatus.size(); i++)
+    {
+        if (AffectedStatus[i].GetName() == statusName)
+        {
+            res = true;
+            break;
+        }
+    }
+
+    return res;
 }
 void BattleCharacter::RemoveInactiveStatus()
 {
@@ -258,6 +299,20 @@ void BattleCharacter::RemoveInactiveStatus()
         }
     }
 }
+void BattleCharacter::RemoveStatus(std::string statusName)
+{
+    for (int i = 0; i < AffectedStatus.size(); i++)
+    {
+        if (AffectedStatus[i].GetName() == statusName)
+        {
+            AffectedStatus.erase(AffectedStatus.begin() + i);
+            break;
+        }
+    }
+}
+
+void BattleCharacter::AddToSkillBar(int adding) { SkillBar += adding; }
+void BattleCharacter::AddToUltimateBar(int adding) { UltimateBar += adding; }
 
 // ------------------------------------------------------------------------------------------------
 // BATTLE CHARACTER RELATED FUNCTIONS -------------------------------------------------------------
@@ -272,7 +327,7 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
     {
         std::vector<int> token(2);
         token.push_back(i);
-        token.push_back(array[i].GetSpeed());
+        token.push_back(array[i].GetBaseSpeed());
         unsorted.push_back(token);
     }
 

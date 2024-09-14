@@ -6,7 +6,7 @@
 class LivyaUnit : public BattleCharacter
 {
 public:
-    LivyaUnit(void);
+    LivyaUnit(bool isFriendly);
 };
 
 BattleMoveActive GetLivyaBaseMove(void);

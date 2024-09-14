@@ -13,6 +13,7 @@ void BattleStatus::CheckTimer()
         }
     }
 }
-std::string BattleStatus::getName() { return statusName; }
+std::string BattleStatus::GetName() { return statusName; }
+BattleCharacter BattleStatus::GetLinkedCharacter() { return linkedCharacter; }
 bool BattleStatus::DoRemoveAfterBattle() { return removeAfterBattle; }
 bool BattleStatus::IsActive() { return isActive; }

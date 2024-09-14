@@ -1,29 +1,36 @@
 #include "zerachiel.h"
 
-void ZerachielBaseMoveCalculator(std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void ZerachielBaseMoveEffect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
+    int M = 1;
+
     for (int i = 0; i < TargetID.size(); i++)
     {
         BattleCharacter target = Field[TargetID[i]];
-        target.TakeDamage(1, BattleElement_Physical);
+        target.TakeDamage(M, BattleElement_Physical);
     }
-}
-void ZerachielBaseMoveEffect(std::vector<int> TargetID, std::vector<BattleCharacter> Field)
-{
+    for (int i = 0; i < Field.size(); i++)
+    {
+        if (Field[i].CheckIfAffected("DuelWithZerachiel"))
+        {
+            Field[i].RemoveStatus("DuelWithZerachiel");
+        }
+    }
+
     for (int i = 0; i < TargetID.size(); i++)
     {
-        BattleCharacter target = Field[TargetID[i]];
-        target.ChangeStat(CharacterStat_Def, -1);
+
+        Status_DuelWithZerachiel status = Status_DuelWithZerachiel(Self);
+        Field[TargetID[i]].AddStatus(status);
     }
 }
 BattleMoveActive GetZerachielBaseMove(void)
 {
     return BattleMoveActive(
-        "Haché Menu",
-        "Restaure 15\% de la BS.\nInflige M\% de dégâts à la cible. Si celle-ci est en duel avec Zerachiel, sa défense est diminuée de N\%.",
+        "Entre vous et moi",
+        "Restaure 15\% de la BS.\nInflige M\% de dégâts à la cible, et la fait entrer en duel avec Zerachiel. Si un autre adversaire est déjà en duel avec Zerachiel, ce précédent duel est annulé.",
         BattleElement_Physical,
         MoveTargetCategory_OneEnemy,
-        ZerachielBaseMoveCalculator,
         ZerachielBaseMoveEffect,
         -15,
         true,
@@ -32,75 +39,167 @@ BattleMoveActive GetZerachielBaseMove(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void ZerachielBaseMoveCalculator(std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void ZerachielMove1Effect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
-    for (int i = 0; i < TargetID.size(); i++)
+    int N = 1;
+    float P = 0.5f;
+    int Q = 3;
+
+    Field[TargetID[0]].ChangeStat(CharacterStat_Speed, N);
+    for (int i = 0; i < Field.size(); i++)
     {
-        BattleCharacter target = Field[TargetID[i]];
-        target.TakeDamage(1, BattleElement_Light);
-    }
-}
-void ZerachielBaseMoveEffect(std::vector<int> TargetID, std::vector<BattleCharacter> Field)
-{
-    for (int i = 0; i < TargetID.size(); i++)
-    {
-        BattleCharacter target = Field[TargetID[i]];
-        target.ChangeStat(CharacterStat_Def, -1);
+        if (Field[i].CheckIfAffected("DuelWithZerachiel") && Field[i].GetHP() / Field[i].GetMaxHP() > P)
+        {
+            Status_Heal_Blocked status = Status_Heal_Blocked(Q);
+            Field[i].AddStatus(status);
+        }
     }
 }
 BattleMoveActive GetZerachielMove1(void)
 {
     return BattleMoveActive(
-        "Haché Menu",
-        "Consomme 20\% de la BS.\nVerrouille une cible, qui subira de Zerachiel M\% de dégâts supplémentaires par attaque. Augmente de N\% la vitesse de Zerachiel. Si la cible a plus de P\% de ses PV max au début du duel contre Zerachiel, elle ne pourra plus récupérer de PV jusqu'à la fin du duel, au bout de Q tours.",
+        "Lames de Duel",
+        "Consomme 20\% de la BS.\nAugmente de N\% la vitesse de Zerachiel. Si la cible a plus de P\% de ses PV max au début du duel contre Zerachiel, elle ne pourra plus récupérer de PV jusqu'à la fin du duel, au bout de Q tours.",
         BattleElement_Light,
-        MoveTargetCategory_OneEnemy,
-        ZerachielBaseMoveCalculator,
-        ZerachielBaseMoveEffect,
+        MoveTargetCategory_Self,
+        ZerachielMove1Effect,
         20,
-        true,
+        false,
         false);
 }
 
 // ------------------------------------------------------------------------------------------------
 
+void ZerachielMove2Effect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+{
+    int atkBuffNotch = 1;
+
+    if (Field[TargetID[0]].GetChangeStat(CharacterStat_Atk) < 0)
+    {
+        Field[TargetID[0]].ChangeStat(CharacterStat_Atk, 0);
+    }
+    if (Field[TargetID[0]].GetChangeStat(CharacterStat_Def) < 0)
+    {
+        Field[TargetID[0]].ChangeStat(CharacterStat_Def, 0);
+    }
+    if (Field[TargetID[0]].GetChangeStat(CharacterStat_Speed) < 0)
+    {
+        Field[TargetID[0]].ChangeStat(CharacterStat_Speed, 0);
+    }
+    Field[TargetID[0]].ChangeStat(CharacterStat_Atk, atkBuffNotch);
+}
 BattleMoveActive GetZerachielMove2(void)
 {
+    return BattleMoveActive(
+        "Infaillible",
+        "Consomme 20\% de la BS.\nNettoie ses lunettes en plein combat, retirant la majorité des malus qui l'incombent et augmentant de M\% son attaque.",
+        BattleElement_Light,
+        MoveTargetCategory_Self,
+        ZerachielMove2Effect,
+        20,
+        false,
+        false);
 }
 
 // ------------------------------------------------------------------------------------------------
 
-BattleMoveActive GetZerachielMove3(void)
+void ZerachielUltimateEffect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
+    int M = 1;
+    int X = 5;
+
+    for (int i = 0; i < TargetID.size(); i++)
+    {
+        int remaining = 0;
+        for (int j = 0; j < X; j++)
+        {
+            BattleCharacter target = Field[TargetID[i]];
+            target.TakeDamage(M, BattleElement_Light);
+            if (target.GetHP() <= 0)
+            {
+                remaining = X - j;
+                break;
+            }
+        }
+
+        if (remaining != 0)
+        {
+            int count = 0;
+            for (int j = 0; j < Field.size(); j++)
+            {
+                if (!Field.at(j).IsFriendly())
+                {
+                    count++;
+                }
+            }
+
+            int residual_damage = (int)M / count;
+            for (int j = 0; j < remaining; j++)
+            {
+                for (int k = 0; k < Field.size(); k++)
+                {
+                    if (!Field.at(k).IsFriendly())
+                    {
+                        Field.at(k).TakeDamage(residual_damage, BattleElement_Light);
+                    }
+                }
+            }
+        }
+    }
 }
-
-// ------------------------------------------------------------------------------------------------
-
 BattleMoveActive GetZerachielUltimate(void)
 {
+    return BattleMoveActive(
+        "Question d'habitude, voyons !",
+        "Inflige M\% de dégâts à un ennemi X fois. Si la cible est vaincue avant que tous les coups soient portés, les dégâts restants sont distribués à tous les ennemis.",
+        BattleElement_Light,
+        MoveTargetCategory_OneEnemy,
+        ZerachielUltimateEffect,
+        0,
+        false,
+        true);
 }
 
 // ------------------------------------------------------------------------------------------------
 
+void ZerachielPassive1Effect(std::vector<BattleCharacter> Field)
+{
+    float HPLossPercentage = 0.1f;
+    float UltimateChargeGained = 0.3f;
+    float AttackIncreaseNotch = 0.1f;
+
+    for (int i = 0; i < Field.size(); i++)
+    {
+        if (Field[i].CheckIfAffected("DuelWithZerachiel"))
+        {
+            if (Field[i].GetLastDamageReceived() >= HPLossPercentage * Field[i].GetMaxHP())
+            {
+                Field[i].GetStatus("DuelWithZerachiel").GetLinkedCharacter().ChangeStat(CharacterStat_Atk, AttackIncreaseNotch);
+                Field[i].GetStatus("DuelWithZerachiel").GetLinkedCharacter().AddToUltimateBar((int)100 * UltimateChargeGained);
+            }
+        }
+    }
+}
 BattleMovePassive GetZerachielPassive1(void)
 {
+    return BattleMovePassive(
+        "L'amour du travail bien fait",
+        "À chaque fois qu'un ennemi en duel avec Zerachiel perd M\% de ses PV maximums, Zerachiel récupère N\% de charge d'ultime et augmente de P\% son attaque.",
+        MoveTargetCategory_OneEnemy,
+        ZerachielPassive1Effect,
+        PassiveTriggerCategory_OnDamageDealtToEnemy);
 }
 
 // ------------------------------------------------------------------------------------------------
-
-BattleMovePassive GetZerachielPassive2(void)
-{
-}
-
-// ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 
-ZerachielUnit::ZerachielUnit(void)
+ZerachielUnit::ZerachielUnit(bool isFriendly)
 {
     std::string zerachielName = "Zerachiel";
     CharacterType zerachielType = CharacterType_DPS;
     BattleElement zerachielElement = BattleElement_Light;
+    this->isFriendly = isFriendly;
 
     int MaxHP = 100;
     int HP = MaxHP;
@@ -113,14 +212,27 @@ ZerachielUnit::ZerachielUnit(void)
     this->Element = Element;
     this->HP = HP;
     this->MaxHP = MaxHP;
-    this->Atk = Atk;
-    this->Speed = Speed;
-    this->Def = Def;
+    this->BaseAtk = Atk;
+    this->BaseSpeed = Speed;
+    this->BaseDef = Def;
+    this->CurrentAtk = Atk;
+    this->AtkChange = 0;
+    this->CurrentSpeed = Speed;
+    this->SpeedChange = 0;
+    this->CurrentDef = Def;
+    this->DefChange = 0;
+    this->LastDamageReceived = 0;
     this->BaseMove = GetZerachielBaseMove();
     this->Move1 = GetZerachielMove1();
     this->Move2 = GetZerachielMove2();
-    this->Move3 = GetZerachielMove3();
+    this->Move3 = GetNullActiveMove();
     this->Ultimate = GetZerachielUltimate();
     this->Passive1 = GetZerachielPassive1();
-    this->Passive2 = GetZerachielPassive2();
+    this->Passive2 = GetNullPassiveMove();
+
+    std::vector<BattleStatus> affectedStatus;
+    this->AffectedStatus = affectedStatus;
+
+    this->SkillBar = 0;
+    this->UltimateBar = 0;
 }

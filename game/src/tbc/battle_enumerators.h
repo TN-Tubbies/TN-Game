@@ -19,6 +19,25 @@ enum MoveTargetCategory
     MoveTargetCategory_Self,
     MoveTargetCategory_OneEnemy,
 };
+enum PassiveTriggerCategory
+{
+    PassiveTriggerCategory_None,
+    PassiveTriggerCategory_OnMoveStart,
+    PassiveTriggerCategory_OnMoveEnd,
+    PassiveTriggerCategory_OnTurnStart,
+    PassiveTriggerCategory_OnTurnEnd,
+    PassiveTriggerCategory_OnDamageDealt,
+    PassiveTriggerCategory_OnDamageReceived,
+    PassiveTriggerCategory_OnHeal,
+    PassiveTriggerCategory_OnStatusApplied,
+    PassiveTriggerCategory_OnStatusRemoved,
+    PassiveTriggerCategory_OnEachMoveStart,
+    PassiveTriggerCategory_OnEachMoveEnd,
+    PassiveTriggerCategory_OnEachTurnStart,
+    PassiveTriggerCategory_OnEachTurnEnd,
+    PassiveTriggerCategory_OnDamageDealtToEnemy,
+    PassiveTriggerCategory_OnDamageReceivedFromEnemy
+};
 
 // Character-related enumerators
 enum BattleElement
