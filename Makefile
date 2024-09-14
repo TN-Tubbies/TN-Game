@@ -1,11 +1,12 @@
+# Files
 TARGET = main
-
-#files
-BASE_DIR = game/src/
-UI_SRCS = $(wildcard $(BASE_DIR)ui/*.cpp)
-SRCS = $(wildcard $(BASE_DIR)*.cpp) $(UI_SRCS)
-
-OBJS = $(SRCS:.cpp=.o)
+MAINSRCS = main.c
+UISRCS = ui_init.c
+TBCSRCS =
+SRCS = $(patsubst %.c, game/src/%.c, $(MAINSRCS))
+	SRCS += $(patsubst %.c, game/src/ui/%.c, $(UISRCS))
+	SRCS += $(patsubst %.c, game/src/tbc/%.c, $(TBCSRCS))
+OBJS = $(patsubst %.c, %.o, $(SRCS))
 
 #compiler
 CC = g++
@@ -25,9 +26,7 @@ LDFLAGS += $(shell pkg-config --libs SDL2_mixer)
 CFLAGS += $(shell pkg-config --cflags SDL2_ttf)
 LDFLAGS += $(shell pkg-config --libs SDL2_ttf)
 # CFLAGS += $(shell pkg-config --cflags sdl2_gfx)
-# LDFLAGS += $(shell pkg-config --libs sdl2_gfx) 
-CFLAGS += $(shell pkg-config --cflags SDL2_ttf)
-LDFLAGS += $(shell pkg-config --libs SDL2_ttf)
+# LDFLAGS += $(shell pkg-config --libs sdl2_gfx)
 
 #compilation
 all: $(TARGET)

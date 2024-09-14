@@ -5,7 +5,8 @@
 #include "ui/ui_init.h"
 #include "defs.h"
 
-int main(void) {
+int main(void)
+{
     SDL_Renderer *renderer = Init_SDL();
     TTF_Font *jersey = Init_TTF();
     Init_IMG();
@@ -16,15 +17,18 @@ int main(void) {
     SDL_Event event;
     int running = 1;
 
-    while (running) {
-        if (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    running = 0;
-                    continue;
+    while (running)
+    {
+        if (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+            case SDL_QUIT:
+                running = 0;
+                continue;
             }
         }
-        //States update
+        // States update
 
         // Rendering
         SDL_RenderClear(renderer);
@@ -35,4 +39,3 @@ int main(void) {
     TTF_CloseFont(jersey);
     SDL_DestroyRenderer(renderer);
 }
-
