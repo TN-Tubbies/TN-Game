@@ -1,37 +1,16 @@
-#include "zerachiel.h"
+#include "livya.h"
 
-void ZerachielBaseMoveEffect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaBaseMoveEffect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
-    int M = 1;
-
-    for (int i = 0; i < TargetID.size(); i++)
-    {
-        BattleCharacter target = Field[TargetID[i]];
-        target.TakeDamage(M, BattleElement_Physical);
-    }
-    for (int i = 0; i < Field.size(); i++)
-    {
-        if (Field[i].CheckIfAffected("DuelWithZerachiel"))
-        {
-            Field[i].RemoveStatus("DuelWithZerachiel");
-        }
-    }
-
-    for (int i = 0; i < TargetID.size(); i++)
-    {
-
-        Status_DuelWithZerachiel status = Status_DuelWithZerachiel(Self);
-        Field[TargetID[i]].AddStatus(status);
-    }
 }
-BattleMoveActive GetZerachielBaseMove(void)
+BattleMoveActive GetLivyaBaseMove(void)
 {
     return BattleMoveActive(
         "Entre vous et moi",
-        "Restaure 15\% de la BS.\nInflige M\% de dégâts à la cible, et la fait entrer en duel avec Zerachiel. Si un autre adversaire est déjà en duel avec Zerachiel, ce précédent duel est annulé.",
+        "Restaure 15\% de la BS.\nInflige M\% de dégâts à la cible, et la fait entrer en duel avec Livya. Si un autre adversaire est déjà en duel avec Livya, ce précédent duel est annulé.",
         BattleElement_Physical,
         MoveTargetCategory_OneEnemy,
-        ZerachielBaseMoveEffect,
+        LivyaBaseMoveEffect,
         -15,
         true,
         false);
@@ -39,30 +18,17 @@ BattleMoveActive GetZerachielBaseMove(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void ZerachielMove1Effect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaMove1Effect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
-    int N = 1;
-    float P = 0.5f;
-    int Q = 3;
-
-    Field[TargetID[0]].ChangeStat(CharacterStat_Speed, N);
-    for (int i = 0; i < Field.size(); i++)
-    {
-        if (Field[i].CheckIfAffected("DuelWithZerachiel") && Field[i].GetHP() / Field[i].GetMaxHP() > P)
-        {
-            Status_Heal_Blocked status = Status_Heal_Blocked(Q);
-            Field[i].AddStatus(status);
-        }
-    }
 }
-BattleMoveActive GetZerachielMove1(void)
+BattleMoveActive GetLivyaMove1(void)
 {
     return BattleMoveActive(
         "Lames de Duel",
-        "Consomme 20\% de la BS.\nAugmente de N\% la vitesse de Zerachiel. Si la cible a plus de P\% de ses PV max au début du duel contre Zerachiel, elle ne pourra plus récupérer de PV jusqu'à la fin du duel, au bout de Q tours.",
+        "Consomme 20\% de la BS.\nAugmente de N\% la vitesse de Livya. Si la cible a plus de P\% de ses PV max au début du duel contre Livya, elle ne pourra plus récupérer de PV jusqu'à la fin du duel, au bout de Q tours.",
         BattleElement_Light,
         MoveTargetCategory_Self,
-        ZerachielMove1Effect,
+        LivyaMove1Effect,
         20,
         false,
         false);
@@ -70,7 +36,7 @@ BattleMoveActive GetZerachielMove1(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void ZerachielMove2Effect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaMove2Effect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int atkBuffNotch = 1;
 
@@ -88,14 +54,14 @@ void ZerachielMove2Effect(BattleCharacter Self, std::vector<int> TargetID, std::
     }
     Field[TargetID[0]].ChangeStat(CharacterStat_Atk, atkBuffNotch);
 }
-BattleMoveActive GetZerachielMove2(void)
+BattleMoveActive GetLivyaMove2(void)
 {
     return BattleMoveActive(
         "Infaillible",
         "Consomme 20\% de la BS.\nNettoie ses lunettes en plein combat, retirant la majorité des malus qui l'incombent et augmentant de M\% son attaque.",
         BattleElement_Light,
         MoveTargetCategory_Self,
-        ZerachielMove2Effect,
+        LivyaMove2Effect,
         20,
         false,
         false);
@@ -103,7 +69,7 @@ BattleMoveActive GetZerachielMove2(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void ZerachielUltimateEffect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaUltimateEffect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int M = 1;
     int X = 5;
@@ -147,14 +113,14 @@ void ZerachielUltimateEffect(BattleCharacter Self, std::vector<int> TargetID, st
         }
     }
 }
-BattleMoveActive GetZerachielUltimate(void)
+BattleMoveActive GetLivyaUltimate(void)
 {
     return BattleMoveActive(
         "Question d'habitude, voyons !",
         "Inflige M\% de dégâts à un ennemi X fois. Si la cible est vaincue avant que tous les coups soient portés, les dégâts restants sont distribués à tous les ennemis.",
         BattleElement_Light,
         MoveTargetCategory_OneEnemy,
-        ZerachielUltimateEffect,
+        LivyaUltimateEffect,
         0,
         false,
         true);
@@ -162,7 +128,7 @@ BattleMoveActive GetZerachielUltimate(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void ZerachielPassive1Effect(std::vector<BattleCharacter> Field)
+void LivyaPassive1Effect(std::vector<BattleCharacter> Field)
 {
     float HPLossPercentage = 0.1f;
     float UltimateChargeGained = 0.3f;
@@ -170,23 +136,23 @@ void ZerachielPassive1Effect(std::vector<BattleCharacter> Field)
 
     for (int i = 0; i < Field.size(); i++)
     {
-        if (Field[i].CheckIfAffected("DuelWithZerachiel"))
+        if (Field[i].CheckIfAffected("DuelWithLivya"))
         {
             if (Field[i].GetLastDamageReceived() >= HPLossPercentage * Field[i].GetMaxHP())
             {
-                Field[i].GetStatus("DuelWithZerachiel").GetLinkedCharacter().ChangeStat(CharacterStat_Atk, AttackIncreaseNotch);
-                Field[i].GetStatus("DuelWithZerachiel").GetLinkedCharacter().AddToUltimateBar((int)100 * UltimateChargeGained);
+                Field[i].GetStatus("DuelWithLivya").GetLinkedCharacter().ChangeStat(CharacterStat_Atk, AttackIncreaseNotch);
+                Field[i].GetStatus("DuelWithLivya").GetLinkedCharacter().AddToUltimateBar((int)100 * UltimateChargeGained);
             }
         }
     }
 }
-BattleMovePassive GetZerachielPassive1(void)
+BattleMovePassive GetLivyaPassive1(void)
 {
     return BattleMovePassive(
         "L'amour du travail bien fait",
-        "À chaque fois qu'un ennemi en duel avec Zerachiel perd M\% de ses PV maximums, Zerachiel récupère N\% de charge d'ultime et augmente de P\% son attaque.",
+        "À chaque fois qu'un ennemi en duel avec Livya perd M\% de ses PV maximums, Livya récupère N\% de charge d'ultime et augmente de P\% son attaque.",
         MoveTargetCategory_OneEnemy,
-        ZerachielPassive1Effect,
+        LivyaPassive1Effect,
         PassiveTriggerCategory_OnDamageDealtToEnemy);
 }
 
@@ -194,11 +160,11 @@ BattleMovePassive GetZerachielPassive1(void)
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 
-ZerachielUnit::ZerachielUnit(bool isFriendly)
+LivyaUnit::LivyaUnit(bool isFriendly)
 {
-    std::string zerachielName = "Zerachiel";
-    CharacterType zerachielType = CharacterType_DPS;
-    BattleElement zerachielElement = BattleElement_Light;
+    std::string livyaName = "Livya";
+    CharacterType livyaType = CharacterType_DPS;
+    BattleElement livyaElement = BattleElement_Light;
     this->isFriendly = isFriendly;
 
     int MaxHP = 100;
@@ -222,12 +188,12 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     this->CurrentDef = Def;
     this->DefChange = 0;
     this->LastDamageReceived = 0;
-    this->BaseMove = GetZerachielBaseMove();
-    this->Move1 = GetZerachielMove1();
-    this->Move2 = GetZerachielMove2();
+    this->BaseMove = GetLivyaBaseMove();
+    this->Move1 = GetLivyaMove1();
+    this->Move2 = GetLivyaMove2();
     this->Move3 = GetNullActiveMove();
-    this->Ultimate = GetZerachielUltimate();
-    this->Passive1 = GetZerachielPassive1();
+    this->Ultimate = GetLivyaUltimate();
+    this->Passive1 = GetLivyaPassive1();
     this->Passive2 = GetNullPassiveMove();
 
     std::vector<BattleStatus> affectedStatus;

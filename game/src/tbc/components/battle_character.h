@@ -3,23 +3,16 @@
 
 #include "../battle_declarations.h"
 #include "../battle_enumerators.h"
+#include "battle_status.h"
 #include "battle_move.h"
 
 #include <stdio.h>
 #include <string>
 #include <vector>
-
-// HP MaxHP Speed Atk Def + affinités de type
-
-// Lumière <=> Ténèbres
-// Quantique
-// Eau => Feu => Bois => Vent => Terre => Foudre => Eau
+#include <algorithm>
 
 // Classes:
 // Débloque des équipements particuliers
-
-// Movepool
-// same movepool
 
 class BattleCharacter
 {
@@ -30,16 +23,24 @@ protected:
 
     int HP;
     int MaxHP;
-    int Atk;
-    int Speed;
-    int Def;
+    int BaseAtk;
+    int BaseSpeed;
+    int BaseDef;
 
+    int CurrentAtk;
     int AtkChange;
+    int CurrentSpeed;
     int SpeedChange;
+    int CurrentDef;
     int DefChange;
+    int LastDamageReceived;
 
-    // SDL_Texture
-    int width, length;
+    bool isFriendly;
+
+    std::vector<BattleStatus> AffectedStatus;
+
+    int SkillBar;
+    int UltimateBar;
 
 public:
     BattleMove BaseMove;
@@ -56,11 +57,12 @@ public:
         std::string name,
         enum CharacterType Type,
         enum BattleElement Element,
+        bool isFriendly,
         int HP,
         int MaxHP,
-        int Atk,
-        int Speed,
-        int Def,
+        int BaseAtk,
+        int BaseSpeed,
+        int BaseDef,
         BattleMove BaseMove,
         BattleMove Move1,
         BattleMove Move2,
@@ -78,11 +80,28 @@ public:
     enum BattleElement GetElement();
     int GetHP();
     int GetMaxHP();
-    int GetAtk();
-    int GetSpeed();
-    int GetDef();
+    int GetBaseAtk();
+    int GetBaseSpeed();
+    int GetBaseDef();
+    int GetBaseStat(enum CharacterStat stat);
+    int GetCurrentStat(enum CharacterStat stat);
+    bool IsFriendly();
+    int GetLastDamageReceived();
 
-    void TakeDamage(int damage);
+    void TakeDamage(int damage, enum BattleElement IncomingElement);
+    float GetElementReactionCoefficient(enum BattleElement IncomingElement);
+
+    int GetChangeStat(enum CharacterStat stat);
+    void ChangeStat(enum CharacterStat stat, int notch);
+
+    void AddStatus(BattleStatus status);
+    BattleStatus GetStatus(std::string statusName);
+    bool CheckIfAffected(std::string statusName);
+    void RemoveInactiveStatus();
+    void RemoveStatus(std::string statusName);
+
+    void AddToSkillBar(int adding);
+    void AddToUltimateBar(int adding);
 };
 
 std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> array);

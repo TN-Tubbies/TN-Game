@@ -2,11 +2,13 @@
 #define ZERACHIEL_H
 
 #include "../components/battle_character.h"
+#include "../status/duel_with_Zerachiel.h"
+#include "../status/heal_blocked.h"
 
 class ZerachielUnit : public BattleCharacter
 {
 public:
-    ZerachielUnit(void);
+    ZerachielUnit(bool isFriendly);
 };
 
 BattleMoveActive GetZerachielBaseMove(void);
