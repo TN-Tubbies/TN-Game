@@ -1,7 +1,7 @@
 # Files
 TARGET = main
 MAINSRCS = main.cpp
-UISRCS = ui_init.cpp
+UISRCS = ui_init.cpp ui.cpp
 TBCSRCS =
 SRCS = $(patsubst %.cpp, game/src/%.cpp, $(MAINSRCS))
 	SRCS += $(patsubst %.cpp, game/src/ui/%.cpp, $(UISRCS))

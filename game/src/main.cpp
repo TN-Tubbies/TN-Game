@@ -3,6 +3,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include "ui/ui_init.h"
+#include "ui/ui.h"
 #include "defs.h"
 
 int main(void)
@@ -13,6 +14,10 @@ int main(void)
     Init_MIX();
 
     SDL_Texture *modernUI = ModernUILoad(renderer);
+
+    //FIXME: Temporary HUD init (should be done when loading a battle) :
+    HUD *hud = Init_HUD(jersey, modernUI, renderer);
+    // End of fix
 
     SDL_Event event;
     int running = 1;
@@ -28,13 +33,21 @@ int main(void)
                 continue;
             }
         }
-        // States update
+        //// States update ////
 
-        // Rendering
+        //// Rendering ////
+        // FIXME: Temporary background :
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        // End of fix
+
+        Render_HUD(renderer, hud);
+
         SDL_RenderPresent(renderer);
     }
 
+    Destroy_HUD(hud);
     SDL_DestroyTexture(modernUI);
     TTF_CloseFont(jersey);
     SDL_DestroyRenderer(renderer);
