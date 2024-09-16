@@ -1,16 +1,16 @@
 # Files
 TARGET = main
-MAINSRCS = main.c
-UISRCS = ui_init.c
+MAINSRCS = main.cpp
+UISRCS = ui_init.cpp
 TBCSRCS =
-SRCS = $(patsubst %.c, game/src/%.c, $(MAINSRCS))
-	SRCS += $(patsubst %.c, game/src/ui/%.c, $(UISRCS))
-	SRCS += $(patsubst %.c, game/src/tbc/%.c, $(TBCSRCS))
-OBJS = $(patsubst %.c, %.o, $(SRCS))
+SRCS = $(patsubst %.cpp, game/src/%.cpp, $(MAINSRCS))
+	SRCS += $(patsubst %.cpp, game/src/ui/%.cpp, $(UISRCS))
+	SRCS += $(patsubst %.cpp, game/src/tbc/%.cpp, $(TBCSRCS))
+OBJS = $(patsubst %.cpp, %.o, $(SRCS))
 
 #compiler
 CC = g++
-CFLAGS = -Wall -std=c++23 -pedantic -O3
+CFLAGS = -Wall -std=c++20 -pedantic -O3
 
 #linker
 CFLAGS += -fsanitize=address -fno-omit-frame-pointer -g3
@@ -30,6 +30,9 @@ LDFLAGS += $(shell pkg-config --libs SDL2_ttf)
 
 #compilation
 all: $(TARGET)
+
+%.o : %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJS)
 	$(CC) $^ $(LDFLAGS) -o $@ 
