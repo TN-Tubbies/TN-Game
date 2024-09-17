@@ -356,3 +356,12 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 
     return res;
 }
+
+// ------------------------------------------------------------------------------------------------
+// HUD RELATED FUNCTIONS --------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
+
+void BattleCharacter::DrawHUD(int x, int y)
+{
+    Render_HUD(this->hud, x, y);
+}

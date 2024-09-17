@@ -110,6 +110,8 @@ public:
 
     void AddToSkillBar(int adding);
     void AddToUltimateBar(int adding);
+
+    void DrawHUD(int x, int y);
 };
 
 std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> array);

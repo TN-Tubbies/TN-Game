@@ -16,6 +16,8 @@ typedef struct HUD {
 
 HUD *Init_HUD(std::string bg_path, std::string char_name, bool isFriendly);
 
+void Render_HUD(HUD *hud, int x, int y);
+
 void Destroy_HUD(HUD *hud);
 
 #endif // BATTLE_HUD_H

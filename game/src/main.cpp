@@ -47,7 +47,9 @@ int main(void)
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        zerachiel.DrawHUD(0, 0);
         // End of fix
+        
 
         SDL_RenderPresent(renderer);
     }

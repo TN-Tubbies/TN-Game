@@ -1,4 +1,5 @@
 #include "battle_hud.h"
+#include "../../defs.h"
 
 extern SDL_Renderer *renderer;
 extern TTF_Font *jersey;
@@ -30,4 +31,12 @@ HUD *Init_HUD(std::string bg_path, std::string char_name, bool isFriendly)
     SDL_FreeSurface(name_surf);
 
     return hud;
+}
+
+void Render_HUD(HUD *hud, int x, int y) {
+    SDL_Rect bg_rect = {x, y, 128, 128};
+    SDL_RenderCopy(renderer, hud->bg, NULL, &bg_rect);
+
+    SDL_Rect name_rect = {x+10, y+10, hud->name_w, hud->name_h};
+    SDL_RenderCopy(renderer, hud->name_disp, NULL, &name_rect);
 }
