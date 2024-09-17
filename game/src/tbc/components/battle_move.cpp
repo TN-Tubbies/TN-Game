@@ -14,7 +14,7 @@ BattleMovePassive::BattleMovePassive(std::string name, std::string description, 
 }
 
 BattleMoveActive::BattleMoveActive(std::string name, std::string description, enum BattleElement element, enum MoveTargetCategory moveTarget,
-                                   std::function<void(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> RunEffect, int cost, bool isBM, bool isU)
+                                   std::function<void(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> RunEffect, int cost, bool isBM, bool isU)
 {
     this->name = name;
     this->description = description;
@@ -29,9 +29,10 @@ BattleMoveActive::BattleMoveActive(std::string name, std::string description, en
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
-
-std::function<void(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> GetNullMoveFunction1(void) {}
-std::function<void(std::vector<BattleCharacter> Field)> GetNullMoveFunction2(void) {}
+void NullFct1(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field){}
+void NullFct2(std::vector<BattleCharacter> Field){}
+std::function<void(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> GetNullMoveFunction1(void) {return NullFct1;}
+std::function<void(std::vector<BattleCharacter> Field)> GetNullMoveFunction2(void) {return NullFct2;}
 BattleMoveActive GetNullActiveMove(void)
 {
     return BattleMoveActive("", "", BattleElement_Null, MoveTargetCategory_None, GetNullMoveFunction1(), 0, false, false);

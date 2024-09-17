@@ -264,7 +264,7 @@ int BattleCharacter::GetChangeStat(enum CharacterStat stat)
 void BattleCharacter::AddStatus(BattleStatus status) { AffectedStatus.push_back(status); }
 BattleStatus BattleCharacter::GetStatus(std::string statusName)
 {
-    for (int i = 0; i < AffectedStatus.size(); i++)
+    for (unsigned int i = 0; i < AffectedStatus.size(); i++)
     {
         if (AffectedStatus[i].GetName() == statusName)
         {
@@ -277,7 +277,7 @@ bool BattleCharacter::CheckIfAffected(std::string statusName)
 {
     bool res = false;
 
-    for (int i = 0; i < AffectedStatus.size(); i++)
+    for (unsigned int i = 0; i < AffectedStatus.size(); i++)
     {
         if (AffectedStatus[i].GetName() == statusName)
         {
@@ -290,7 +290,7 @@ bool BattleCharacter::CheckIfAffected(std::string statusName)
 }
 void BattleCharacter::RemoveInactiveStatus()
 {
-    for (int i = 0; i < AffectedStatus.size(); i++)
+    for (unsigned int i = 0; i < AffectedStatus.size(); i++)
     {
         if (!AffectedStatus[i].IsActive())
         {
@@ -301,7 +301,7 @@ void BattleCharacter::RemoveInactiveStatus()
 }
 void BattleCharacter::RemoveStatus(std::string statusName)
 {
-    for (int i = 0; i < AffectedStatus.size(); i++)
+    for (unsigned int i = 0; i < AffectedStatus.size(); i++)
     {
         if (AffectedStatus[i].GetName() == statusName)
         {
@@ -336,7 +336,7 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
     {
         int max = 0;
         int maxIndex = -1;
-        for (int i = 0; i < unsorted.size(); i++)
+        for (unsigned int i = 0; i < unsorted.size(); i++)
         {
             if (unsorted[i][1] > max)
             {
@@ -349,7 +349,7 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
     }
 
     std::vector<BattleCharacter> res(length);
-    for (int i = 0; i < sorted.size(); i++)
+    for (unsigned int i = 0; i < sorted.size(); i++)
     {
         res.push_back(array[sorted[i][0]]);
     }

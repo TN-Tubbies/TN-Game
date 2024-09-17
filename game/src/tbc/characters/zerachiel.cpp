@@ -1,15 +1,15 @@
 #include "zerachiel.h"
 
-void ZerachielBaseMoveEffect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void ZerachielBaseMoveEffect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int M = 1;
 
-    for (int i = 0; i < TargetID.size(); i++)
+    for (unsigned int i = 0; i < TargetID.size(); i++)
     {
         BattleCharacter target = Field[TargetID[i]];
         target.TakeDamage(M, BattleElement_Physical);
     }
-    for (int i = 0; i < Field.size(); i++)
+    for (unsigned int i = 0; i < Field.size(); i++)
     {
         if (Field[i].CheckIfAffected("DuelWithZerachiel"))
         {
@@ -17,10 +17,10 @@ void ZerachielBaseMoveEffect(BattleCharacter Self, std::vector<int> TargetID, st
         }
     }
 
-    for (int i = 0; i < TargetID.size(); i++)
+    for (unsigned int i = 0; i < TargetID.size(); i++)
     {
 
-        Status_DuelWithZerachiel status = Status_DuelWithZerachiel(Self);
+        Status_DuelWithZerachiel status = Status_DuelWithZerachiel(*Self);
         Field[TargetID[i]].AddStatus(status);
     }
 }
@@ -39,14 +39,14 @@ BattleMoveActive GetZerachielBaseMove(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void ZerachielMove1Effect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void ZerachielMove1Effect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int N = 1;
     float P = 0.5f;
     int Q = 3;
 
     Field[TargetID[0]].ChangeStat(CharacterStat_Speed, N);
-    for (int i = 0; i < Field.size(); i++)
+    for (unsigned int i = 0; i < Field.size(); i++)
     {
         if (Field[i].CheckIfAffected("DuelWithZerachiel") && Field[i].GetHP() / Field[i].GetMaxHP() > P)
         {
@@ -70,7 +70,7 @@ BattleMoveActive GetZerachielMove1(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void ZerachielMove2Effect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void ZerachielMove2Effect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int atkBuffNotch = 1;
 
@@ -103,12 +103,12 @@ BattleMoveActive GetZerachielMove2(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void ZerachielUltimateEffect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void ZerachielUltimateEffect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int M = 1;
     int X = 5;
 
-    for (int i = 0; i < TargetID.size(); i++)
+    for (unsigned int i = 0; i < TargetID.size(); i++)
     {
         int remaining = 0;
         for (int j = 0; j < X; j++)
@@ -136,7 +136,7 @@ void ZerachielUltimateEffect(BattleCharacter Self, std::vector<int> TargetID, st
             int residual_damage = (int)M / count;
             for (int j = 0; j < remaining; j++)
             {
-                for (int k = 0; k < Field.size(); k++)
+                for (unsigned int k = 0; k < Field.size(); k++)
                 {
                     if (!Field.at(k).IsFriendly())
                     {
@@ -168,14 +168,14 @@ void ZerachielPassive1Effect(std::vector<BattleCharacter> Field)
     float UltimateChargeGained = 0.3f;
     float AttackIncreaseNotch = 0.1f;
 
-    for (int i = 0; i < Field.size(); i++)
+    for (unsigned int i = 0; i < Field.size(); i++)
     {
         if (Field[i].CheckIfAffected("DuelWithZerachiel"))
         {
             if (Field[i].GetLastDamageReceived() >= HPLossPercentage * Field[i].GetMaxHP())
             {
-                Field[i].GetStatus("DuelWithZerachiel").GetLinkedCharacter().ChangeStat(CharacterStat_Atk, AttackIncreaseNotch);
-                Field[i].GetStatus("DuelWithZerachiel").GetLinkedCharacter().AddToUltimateBar((int)100 * UltimateChargeGained);
+                (*(Field[i].GetStatus("DuelWithZerachiel").GetLinkedCharacter())).ChangeStat(CharacterStat_Atk, AttackIncreaseNotch);
+                (*(Field[i].GetStatus("DuelWithZerachiel").GetLinkedCharacter())).AddToUltimateBar((int)100 * UltimateChargeGained);
             }
         }
     }

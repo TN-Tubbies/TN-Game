@@ -1,6 +1,6 @@
 #include "livya.h"
 
-void LivyaBaseMoveEffect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaBaseMoveEffect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
 }
 BattleMoveActive GetLivyaBaseMove(void)
@@ -18,7 +18,7 @@ BattleMoveActive GetLivyaBaseMove(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void LivyaMove1Effect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaMove1Effect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
 }
 BattleMoveActive GetLivyaMove1(void)
@@ -36,7 +36,7 @@ BattleMoveActive GetLivyaMove1(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void LivyaMove2Effect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaMove2Effect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int atkBuffNotch = 1;
 
@@ -69,12 +69,12 @@ BattleMoveActive GetLivyaMove2(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void LivyaUltimateEffect(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaUltimateEffect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int M = 1;
     int X = 5;
 
-    for (int i = 0; i < TargetID.size(); i++)
+    for (unsigned int i = 0; i < TargetID.size(); i++)
     {
         int remaining = 0;
         for (int j = 0; j < X; j++)
@@ -134,14 +134,14 @@ void LivyaPassive1Effect(std::vector<BattleCharacter> Field)
     float UltimateChargeGained = 0.3f;
     float AttackIncreaseNotch = 0.1f;
 
-    for (int i = 0; i < Field.size(); i++)
+    for (unsigned int i = 0; i < Field.size(); i++)
     {
         if (Field[i].CheckIfAffected("DuelWithLivya"))
         {
             if (Field[i].GetLastDamageReceived() >= HPLossPercentage * Field[i].GetMaxHP())
             {
-                Field[i].GetStatus("DuelWithLivya").GetLinkedCharacter().ChangeStat(CharacterStat_Atk, AttackIncreaseNotch);
-                Field[i].GetStatus("DuelWithLivya").GetLinkedCharacter().AddToUltimateBar((int)100 * UltimateChargeGained);
+                (*(Field[i].GetStatus("DuelWithLivya").GetLinkedCharacter())).ChangeStat(CharacterStat_Atk, AttackIncreaseNotch);
+                (*(Field[i].GetStatus("DuelWithLivya").GetLinkedCharacter())).AddToUltimateBar((int)100 * UltimateChargeGained);
             }
         }
     }

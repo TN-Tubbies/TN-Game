@@ -33,10 +33,10 @@ private:
 class BattleMoveActive : public BattleMove
 {
 public:
-    std::function<void(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> runFunction;
+    std::function<void(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> runFunction;
 
     BattleMoveActive(std::string name, std::string description, enum BattleElement element, enum MoveTargetCategory moveTarget,
-                     std::function<void(BattleCharacter Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> sideEffect, int cost, bool isBM, bool isU);
+                     std::function<void(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> sideEffect, int cost, bool isBM, bool isU);
 
     // TODO: Les getters arrivent fort
 

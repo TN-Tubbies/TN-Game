@@ -16,8 +16,10 @@ Battle_System *StartBattle(std::vector<BattleCharacter> playableCharacters, std:
     NewBattle->currentState = BattleState_Starting;
     NewBattle->currentTurnState = BattleTurnState_Starting;
 
-    std::vector<BattleCharacter> merged(playableCharacters.size() + enemyCharacters.size());
-    merge(playableCharacters.begin(), playableCharacters.end(), enemyCharacters.begin(), enemyCharacters.end(), merged.begin());
+    std::vector<BattleCharacter> merged;
+    for (unsigned int i = 0; i < playableCharacters.size();i++){merged.push_back(playableCharacters[i]);}
+    for (unsigned int i = 0; i < enemyCharacters.size();i++){merged.push_back(enemyCharacters[i]);}
+
     NewBattle->currentCharacterOrder = merged;
     NewBattle->battlefield = merged;
     return NewBattle;
