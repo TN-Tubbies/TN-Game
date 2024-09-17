@@ -91,7 +91,7 @@ void LivyaUltimateEffect(BattleCharacter* Self, std::vector<int> TargetID, std::
         if (remaining != 0)
         {
             int count = 0;
-            for (int j = 0; j < Field.size(); j++)
+            for (unsigned int j = 0; j < Field.size(); j++)
             {
                 if (!Field.at(j).IsFriendly())
                 {
@@ -102,7 +102,7 @@ void LivyaUltimateEffect(BattleCharacter* Self, std::vector<int> TargetID, std::
             int residual_damage = (int)M / count;
             for (int j = 0; j < remaining; j++)
             {
-                for (int k = 0; k < Field.size(); k++)
+                for (unsigned int k = 0; k < Field.size(); k++)
                 {
                     if (!Field.at(k).IsFriendly())
                     {

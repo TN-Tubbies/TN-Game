@@ -1,7 +1,7 @@
 # Global Files
 TARGET = main
 MAINSRCS = main.cpp
-SDLSRCS = ui_init.cpp
+SDLSRCS = ui_init.cpp jersey.cpp renderer.cpp
 WORLDSRCS =
 # TBC Files
 COMPONENTSRCS = battle_character.cpp battle_hud.cpp battle_move.cpp battle_status.cpp

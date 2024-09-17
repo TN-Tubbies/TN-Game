@@ -2,23 +2,22 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
+
 #include "sdl/ui_init.h"
-#include "defs.h"
+#include "sdl/renderer.h"
+#include "sdl/jersey.h"
 #include "tbc/components/battle_character.h"
 //FIXME: temporary :
 #include "tbc/characters/zerachiel.h"
 
-extern TTF_Font *jersey;
-extern SDL_Renderer *renderer;
-
 int main(void)
 {
-    renderer = Init_SDL();
-    jersey = Init_TTF();
+    Init_Renderer();
+    Init_Jersey();
     Init_IMG();
     Init_MIX();
 
-    SDL_Texture *modernUI = ModernUILoad(renderer);
+    SDL_Texture *modernUI = ModernUILoad(Get_Renderer());
     
     //FIXME: Temporary party & HUD init (should be done when loading a battle) :
     std::vector<BattleCharacter> player_party;
@@ -44,17 +43,16 @@ int main(void)
 
         //// Rendering ////
         // FIXME: Temporary background :
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderClear(renderer);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(Get_Renderer(), 255, 255, 255, 255);
+        SDL_RenderClear(Get_Renderer());
+        SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
         zerachiel.DrawHUD(0, 0);
         // End of fix
         
-
-        SDL_RenderPresent(renderer);
+        SDL_RenderPresent(Get_Renderer());
     }
 
     SDL_DestroyTexture(modernUI);
-    TTF_CloseFont(jersey);
-    SDL_DestroyRenderer(renderer);
+    Destroy_Jersey();
+    Destroy_Renderer();
 }

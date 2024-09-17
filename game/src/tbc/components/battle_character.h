@@ -3,6 +3,8 @@
 
 #include "../battle_declarations.h"
 #include "../battle_enumerators.h"
+#include "../../sdl/renderer.h"
+#include "../../sdl/jersey.h"
 #include "battle_status.h"
 #include "battle_move.h"
 #include "battle_hud.h"
@@ -14,9 +16,6 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-
-extern TTF_Font *jersey;
-extern SDL_Renderer *renderer;
 
 // Classes:
 // Débloque des équipements particuliers

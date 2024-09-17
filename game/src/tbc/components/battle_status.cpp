@@ -1,5 +1,7 @@
 #include "battle_status.h"
 
+BattleStatus::BattleStatus(){}
+
 void BattleStatus::CheckTimer()
 {
     if (hasTimer)
