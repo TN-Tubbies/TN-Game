@@ -11,7 +11,7 @@ public:
     BattleStatus();
 
     std::string GetName();
-    BattleCharacter GetLinkedCharacter();
+    BattleCharacter* GetLinkedCharacter();
     void CheckTimer();
     bool DoRemoveAfterBattle();
     bool IsActive();
@@ -23,7 +23,7 @@ protected:
     int timerDuration;
 
     bool removeAfterBattle;
-    BattleCharacter linkedCharacter;
+    BattleCharacter* linkedCharacter;
 };
 
 #endif
