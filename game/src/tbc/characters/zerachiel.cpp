@@ -28,7 +28,7 @@ BattleMoveActive GetZerachielBaseMove(void)
 {
     return BattleMoveActive(
         "Entre vous et moi",
-        "Restaure 15\% de la BS.\nInflige M\% de dégâts à la cible, et la fait entrer en duel avec Zerachiel. Si un autre adversaire est déjà en duel avec Zerachiel, ce précédent duel est annulé.",
+        "Restaure 15% de la BS.\nInflige M% de dégâts à la cible, et la fait entrer en duel avec Zerachiel. Si un autre adversaire est déjà en duel avec Zerachiel, ce précédent duel est annulé.",
         BattleElement_Physical,
         MoveTargetCategory_OneEnemy,
         ZerachielBaseMoveEffect,
@@ -59,7 +59,7 @@ BattleMoveActive GetZerachielMove1(void)
 {
     return BattleMoveActive(
         "Lames de Duel",
-        "Consomme 20\% de la BS.\nAugmente de N\% la vitesse de Zerachiel. Si la cible a plus de P\% de ses PV max au début du duel contre Zerachiel, elle ne pourra plus récupérer de PV jusqu'à la fin du duel, au bout de Q tours.",
+        "Consomme 20% de la BS.\nAugmente de N% la vitesse de Zerachiel. Si la cible a plus de P% de ses PV max au début du duel contre Zerachiel, elle ne pourra plus récupérer de PV jusqu'à la fin du duel, au bout de Q tours.",
         BattleElement_Light,
         MoveTargetCategory_Self,
         ZerachielMove1Effect,
@@ -92,7 +92,7 @@ BattleMoveActive GetZerachielMove2(void)
 {
     return BattleMoveActive(
         "Infaillible",
-        "Consomme 20\% de la BS.\nNettoie ses lunettes en plein combat, retirant la majorité des malus qui l'incombent et augmentant de M\% son attaque.",
+        "Consomme 20% de la BS.\nNettoie ses lunettes en plein combat, retirant la majorité des malus qui l'incombent et augmentant de M% son attaque.",
         BattleElement_Light,
         MoveTargetCategory_Self,
         ZerachielMove2Effect,
@@ -125,7 +125,7 @@ void ZerachielUltimateEffect(BattleCharacter *Self, std::vector<int> TargetID, s
         if (remaining != 0)
         {
             int count = 0;
-            for (int j = 0; j < Field.size(); j++)
+            for (unsigned int j = 0; j < Field.size(); j++)
             {
                 if (!Field.at(j).IsFriendly())
                 {
@@ -151,7 +151,7 @@ BattleMoveActive GetZerachielUltimate(void)
 {
     return BattleMoveActive(
         "Question d'habitude, voyons !",
-        "Inflige M\% de dégâts à un ennemi X fois. Si la cible est vaincue avant que tous les coups soient portés, les dégâts restants sont distribués à tous les ennemis.",
+        "Inflige M% de dégâts à un ennemi X fois. Si la cible est vaincue avant que tous les coups soient portés, les dégâts restants sont distribués à tous les ennemis.",
         BattleElement_Light,
         MoveTargetCategory_OneEnemy,
         ZerachielUltimateEffect,
@@ -184,7 +184,7 @@ BattleMovePassive GetZerachielPassive1(void)
 {
     return BattleMovePassive(
         "L'amour du travail bien fait",
-        "À chaque fois qu'un ennemi en duel avec Zerachiel perd M\% de ses PV maximums, Zerachiel récupère N\% de charge d'ultime et augmente de P\% son attaque.",
+        "À chaque fois qu'un ennemi en duel avec Zerachiel perd M% de ses PV maximums, Zerachiel récupère N% de charge d'ultime et augmente de P% son attaque.",
         MoveTargetCategory_OneEnemy,
         ZerachielPassive1Effect,
         PassiveTriggerCategory_OnDamageDealtToEnemy);

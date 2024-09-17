@@ -7,7 +7,7 @@ BattleMoveActive GetLivyaBaseMove(void)
 {
     return BattleMoveActive(
         "Entre vous et moi",
-        "Restaure 15\% de la BS.\nInflige M\% de dégâts à la cible, et la fait entrer en duel avec Livya. Si un autre adversaire est déjà en duel avec Livya, ce précédent duel est annulé.",
+        "Restaure 15% de la BS.\nInflige M% de dégâts à la cible, et la fait entrer en duel avec Livya. Si un autre adversaire est déjà en duel avec Livya, ce précédent duel est annulé.",
         BattleElement_Physical,
         MoveTargetCategory_OneEnemy,
         LivyaBaseMoveEffect,
@@ -25,7 +25,7 @@ BattleMoveActive GetLivyaMove1(void)
 {
     return BattleMoveActive(
         "Lames de Duel",
-        "Consomme 20\% de la BS.\nAugmente de N\% la vitesse de Livya. Si la cible a plus de P\% de ses PV max au début du duel contre Livya, elle ne pourra plus récupérer de PV jusqu'à la fin du duel, au bout de Q tours.",
+        "Consomme 20% de la BS.\nAugmente de N% la vitesse de Livya. Si la cible a plus de P% de ses PV max au début du duel contre Livya, elle ne pourra plus récupérer de PV jusqu'à la fin du duel, au bout de Q tours.",
         BattleElement_Light,
         MoveTargetCategory_Self,
         LivyaMove1Effect,
@@ -58,7 +58,7 @@ BattleMoveActive GetLivyaMove2(void)
 {
     return BattleMoveActive(
         "Infaillible",
-        "Consomme 20\% de la BS.\nNettoie ses lunettes en plein combat, retirant la majorité des malus qui l'incombent et augmentant de M\% son attaque.",
+        "Consomme 20% de la BS.\nNettoie ses lunettes en plein combat, retirant la majorité des malus qui l'incombent et augmentant de M% son attaque.",
         BattleElement_Light,
         MoveTargetCategory_Self,
         LivyaMove2Effect,
@@ -117,7 +117,7 @@ BattleMoveActive GetLivyaUltimate(void)
 {
     return BattleMoveActive(
         "Question d'habitude, voyons !",
-        "Inflige M\% de dégâts à un ennemi X fois. Si la cible est vaincue avant que tous les coups soient portés, les dégâts restants sont distribués à tous les ennemis.",
+        "Inflige M% de dégâts à un ennemi X fois. Si la cible est vaincue avant que tous les coups soient portés, les dégâts restants sont distribués à tous les ennemis.",
         BattleElement_Light,
         MoveTargetCategory_OneEnemy,
         LivyaUltimateEffect,
@@ -150,7 +150,7 @@ BattleMovePassive GetLivyaPassive1(void)
 {
     return BattleMovePassive(
         "L'amour du travail bien fait",
-        "À chaque fois qu'un ennemi en duel avec Livya perd M\% de ses PV maximums, Livya récupère N\% de charge d'ultime et augmente de P\% son attaque.",
+        "À chaque fois qu'un ennemi en duel avec Livya perd M% de ses PV maximums, Livya récupère N% de charge d'ultime et augmente de P% son attaque.",
         MoveTargetCategory_OneEnemy,
         LivyaPassive1Effect,
         PassiveTriggerCategory_OnDamageDealtToEnemy);

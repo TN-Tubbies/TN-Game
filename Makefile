@@ -1,19 +1,19 @@
 # Global Files
 TARGET = main
 MAINSRCS = main.cpp
-UISRCS = ui_init.cpp
+SDLSRCS = ui_init.cpp
 WORLDSRCS =
 # TBC Files
 COMPONENTSRCS = battle_character.cpp battle_hud.cpp battle_move.cpp battle_status.cpp
 CHARACTERSRCS = zerachiel.cpp livya.cpp
-STATUSSRCS = duel_with_Zerachiel.cpp heal_blocked_.cpp
+STATUSSRCS = duel_with_Zerachiel.cpp heal_blocked.cpp
 TBCSRCS = battle_system.cpp
 	TBCSRCS += $(patsubst %.cpp, components/%.cpp, $(COMPONENTSRCS))
 	TBCSRCS += $(patsubst %.cpp, characters/%.cpp, $(CHARACTERSRCS))
 	TBCSRCS += $(patsubst %.cpp, status/%.cpp, $(STATUSSRCS))
 # All Sources
 SRCS = $(patsubst %.cpp, game/src/%.cpp, $(MAINSRCS))
-	SRCS += $(patsubst %.cpp, game/src/ui/%.cpp, $(UISRCS))
+	SRCS += $(patsubst %.cpp, game/src/sdl/%.cpp, $(SDLSRCS))
 	SRCS += $(patsubst %.cpp, game/src/tbc/%.cpp, $(TBCSRCS))
 	SRCS += $(patsubst %.cpp, game/src/world/%.cpp, $(WORLDSRCS))
 OBJS = $(patsubst %.cpp, %.o, $(SRCS))

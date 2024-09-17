@@ -29,15 +29,13 @@ BattleMoveActive::BattleMoveActive(std::string name, std::string description, en
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
-void NullFct1(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field){}
-void NullFct2(std::vector<BattleCharacter> Field){}
-std::function<void(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> GetNullMoveFunction1(void) {return NullFct1;}
-std::function<void(std::vector<BattleCharacter> Field)> GetNullMoveFunction2(void) {return NullFct2;}
 BattleMoveActive GetNullActiveMove(void)
 {
-    return BattleMoveActive("", "", BattleElement_Null, MoveTargetCategory_None, GetNullMoveFunction1(), 0, false, false);
+    std::function<void(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> NullMoveFunction;
+    return BattleMoveActive("", "", BattleElement_Null, MoveTargetCategory_None, NullMoveFunction, 0, false, false);
 }
 BattleMovePassive GetNullPassiveMove(void)
 {
-    return BattleMovePassive("", "", MoveTargetCategory_None, GetNullMoveFunction2(), PassiveTriggerCategory_None);
+    std::function<void(std::vector<BattleCharacter> Field)> NullMoveFunction;
+    return BattleMovePassive("", "", MoveTargetCategory_None, NullMoveFunction, PassiveTriggerCategory_None);
 }
