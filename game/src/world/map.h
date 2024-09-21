@@ -10,18 +10,12 @@
 
 #include "../defs.h"
 #include "../static/renderer.h"
-
-class Tile{
-private:
-    bool IsWall;
-    std::string AnimationPath;
-public:
-    Tile(bool is_wall);
-    Tile(bool is_wall, std::string animation_path);
-};
+#include "../utility/sdl_compare_surfaces.h"
+#include "tile.h"
 
 class Map {
 private:
+    int ID;
     std::string MapName;
     int Height, Width;
     std::vector<std::vector<Tile>> MapTiles;
@@ -33,8 +27,20 @@ private:
     SDL_Texture* SkyTexture;
     int SkyTextureWidth, SkyTextureHeight;
 
+    std::vector<int> LinkedMapsID;
+
 public:
     Map(std::string name, int height, int width, std::string base_img_path);
+    ~Map();
+
+    int GetID() const;
+    int GetHeight() const;
+    int GetWidth() const;
+    std::string GetMapName() const;
+    std::vector<std::vector<Tile>> GetMapTiles();
+    std::vector<int> GetLinkedMapsID();
+
+    void Render(void);
 };
 
 #endif

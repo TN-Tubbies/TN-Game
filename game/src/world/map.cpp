@@ -1,20 +1,8 @@
 #include "map.h"
 
-// Tile Methods -----------------------------------------------------------------------------------
-
-Tile::Tile(bool is_wall){
-    this->IsWall = is_wall;
-
-    // Default animation path is "*None*"
-    this->AnimationPath = "*None*";
-}
-Tile::Tile(bool is_wall, std::string animation_path){
-    this->IsWall = is_wall;
-    this->AnimationPath = animation_path;
-}
-
 // Map Methods ------------------------------------------------------------------------------------
 
+// Constr and destr
 Map::Map(std::string name, int height, int width, std::string img_path){
     this->MapName = name;
     this->Height = height;
@@ -27,7 +15,6 @@ Map::Map(std::string name, int height, int width, std::string img_path){
         return;
     }
     FloorTexture = SDL_CreateTextureFromSurface(Get_Renderer(), floor_surface);
-    SDL_FreeSurface(floor_surface);
     if (!FloorTexture) {
         std::cerr << "Error creating texture from map: " << SDL_GetError() << std::endl;
         return;
@@ -41,7 +28,6 @@ Map::Map(std::string name, int height, int width, std::string img_path){
         return;
     }
     WallTexture = SDL_CreateTextureFromSurface(Get_Renderer(), wall_surface);
-    SDL_FreeSurface(wall_surface);
     if (!WallTexture) {
         std::cerr << "Error creating texture from map: " << SDL_GetError() << std::endl;
         return;
@@ -55,19 +41,73 @@ Map::Map(std::string name, int height, int width, std::string img_path){
         return;
     }
     SkyTexture = SDL_CreateTextureFromSurface(Get_Renderer(), sky_surface);
-    SDL_FreeSurface(sky_surface);
     if (!SkyTexture) {
         std::cerr << "Error creating texture from map: " << SDL_GetError() << std::endl;
         return;
     }
     SDL_QueryTexture(SkyTexture, NULL, NULL, &SkyTextureWidth, &SkyTextureHeight);
 
+    // Get empty tile
+    SDL_Surface* EmptyTile = IMG_Load(PATH_TO_EMPTY_TILE);
+    if (!EmptyTile) {
+        std::cerr << "Error loading empty tile: " << IMG_GetError() << std::endl;
+        return;
+    }
     // Setup map tiles
-    std::vector<std::vector<Tile>> map_tiles(Height, std::vector<Tile>(Width));
-    for (int i = 0; i < Height; ++i) {
-        for (int j = 0; j < Width; ++j) {
-            map_tiles[i][j] = Tile(false);   // FIXME: Add tile data based on map data
+    int NbTilesHeight = height/TILE_SIZE;
+    int NbTilesWidth = width/TILE_SIZE;
+    std::vector<std::vector<Tile>> map_tiles(NbTilesHeight, std::vector<Tile>(NbTilesWidth));
+    for (int i = 0; i < NbTilesHeight; ++i) {
+        for (int j = 0; j < NbTilesWidth; ++j) {
+            bool IsWall;
+            SDL_Surface* CurrentTile = IMG_Load(PATH_TO_EMPTY_TILE);
+            if (!CurrentTile) {
+                std::cerr << "Error loading empty tile: " << IMG_GetError() << std::endl;
+                return;
+            }
+
+            SDL_Rect src = {.x = i*TILE_SIZE, .y = j*TILE_SIZE, .w = TILE_SIZE, .h = TILE_SIZE};
+            // project tile to current working tile
+            if (SDL_BlitSurface(wall_surface, &src, CurrentTile, NULL)) {
+                std::cerr << "Error blitting wall map to current working tile: " << IMG_GetError() << std::endl;
+                return;
+            }
+
+            if (AreSurfacesEqual(CurrentTile, EmptyTile)) {
+                IsWall = false;
+            } else {
+                IsWall = true;
+            }
+
+            SDL_FreeSurface(CurrentTile);
+
+            map_tiles[i][j] = Tile(IsWall);
         }
     }
     this->MapTiles = map_tiles;
+    this->LinkedMapsID = std::vector<int>();
+
+    // Cleaning up surfaces
+    SDL_FreeSurface(floor_surface);
+    SDL_FreeSurface(wall_surface);
+    SDL_FreeSurface(sky_surface);
+    SDL_FreeSurface(EmptyTile);
+}
+Map::~Map(void){
+    SDL_DestroyTexture(FloorTexture);
+    SDL_DestroyTexture(WallTexture);
+    SDL_DestroyTexture(SkyTexture);
+}
+
+// Getters
+int Map::GetID() const { return ID;}
+int Map::GetHeight() const { return Height;  }
+int Map::GetWidth() const { return Width;  }
+std::string Map::GetMapName() const { return MapName; }
+std::vector<std::vector<Tile>> Map::GetMapTiles(){ return MapTiles; }
+std::vector<int> Map::GetLinkedMapsID(){ return LinkedMapsID; }
+
+// Render
+void Map::Render(void){    // TODO: Implement rendering logic
+    // Render sky over wall over floor
 }

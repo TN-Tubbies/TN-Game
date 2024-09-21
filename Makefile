@@ -2,8 +2,9 @@
 TARGET = main
 MAINSRCS = main.cpp
 STATICSRCS = jersey.cpp renderer.cpp
+UTILITYSRCS = sdl_compare_surfaces.cpp
 UISRCS = ui_init.cpp
-WORLDSRCS = map.cpp
+WORLDSRCS = world.cpp map.cpp tile.cpp
 # TBC Files
 COMPONENTSRCS = battle_character.cpp battle_hud.cpp battle_move.cpp battle_status.cpp
 CHARACTERSRCS = zerachiel.cpp livya.cpp
@@ -15,6 +16,7 @@ TBCSRCS = battle_system.cpp
 # All Sources
 SRCS = $(patsubst %.cpp, game/src/%.cpp, $(MAINSRCS))
 	SRCS += $(patsubst %.cpp, game/src/static/%.cpp, $(STATICSRCS))
+	SRCS += $(patsubst %.cpp, game/src/utility/%.cpp, $(UTILITYSRCS))
 	SRCS += $(patsubst %.cpp, game/src/ui/%.cpp, $(UISRCS))
 	SRCS += $(patsubst %.cpp, game/src/tbc/%.cpp, $(TBCSRCS))
 	SRCS += $(patsubst %.cpp, game/src/world/%.cpp, $(WORLDSRCS))
