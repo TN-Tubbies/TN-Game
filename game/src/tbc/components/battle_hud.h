@@ -7,8 +7,8 @@
 
 #include <string>
 
-#include "../../sdl/renderer.h"
-#include "../../sdl/jersey.h"
+#include "../../static/renderer.h"
+#include "../../static/jersey.h"
 
 typedef struct HUD {
     SDL_Texture *bg;

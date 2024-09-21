@@ -3,9 +3,9 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "sdl/ui_init.h"
-#include "sdl/renderer.h"
-#include "sdl/jersey.h"
+#include "ui/ui_init.h"
+#include "static/renderer.h"
+#include "static/jersey.h"
 #include "tbc/components/battle_character.h"
 //FIXME: temporary :
 #include "tbc/characters/zerachiel.h"

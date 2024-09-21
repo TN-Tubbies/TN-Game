@@ -3,8 +3,8 @@
 
 #include "../battle_declarations.h"
 #include "../battle_enumerators.h"
-#include "../../sdl/renderer.h"
-#include "../../sdl/jersey.h"
+#include "../../static/renderer.h"
+#include "../../static/jersey.h"
 #include "battle_status.h"
 #include "battle_move.h"
 #include "battle_hud.h"

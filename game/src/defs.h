@@ -5,5 +5,6 @@
 
 #define WIDTH 1707
 #define HEIGHT 960
+#define TILE_SIZE 32    // In pixels
 
 #endif
