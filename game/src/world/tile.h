@@ -8,6 +8,7 @@ private:
     bool isWall;
     std::string AnimationPath;
 public:
+    Tile();
     Tile(bool is_wall);
     Tile(bool is_wall, std::string animation_path);
 
@@ -23,7 +24,8 @@ public:
     WarpingTile(int destination_map_id, int destination_x, int destination_y);
 
     int GetDestinationMapID();
-    int* GetDestinationCoordinates();
+    int GetDestinationX();
+    int GetDestinationY();
 };
 
 #endif

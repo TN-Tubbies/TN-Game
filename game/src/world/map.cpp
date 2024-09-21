@@ -3,13 +3,13 @@
 // Map Methods ------------------------------------------------------------------------------------
 
 // Constr and destr
-Map::Map(std::string name, int height, int width, std::string img_path){
+Map::Map(std::string name, int height, int width, std::string img_folder_path){
     this->MapName = name;
     this->Height = height;
     this->Width = width;
 
     // Load floor texture
-    SDL_Surface* floor_surface = IMG_Load(("floor_" + img_path).c_str());
+    SDL_Surface* floor_surface = IMG_Load((img_folder_path + "/floor.png").c_str());
     if (!floor_surface) {
         std::cerr << "Error loading map texture: " << IMG_GetError() << std::endl;
         return;
@@ -22,7 +22,7 @@ Map::Map(std::string name, int height, int width, std::string img_path){
     SDL_QueryTexture(FloorTexture, NULL, NULL, &FloorTextureWidth, &FloorTextureHeight);
 
     // Load wall texture
-    SDL_Surface* wall_surface = IMG_Load(("wall_" + img_path).c_str());
+    SDL_Surface* wall_surface = IMG_Load((img_folder_path + "/wall.png").c_str());
     if (!wall_surface) {
         std::cerr << "Error loading map texture: " << IMG_GetError() << std::endl;
         return;
@@ -35,17 +35,21 @@ Map::Map(std::string name, int height, int width, std::string img_path){
     SDL_QueryTexture(WallTexture, NULL, NULL, &WallTextureWidth, &WallTextureHeight);
 
     // Load sky texture
-    SDL_Surface* sky_surface = IMG_Load(("sky_" + img_path).c_str());
-    if (!sky_surface) {
-        std::cerr << "Error loading map texture: " << IMG_GetError() << std::endl;
-        return;
+    SDL_Surface* sky_surface = IMG_Load((img_folder_path + "/sky").c_str());
+    if (sky_surface) {
+        SkyTexture = SDL_CreateTextureFromSurface(Get_Renderer(), sky_surface);
+        if (!SkyTexture) {
+            std::cerr << "Error creating texture from map: " << SDL_GetError() << std::endl;
+            return;
+        }
+        SDL_QueryTexture(SkyTexture, NULL, NULL, &SkyTextureWidth, &SkyTextureHeight);
+        SDL_FreeSurface(sky_surface);
+    } else {
+        SkyTexture = NULL;
+        SkyTextureWidth = 0;
+        SkyTextureHeight = 0;
     }
-    SkyTexture = SDL_CreateTextureFromSurface(Get_Renderer(), sky_surface);
-    if (!SkyTexture) {
-        std::cerr << "Error creating texture from map: " << SDL_GetError() << std::endl;
-        return;
-    }
-    SDL_QueryTexture(SkyTexture, NULL, NULL, &SkyTextureWidth, &SkyTextureHeight);
+
 
     // Get empty tile
     SDL_Surface* EmptyTile = IMG_Load(PATH_TO_EMPTY_TILE);
@@ -90,7 +94,6 @@ Map::Map(std::string name, int height, int width, std::string img_path){
     // Cleaning up surfaces
     SDL_FreeSurface(floor_surface);
     SDL_FreeSurface(wall_surface);
-    SDL_FreeSurface(sky_surface);
     SDL_FreeSurface(EmptyTile);
 }
 Map::~Map(void){

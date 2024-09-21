@@ -54,6 +54,7 @@ BattleCharacter::BattleCharacter(
 
 BattleCharacter::~BattleCharacter()
 {
+    Destroy_HUD(hud);
 }
 
 // ------------------------------------------------------------------------------------------------

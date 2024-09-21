@@ -36,3 +36,10 @@ void Render_HUD(HUD *hud, int x, int y) {
     SDL_Rect name_rect = {x+10, y+10, hud->name_w, hud->name_h};
     SDL_RenderCopy(Get_Renderer(), hud->name_disp, NULL, &name_rect);
 }
+
+void Destroy_HUD(HUD *hud) {
+    if (hud != NULL) {
+        SDL_DestroyTexture(hud->bg);
+        SDL_DestroyTexture(hud->name_disp);
+    }
+}

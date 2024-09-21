@@ -236,5 +236,5 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     this->SkillBar = 0;
     this->UltimateBar = 0;
 
-    this->hud = Init_HUD("assets/images/ui/faded_bg.png", zerachielName, isFriendly);
+    this->hud = Init_HUD("game/assets/images/ui/faded_bg.png", zerachielName, isFriendly);
 }

@@ -30,7 +30,7 @@ private:
     std::vector<int> LinkedMapsID;
 
 public:
-    Map(std::string name, int height, int width, std::string base_img_path);
+    Map(std::string name, int height, int width, std::string img_folder_path);
     ~Map();
 
     int GetID() const;

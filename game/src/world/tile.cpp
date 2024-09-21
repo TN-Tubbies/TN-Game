@@ -1,9 +1,11 @@
 #include "tile.h"
 
+Tile::Tile(void){
+    this->isWall = true;
+    this->AnimationPath = "*None*";
+}
 Tile::Tile(bool is_wall){
     this->isWall = is_wall;
-
-    // Default animation path is "*None*"
     this->AnimationPath = "*None*";
 }
 Tile::Tile(bool is_wall, std::string animation_path){
@@ -22,9 +24,5 @@ WarpingTile::WarpingTile(int destination_map_id,
     this->DestinationY = destination_y;
 }
 int WarpingTile::GetDestinationMapID() { return DestinationMapID; }
-int* WarpingTile::GetDestinationCoordinates() { 
-    int res[2];
-    res[0] = this->DestinationX;
-    res[0] = this->DestinationY;
-    return res;
-}
+int WarpingTile::GetDestinationX() { return DestinationX; }
+int WarpingTile::GetDestinationY() { return DestinationY; }
