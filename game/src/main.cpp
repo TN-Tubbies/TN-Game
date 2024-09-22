@@ -28,10 +28,6 @@ int main(void)
 
     // FIXME: Temporary Map init
     Map test_map("Test Map", 13, 15, "game/assets/images/maps/entrance");
-    Map test_map2("Test Map", 13, 15, "game/assets/images/maps/entrance");
-
-    std::cout << "ID of the first map: " << test_map.GetID() << std::endl;
-    std::cout << "ID of the second map: " << test_map2.GetID() << std::endl;
 
     SDL_Event event;
     int running = 1;
