@@ -13,9 +13,12 @@
 #include "../utility/sdl_compare_surfaces.h"
 #include "tile.h"
 
+static int LastMapID = 0;
+
 class Map {
 private:
     int ID;
+
     std::string MapName;
     int Height, Width;
     int XPos, YPos;
@@ -31,6 +34,7 @@ private:
     std::vector<int> LinkedMapsID;
 
 public:
+    Map(std::string data_file_path, std::string img_folder_path);
     Map(std::string name, int height, int width, std::string img_folder_path);
     ~Map();
 
