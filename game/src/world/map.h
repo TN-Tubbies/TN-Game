@@ -18,6 +18,7 @@ private:
     int ID;
     std::string MapName;
     int Height, Width;
+    int XPos, YPos;
     std::vector<std::vector<Tile>> MapTiles;
 
     SDL_Texture* FloorTexture;
@@ -37,6 +38,8 @@ public:
     int GetHeight() const;
     int GetWidth() const;
     std::string GetMapName() const;
+    int GetXPos();
+    int GetYPos();
     std::vector<std::vector<Tile>> GetMapTiles();
     std::vector<int> GetLinkedMapsID();
 

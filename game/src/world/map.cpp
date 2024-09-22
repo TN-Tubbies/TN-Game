@@ -3,10 +3,18 @@
 // Map Methods ------------------------------------------------------------------------------------
 
 // Constr and destr
+/*
+ * Constructor of the Map class.
+ *
+ * Note: the height and width are in tiles.
+ * Note: The img_folder_path is the path to the folder containing the textures. It should not end with a '/'.
+ */
 Map::Map(std::string name, int height, int width, std::string img_folder_path){
     this->MapName = name;
     this->Height = height;
     this->Width = width;
+    this->XPos = 0;
+    this->YPos = 0;
 
     // Load floor texture
     SDL_Surface* floor_surface = IMG_Load((img_folder_path + "/floor.png").c_str());
@@ -103,9 +111,11 @@ Map::~Map(void){
 }
 
 // Getters
-int Map::GetID() const { return ID;}
-int Map::GetHeight() const { return Height;  }
-int Map::GetWidth() const { return Width;  }
+int Map::GetID() const { return ID; }
+int Map::GetHeight() const { return Height; }
+int Map::GetWidth() const { return Width; }
+int Map::GetXPos() { return XPos; }
+int Map::GetYPos() { return YPos; }
 std::string Map::GetMapName() const { return MapName; }
 std::vector<std::vector<Tile>> Map::GetMapTiles(){ return MapTiles; }
 std::vector<int> Map::GetLinkedMapsID(){ return LinkedMapsID; }
@@ -113,4 +123,17 @@ std::vector<int> Map::GetLinkedMapsID(){ return LinkedMapsID; }
 // Render
 void Map::Render(void){    // TODO: Implement rendering logic
     // Render sky over wall over floor
+    SDL_Rect dest;
+    SDL_Renderer* renderer = Get_Renderer();
+
+    int widthInPixels = Width * TILE_SIZE;
+    int heightInPixels = Height * TILE_SIZE;
+
+    // FIXME: Change the position wrt XPos and YPos
+    dest = {.x = 0,.y = 0,.w = widthInPixels,.h = heightInPixels};
+    SDL_RenderCopy(renderer, FloorTexture, NULL, &dest);
+    dest = {.x = 0,.y = 0,.w = widthInPixels,.h = heightInPixels};
+    SDL_RenderCopy(renderer, WallTexture, NULL, &dest);
+    dest = {.x = 0,.y = 0,.w = widthInPixels,.h = heightInPixels};
+    SDL_RenderCopy(renderer, SkyTexture, NULL, &dest);
 }

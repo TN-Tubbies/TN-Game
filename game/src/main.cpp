@@ -27,7 +27,7 @@ int main(void)
     // End of fix
 
     // FIXME: Temporary Map init
-    Map test_map("Test Map", 100, 100, "game/assets/images/maps/entrance");
+    Map test_map("Test Map", 13, 15, "game/assets/images/maps/entrance");
 
     SDL_Event event;
     int running = 1;
