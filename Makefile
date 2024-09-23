@@ -24,7 +24,7 @@ OBJS = $(patsubst %.cpp, %.o, $(SRCS))
 
 #compiler
 CC = g++
-CFLAGS = -Wall -std=c++20 -pedantic -O3
+CFLAGS = -Wall -std=c++23 -O3 -pedantic -Wextra
 
 #linker
 CFLAGS += -fsanitize=address -fno-omit-frame-pointer -g3
