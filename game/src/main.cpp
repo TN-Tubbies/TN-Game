@@ -60,4 +60,5 @@ int main(void)
     // SDL_DestroyTexture(modernUI);
     Destroy_Jersey();
     Destroy_Renderer();
+    exit(0);
 }

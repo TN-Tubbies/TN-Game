@@ -48,6 +48,8 @@ protected:
     int SkillBar;
     int UltimateBar;
 
+    BattleHUD hud;
+
 public:
     BattleMove BaseMove;
     BattleMove Move1;
@@ -56,7 +58,6 @@ public:
     BattleMove Ultimate;
     BattleMove Passive1;
     BattleMove Passive2;
-    HUD *hud;
 
     // Construct
     BattleCharacter() {};

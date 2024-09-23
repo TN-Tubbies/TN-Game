@@ -52,10 +52,7 @@ BattleCharacter::BattleCharacter(
     this->UltimateBar = 0;
 }
 
-BattleCharacter::~BattleCharacter()
-{
-    Destroy_HUD(hud);
-}
+BattleCharacter::~BattleCharacter(){}
 
 // ------------------------------------------------------------------------------------------------
 
@@ -364,5 +361,5 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 
 void BattleCharacter::DrawHUD(int x, int y)
 {
-    Render_HUD(this->hud, x, y);
+    hud.render(x, y);
 }

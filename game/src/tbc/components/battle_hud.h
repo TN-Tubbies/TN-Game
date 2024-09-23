@@ -6,21 +6,22 @@
 #include <SDL2/SDL_ttf.h>
 
 #include <string>
+#include <iostream>
 
 #include "../../static/renderer.h"
 #include "../../static/jersey.h"
 
-typedef struct HUD {
+class BattleHUD {
+private:
     SDL_Texture *bg;
     SDL_Texture *name_disp;
     int name_w;
     int name_h;
-} HUD;
-
-HUD *Init_HUD(std::string bg_path, std::string char_name, bool isFriendly);
-
-void Render_HUD(HUD *hud, int x, int y);
-
-void Destroy_HUD(HUD *hud);
+public:
+    BattleHUD(){};
+    BattleHUD(std::string bg_path, std::string char_name, bool isFriendly);
+    void render(int x, int y);
+    ~BattleHUD();
+};
 
 #endif // BATTLE_HUD_H
