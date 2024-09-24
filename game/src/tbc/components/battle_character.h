@@ -7,7 +7,6 @@
 #include "../../static/jersey.h"
 #include "battle_status.h"
 #include "battle_move.h"
-#include "battle_hud.h"
 
 #include <stdio.h>
 #include <string>
@@ -48,7 +47,10 @@ protected:
     int SkillBar;
     int UltimateBar;
 
-    BattleHUD hud;
+    SDL_Texture *HudBG;
+    SDL_Texture *DisplayedName;
+    int DisplayedNameWidth;
+    int DisplayedNameHeight;
 
 public:
     BattleMove BaseMove;
@@ -111,7 +113,7 @@ public:
     void AddToSkillBar(int adding);
     void AddToUltimateBar(int adding);
 
-    void DrawHUD(int x, int y);
+    void DrawHud(int x, int y);
 };
 
 std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> array);

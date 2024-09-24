@@ -1,5 +1,19 @@
 #include "map.h"
 
+// Generate headers -------------------------------------------------------------------------------
+
+std::vector<std::string> GenerateHeaders() {
+    std::vector<std::string> headers;
+
+    headers.push_back("map name");
+    headers.push_back("height");
+    headers.push_back("width");
+    headers.push_back("link amount");
+    headers.push_back("links");
+
+    return headers;
+}
+
 // Map Methods ------------------------------------------------------------------------------------
 
 // Constr and destr
@@ -13,6 +27,16 @@ Map::Map(std::string data_file_path, std::string img_folder_path){
     this->ID = LastMapID;
     LastMapID++;
 
+    // Extract the data ---------------------------------------------------------------------------
+
+    std::ifstream f(data_file_path.c_str());
+    nlohmann::json json_file = nlohmann::json::parse(f);
+
+
+
+    json_file["/baz/1"_json_pointer];
+
+    // Use the data ------------------------------------------------------------------------------- 
 
     if ((Height*TILE_SIZE < HEIGHT) || (Width*TILE_SIZE < WIDTH)){
         std::cout << "WARNING: the map \"" << MapName.c_str() << "\" is smaller than the screen."<< std::endl;

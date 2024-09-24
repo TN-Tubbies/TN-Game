@@ -7,6 +7,7 @@
 #include "static/renderer.h"
 #include "static/jersey.h"
 #include "world/world.h"
+#include "audio/audio.h"
 #include "tbc/components/battle_character.h"
 //FIXME: temporary :
 #include "tbc/characters/zerachiel.h"
@@ -28,6 +29,10 @@ int main(void)
 
     // FIXME: Temporary Map init
     Map test_map("Test Map", 13, 15, "game/assets/images/maps/entrance");
+
+    // FIXME: Temporary audio init
+    Music background_music("game/assets/audio/music/trial2.wav");
+    background_music.Play(1);
 
     SDL_Event event;
     int running = 1;
@@ -51,7 +56,7 @@ int main(void)
         SDL_RenderClear(Get_Renderer());
         SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
         test_map.Render();
-        zerachiel.DrawHUD(0, 0);
+        zerachiel.DrawHud(0, 0);
         // End of fix
         
         SDL_RenderPresent(Get_Renderer());
