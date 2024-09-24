@@ -3,7 +3,9 @@
 
 #include <string>
 
-#include "battle_character.h"
+// #include "battle_character.h"
+
+class BattleCharacter;
 
 class BattleStatus
 {
