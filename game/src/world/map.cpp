@@ -1,46 +1,62 @@
 #include "map.h"
 
-// Generate headers -------------------------------------------------------------------------------
-
-std::vector<std::string> GenerateHeaders() {
-    std::vector<std::string> headers;
-
-    headers.push_back("map name");
-    headers.push_back("height");
-    headers.push_back("width");
-    headers.push_back("link amount");
-    headers.push_back("links");
-
-    return headers;
-}
-
 // Map Methods ------------------------------------------------------------------------------------
 
 // Constr and destr
 /*
  * Constructor of the Map class.
  *
- * Note: the height and width are in tiles.
- * Note: The img_folder_path is the path to the folder containing the textures. It should not end with a '/'.
+ * Note: The normalize name should be in lower case, with underscores (_) instead of spaces.
+ * Note: The normalize name should be used as name of the JSON file and the folder containing the images.
  */
-Map::Map(std::string data_file_path, std::string img_folder_path){
+Map::Map(std::string normalize_map_name){
+    std::string data_file_path = "game/data/maps/" + normalize_map_name + ".json";
+    std::string img_folder_path = "game/assets/images/maps/" + normalize_map_name;
+
     this->ID = LastMapID;
     LastMapID++;
 
     // Extract the data ---------------------------------------------------------------------------
 
-    std::ifstream f(data_file_path.c_str());
-    nlohmann::json json_file = nlohmann::json::parse(f);
+    std::ifstream json_file_unparsed(data_file_path.c_str());
+    if (!json_file_unparsed.is_open()) {
+        std::cerr << "Error opening input file." << std::endl;
+        exit(-1);
+    }
+    nlohmann::json json_file = nlohmann::json::parse(json_file_unparsed);
+    json_file_unparsed.close();
 
+    std::string map_name = json_file["map_name"];
+    int height = json_file["height"];
+    int width = json_file["width"];
 
-
-    json_file["/baz/1"_json_pointer];
+    // Processing links
+    std::vector<nlohmann::json> links = json_file["links"];
+    std::vector<std::vector<int>> processed_links;
+    for (unsigned int i = 0; i < links.size();i++) {
+        std::vector<int> processed_link;
+        processed_link.push_back(links[i]["Map_ID"]);
+        processed_link.push_back(links[i]["source"]["x"]);
+        processed_link.push_back(links[i]["source"]["y"]);
+        processed_link.push_back(links[i]["destination"]["x"]);
+        processed_link.push_back(links[i]["destination"]["y"]);
+        processed_links.push_back(processed_link);
+    }
 
     // Use the data ------------------------------------------------------------------------------- 
+
+    this->MapName = map_name;
+    this->Height = height;
+    this->Width = width;
+    this->XPos = 0;
+    this->YPos = 0;
+    this->LinkedMaps = processed_links;
 
     if ((Height*TILE_SIZE < HEIGHT) || (Width*TILE_SIZE < WIDTH)){
         std::cout << "WARNING: the map \"" << MapName.c_str() << "\" is smaller than the screen."<< std::endl;
     }
+
+    // Load textures ------------------------------------------------------------------------------ 
 
     // Load floor texture
     SDL_Surface* floor_surface = IMG_Load((img_folder_path + "/floor.png").c_str());
@@ -84,6 +100,7 @@ Map::Map(std::string data_file_path, std::string img_folder_path){
         SkyTextureHeight = 0;
     }
 
+    // Setup tiles --------------------------------------------------------------------------------
 
     // Get empty tile
     SDL_Surface* EmptyTile = IMG_Load(PATH_TO_EMPTY_TILE);
@@ -122,25 +139,63 @@ Map::Map(std::string data_file_path, std::string img_folder_path){
     }
     this->MapTiles = map_tiles;
 
-    // Cleaning up surfaces
+    // Cleaning up surfaces -----------------------------------------------------------------------
+
     SDL_FreeSurface(floor_surface);
     SDL_FreeSurface(wall_surface);
     SDL_FreeSurface(EmptyTile);
 }
-Map::Map(std::string name, int height, int width, std::string img_folder_path){
+/*
+ * Constructor of the Map class.
+ *
+ * Note: The data_file_path is the exact path to the JSON file containing the map data.
+ * Note: The img_folder_path is the path to the folder containing the textures. It should not end with a '/'.
+ */
+Map::Map(std::string data_file_path, std::string img_folder_path){
     this->ID = LastMapID;
     LastMapID++;
 
-    this->MapName = name;
+    // Extract the data ---------------------------------------------------------------------------
+
+    std::ifstream json_file_unparsed(data_file_path.c_str());
+    if (!json_file_unparsed.is_open()) {
+        std::cerr << "Error opening input file." << std::endl;
+        exit(-1);
+    }
+    nlohmann::json json_file = nlohmann::json::parse(json_file_unparsed);
+    json_file_unparsed.close();
+
+    std::string map_name = json_file["map_name"];
+    int height = json_file["height"];
+    int width = json_file["width"];
+
+    // Processing links
+    std::vector<nlohmann::json> links = json_file["links"];
+    std::vector<std::vector<int>> processed_links;
+    for (unsigned int i = 0; i < links.size();i++) {
+        std::vector<int> processed_link;
+        processed_link.push_back(links[i]["Map_ID"]);
+        processed_link.push_back(links[i]["source"]["x"]);
+        processed_link.push_back(links[i]["source"]["y"]);
+        processed_link.push_back(links[i]["destination"]["x"]);
+        processed_link.push_back(links[i]["destination"]["y"]);
+        processed_links.push_back(processed_link);
+    }
+
+    // Use the data ------------------------------------------------------------------------------- 
+
+    this->MapName = map_name;
     this->Height = height;
     this->Width = width;
     this->XPos = 0;
     this->YPos = 0;
-    this->LinkedMapsID = std::vector<int>();
+    this->LinkedMaps = processed_links;
 
-    if ((height*TILE_SIZE < HEIGHT) || (width*TILE_SIZE < WIDTH)){
-        std::cout << "WARNING: the map \"" << name.c_str() << "\" is smaller than the screen."<< std::endl;
+    if ((Height*TILE_SIZE < HEIGHT) || (Width*TILE_SIZE < WIDTH)){
+        std::cout << "WARNING: the map \"" << MapName.c_str() << "\" is smaller than the screen."<< std::endl;
     }
+
+    // Load textures ------------------------------------------------------------------------------ 
 
     // Load floor texture
     SDL_Surface* floor_surface = IMG_Load((img_folder_path + "/floor.png").c_str());
@@ -184,6 +239,7 @@ Map::Map(std::string name, int height, int width, std::string img_folder_path){
         SkyTextureHeight = 0;
     }
 
+    // Setup tiles --------------------------------------------------------------------------------
 
     // Get empty tile
     SDL_Surface* EmptyTile = IMG_Load(PATH_TO_EMPTY_TILE);
@@ -192,11 +248,9 @@ Map::Map(std::string name, int height, int width, std::string img_folder_path){
         return;
     }
     // Setup map tiles
-    int NbTilesHeight = height/TILE_SIZE;
-    int NbTilesWidth = width/TILE_SIZE;
-    std::vector<std::vector<Tile>> map_tiles(NbTilesHeight, std::vector<Tile>(NbTilesWidth));
-    for (int i = 0; i < NbTilesHeight; ++i) {
-        for (int j = 0; j < NbTilesWidth; ++j) {
+    std::vector<std::vector<Tile>> map_tiles(Height, std::vector<Tile>(Width));
+    for (int i = 0; i < Height; ++i) {
+        for (int j = 0; j < Width; ++j) {
             bool IsWall;
             SDL_Surface* CurrentTile = IMG_Load(PATH_TO_EMPTY_TILE);
             if (!CurrentTile) {
@@ -224,7 +278,8 @@ Map::Map(std::string name, int height, int width, std::string img_folder_path){
     }
     this->MapTiles = map_tiles;
 
-    // Cleaning up surfaces
+    // Cleaning up surfaces -----------------------------------------------------------------------
+
     SDL_FreeSurface(floor_surface);
     SDL_FreeSurface(wall_surface);
     SDL_FreeSurface(EmptyTile);
@@ -243,7 +298,7 @@ int Map::GetXPos() { return XPos; }
 int Map::GetYPos() { return YPos; }
 std::string Map::GetMapName() const { return MapName; }
 std::vector<std::vector<Tile>> Map::GetMapTiles(){ return MapTiles; }
-std::vector<int> Map::GetLinkedMapsID(){ return LinkedMapsID; }
+std::vector<std::vector<int>> Map::GetLinkedMaps(){ return LinkedMaps; }
 
 // Render
 void Map::Render(void){

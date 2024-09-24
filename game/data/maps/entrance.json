@@ -1,9 +1,17 @@
 {
-	"map name": "<map name>",
+	"map_name": "entrance",
 	"height": 13,
 	"width": 15,
-	"links": {
-		"map_name": { "x": 0, "y": 0 },
-		"map_name2": { "x": 0, "y": 0 }
-	}
+	"links": [
+		{
+			"Map_ID": 0,
+			"source": { "x": 0, "y": 0 },
+			"destination": { "x": 0, "y": 0 }
+		},
+		{
+			"Map_ID": 1,
+			"source": { "x": 8, "y": 8 },
+			"destination": { "x": 9, "y": 9 }
+		}
+	]
 }

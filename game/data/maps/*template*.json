@@ -2,15 +2,14 @@
 	"map_name": "<map name>",
 	"height": 13,
 	"width": 15,
-	"link_amount": 2,
 	"links": [
 		{
-			"ID": 0,
+			"Map_ID": 0,
 			"source": { "x": 0, "y": 0 },
 			"destination": { "x": 0, "y": 0 }
 		},
 		{
-			"ID": 1,
+			"Map_ID": 1,
 			"source": { "x": 0, "y": 0 },
 			"destination": { "x": 0, "y": 0 }
 		}
