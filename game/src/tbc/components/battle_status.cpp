@@ -1,5 +1,4 @@
 #include "battle_status.h"
-#include "battle_character.h"
 
 BattleStatus::BattleStatus(){}
 
