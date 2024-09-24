@@ -201,6 +201,4 @@ LivyaUnit::LivyaUnit(bool isFriendly)
 
     this->SkillBar = 0;
     this->UltimateBar = 0;
-
-    this->hud = BattleHUD("game/assets/images/ui/faded_bg.png", livyaName, isFriendly);
 }
