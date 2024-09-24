@@ -7,7 +7,7 @@ UISRCS = ui_init.cpp
 WORLDSRCS = world.cpp map.cpp tile.cpp
 AUDIOSRCS = music.cpp
 # TBC Files
-COMPONENTSRCS = battle_character.cpp battle_hud.cpp battle_move.cpp battle_status.cpp
+COMPONENTSRCS = battle_character.cpp battle_move.cpp battle_status.cpp
 CHARACTERSRCS = zerachiel.cpp livya.cpp
 STATUSSRCS = duel_with_Zerachiel.cpp heal_blocked.cpp
 TBCSRCS = battle_system.cpp

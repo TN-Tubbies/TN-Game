@@ -4,9 +4,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include <fstream>
 #include <iostream>
 #include <vector>
 #include <string>
+
+#include "../lib/json.hpp"
 
 #include "../defs.h"
 #include "../static/renderer.h"

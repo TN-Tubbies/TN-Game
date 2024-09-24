@@ -236,5 +236,25 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     this->SkillBar = 0;
     this->UltimateBar = 0;
 
-    this->hud = Init_HUD("game/assets/images/ui/faded_bg.png", zerachielName, isFriendly);
+    SDL_Texture *bg = IMG_LoadTexture(Get_Renderer(), "game/assets/images/ui/faded_bg.png");
+    if (bg == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in ui_init, bg load: %s", SDL_GetError());
+        exit(-1);
+    }
+    this->HudBG = bg;
+
+    SDL_Surface *name_surf;
+    if (isFriendly)
+    {
+        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(), zerachielName.c_str(), (SDL_Color){255, 255, 255, 255});
+    } 
+    else 
+    {
+        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(), zerachielName.c_str(), (SDL_Color){255, 0, 0, 255});
+    }
+    this->DisplayedNameHeight = name_surf->h;
+    this->DisplayedNameWidth = name_surf->w;
+    this->DisplayedName = SDL_CreateTextureFromSurface(Get_Renderer(), name_surf);
+    SDL_FreeSurface(name_surf);
 }

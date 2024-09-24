@@ -54,7 +54,12 @@ BattleCharacter::BattleCharacter(
 
 BattleCharacter::~BattleCharacter()
 {
-    Destroy_HUD(hud);
+    if (HudBG != NULL) {
+        SDL_DestroyTexture(HudBG);
+    }
+    if (DisplayedName != NULL) {
+        SDL_DestroyTexture(DisplayedName);
+    }
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -362,7 +367,11 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 // HUD RELATED FUNCTIONS --------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 
-void BattleCharacter::DrawHUD(int x, int y)
-{
-    Render_HUD(this->hud, x, y);
+void BattleCharacter::DrawHud(int x, int y)
+{    
+    SDL_Rect bg_rect = {x, y, 128, 128};
+    SDL_RenderCopy(Get_Renderer(), HudBG, NULL, &bg_rect);
+
+    SDL_Rect name_rect = {x+10, y+10, DisplayedNameWidth, DisplayedNameHeight};
+    SDL_RenderCopy(Get_Renderer(), DisplayedName, NULL, &name_rect);
 }

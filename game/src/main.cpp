@@ -56,7 +56,7 @@ int main(void)
         SDL_RenderClear(Get_Renderer());
         SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
         test_map.Render();
-        zerachiel.DrawHUD(0, 0);
+        zerachiel.DrawHud(0, 0);
         // End of fix
         
         SDL_RenderPresent(Get_Renderer());
