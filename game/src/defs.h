@@ -9,4 +9,10 @@
 #define TILE_SIZE 64    // In pixels
 #define PATH_TO_EMPTY_TILE "game/assets/images/empty_tile.png"
 
+enum DisplayState {
+    MAIN_MENU,
+    MAP,
+    BATTLE
+};
+
 #endif
