@@ -14,6 +14,7 @@
 #include "../defs.h"
 #include "../static/renderer.h"
 #include "../utility/sdl_compare_surfaces.h"
+#include "../audio/audio.h"
 #include "tile.h"
 
 static int LastMapID = 0;
@@ -38,6 +39,8 @@ private:
     //              [Map_ID, source_x, source_y, destination_x, destination_y]
     std::vector<std::vector<int>> LinkedMaps;
 
+    Music *MapTheme;
+
 public:
     Map(std::string normalize_map_name);
     Map(std::string data_file_path, std::string img_folder_path);
@@ -53,6 +56,7 @@ public:
     std::vector<std::vector<int>> GetLinkedMaps();
 
     void Render(void);
+    void PlayTheme(void);
 };
 
 #endif

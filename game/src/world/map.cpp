@@ -29,6 +29,7 @@ Map::Map(std::string normalize_map_name){
     std::string map_name = json_file["map_name"];
     int height = json_file["height"];
     int width = json_file["width"];
+    std::string music_path = json_file["music_path"];
 
     // Processing links
     std::vector<nlohmann::json> links = json_file["links"];
@@ -51,6 +52,7 @@ Map::Map(std::string normalize_map_name){
     this->XPos = 0;
     this->YPos = 0;
     this->LinkedMaps = processed_links;
+    this->MapTheme = new Music(music_path);
 
     if ((Height*TILE_SIZE < HEIGHT) || (Width*TILE_SIZE < WIDTH)){
         std::cout << "WARNING: the map \"" << MapName.c_str() << "\" is smaller than the screen."<< std::endl;
@@ -168,6 +170,7 @@ Map::Map(std::string data_file_path, std::string img_folder_path){
     std::string map_name = json_file["map_name"];
     int height = json_file["height"];
     int width = json_file["width"];
+    std::string music_path = json_file["music_path"];
 
     // Processing links
     std::vector<nlohmann::json> links = json_file["links"];
@@ -190,6 +193,7 @@ Map::Map(std::string data_file_path, std::string img_folder_path){
     this->XPos = 0;
     this->YPos = 0;
     this->LinkedMaps = processed_links;
+    this->MapTheme = new Music(music_path);
 
     if ((Height*TILE_SIZE < HEIGHT) || (Width*TILE_SIZE < WIDTH)){
         std::cout << "WARNING: the map \"" << MapName.c_str() << "\" is smaller than the screen."<< std::endl;
@@ -285,6 +289,8 @@ Map::Map(std::string data_file_path, std::string img_folder_path){
     SDL_FreeSurface(EmptyTile);
 }
 Map::~Map(void){
+    delete MapTheme;
+
     SDL_DestroyTexture(FloorTexture);
     SDL_DestroyTexture(WallTexture);
     SDL_DestroyTexture(SkyTexture);
@@ -312,4 +318,9 @@ void Map::Render(void){
     SDL_RenderCopy(renderer, FloorTexture, NULL, &dest);
     SDL_RenderCopy(renderer, WallTexture, NULL, &dest);
     SDL_RenderCopy(renderer, SkyTexture, NULL, &dest);
+}
+
+// Music player
+void Map::PlayTheme(void){
+    MapTheme->Play(1);
 }
