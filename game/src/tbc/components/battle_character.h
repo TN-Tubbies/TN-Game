@@ -84,6 +84,10 @@ public:
     // Destruct
     ~BattleCharacter();
 
+    // Operators
+    bool operator==(BattleCharacter &other) const;
+    bool operator!=(BattleCharacter &other) const;
+
     // Getters
     std::string GetName();
     enum CharacterType GetType();

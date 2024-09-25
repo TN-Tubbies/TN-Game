@@ -5,11 +5,10 @@
 enum BattleState
 {
     BattleState_Starting,
-    BattleState_End
-};
-enum BattleTurnState
-{
-    BattleTurnState_Starting,
+    BattleState_TurnStart,
+    BattleState_InATurn,
+    BattleState_TurnEnd,
+    BattleState_Ending
 };
 
 // Move-related enumerators
