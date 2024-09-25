@@ -10,6 +10,7 @@ private:
     std::string Name;
     Mix_Music *SDL_Music;
 public:
+    Music() {};
     Music(std::string file_name);
     ~Music();
 

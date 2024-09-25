@@ -28,11 +28,9 @@ int main(void)
     // End of fix
 
     // FIXME: Temporary Map init
-    Map test_map("Test Map", 13, 15, "game/assets/images/maps/entrance");
-
-    // FIXME: Temporary audio init
-    Music background_music("game/assets/audio/music/trial2.wav");
-    background_music.Play(1);
+    Map test_map("entrance");
+    test_map.PlayTheme();
+    // End of fix
 
     SDL_Event event;
     int running = 1;
