@@ -1,4 +1,4 @@
-#include "heal_blocked.h"
+#include "heal_blocked.hpp"
 
 Status_Heal_Blocked::Status_Heal_Blocked(int turnPersistence)
 {

@@ -1,7 +1,7 @@
 #ifndef PRIORITY_LIST_HPP
 #define PRIORITY_LIST_HPP
 
-#include "battle_character.h"
+#include "battle_character.hpp"
 
 typedef struct PriorityEntity
 {

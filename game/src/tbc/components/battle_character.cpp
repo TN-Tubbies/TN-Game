@@ -1,4 +1,4 @@
-#include "battle_character.h"
+#include "battle_character.hpp"
 
 // ------------------------------------------------------------------------------------------------
 
@@ -54,20 +54,24 @@ BattleCharacter::BattleCharacter(
 
 BattleCharacter::~BattleCharacter()
 {
-    if (HudBG != NULL) {
+    if (HudBG != NULL)
+    {
         SDL_DestroyTexture(HudBG);
     }
-    if (DisplayedName != NULL) {
+    if (DisplayedName != NULL)
+    {
         SDL_DestroyTexture(DisplayedName);
     }
 }
 
 // ------------------------------------------------------------------------------------------------
 
-bool BattleCharacter::operator==(BattleCharacter &other) const{
+bool BattleCharacter::operator==(BattleCharacter &other) const
+{
     return (name == other.name && Type == other.Type && Element == other.Element && isFriendly == other.isFriendly && HP == other.HP && MaxHP == other.MaxHP && BaseAtk == other.BaseAtk && BaseSpeed == other.BaseSpeed && BaseDef == other.BaseDef && BaseMove.getName() == other.BaseMove.getName() && Move1.getName() == other.Move1.getName() && Move2.getName() == other.Move2.getName() && Move3.getName() == other.Move3.getName() && Ultimate.getName() == other.Ultimate.getName() && Passive1.getName() == other.Passive1.getName() && Passive2.getName() == other.Passive2.getName());
 }
-bool BattleCharacter::operator!=(BattleCharacter &other) const{
+bool BattleCharacter::operator!=(BattleCharacter &other) const
+{
     return !(*this == other);
 }
 
@@ -377,10 +381,10 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 // ------------------------------------------------------------------------------------------------
 
 void BattleCharacter::DrawHud(int x, int y)
-{    
+{
     SDL_Rect bg_rect = {x, y, 128, 128};
     SDL_RenderCopy(Get_Renderer(), HudBG, NULL, &bg_rect);
 
-    SDL_Rect name_rect = {x+10, y+10, DisplayedNameWidth, DisplayedNameHeight};
+    SDL_Rect name_rect = {x + 10, y + 10, DisplayedNameWidth, DisplayedNameHeight};
     SDL_RenderCopy(Get_Renderer(), DisplayedName, NULL, &name_rect);
 }

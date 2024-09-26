@@ -1,6 +1,6 @@
-#include "battle_status.h"
+#include "battle_status.hpp"
 
-BattleStatus::BattleStatus(){}
+BattleStatus::BattleStatus() {}
 
 void BattleStatus::CheckTimer()
 {
@@ -16,6 +16,6 @@ void BattleStatus::CheckTimer()
     }
 }
 std::string BattleStatus::GetName() { return statusName; }
-BattleCharacter* BattleStatus::GetLinkedCharacter() { return linkedCharacter; }
+BattleCharacter *BattleStatus::GetLinkedCharacter() { return linkedCharacter; }
 bool BattleStatus::DoRemoveAfterBattle() { return removeAfterBattle; }
 bool BattleStatus::IsActive() { return isActive; }

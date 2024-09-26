@@ -1,7 +1,7 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef RENDERER_HPP
+#define RENDERER_HPP
 
-#include "../defs.h"
+#include "../defs.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

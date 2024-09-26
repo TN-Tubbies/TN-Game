@@ -1,5 +1,5 @@
-#ifndef BATTLE_STATUS_H
-#define BATTLE_STATUS_H
+#ifndef BATTLE_STATUS_HPP
+#define BATTLE_STATUS_HPP
 
 #include <string>
 
@@ -11,7 +11,7 @@ public:
     BattleStatus();
 
     std::string GetName();
-    BattleCharacter* GetLinkedCharacter();
+    BattleCharacter *GetLinkedCharacter();
     void CheckTimer();
     bool DoRemoveAfterBattle();
     bool IsActive();
@@ -23,7 +23,7 @@ protected:
     int timerDuration;
 
     bool removeAfterBattle;
-    BattleCharacter* linkedCharacter;
+    BattleCharacter *linkedCharacter;
 };
 
 #endif

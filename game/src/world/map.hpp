@@ -1,5 +1,5 @@
-#ifndef MAP_H
-#define MAP_H
+#ifndef MAP_HPP
+#define MAP_HPP
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -11,15 +11,16 @@
 
 #include "../lib/json.hpp"
 
-#include "../defs.h"
-#include "../static/renderer.h"
-#include "../utility/sdl_compare_surfaces.h"
-#include "../audio/audio.h"
-#include "tile.h"
+#include "../defs.hpp"
+#include "../static/renderer.hpp"
+#include "../utility/sdl_compare_surfaces.hpp"
+#include "../audio/audio.hpp"
+#include "tile.hpp"
 
 static int LastMapID = 0;
 
-class Map {
+class Map
+{
 private:
     int ID;
 
@@ -28,11 +29,11 @@ private:
     int XPos, YPos;
     std::vector<std::vector<Tile>> MapTiles;
 
-    SDL_Texture* FloorTexture;
+    SDL_Texture *FloorTexture;
     int FloorTextureWidth, FloorTextureHeight;
-    SDL_Texture* WallTexture;
+    SDL_Texture *WallTexture;
     int WallTextureWidth, WallTextureHeight;
-    SDL_Texture* SkyTexture;
+    SDL_Texture *SkyTexture;
     int SkyTextureWidth, SkyTextureHeight;
 
     // Each std::vector<int> in LinkedMaps represents a link:

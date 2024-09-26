@@ -1,6 +1,6 @@
-#include "livya.h"
+#include "livya.hpp"
 
-void LivyaBaseMoveEffect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaBaseMoveEffect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
 }
 BattleMoveActive GetLivyaBaseMove(void)
@@ -18,7 +18,7 @@ BattleMoveActive GetLivyaBaseMove(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void LivyaMove1Effect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaMove1Effect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
 }
 BattleMoveActive GetLivyaMove1(void)
@@ -36,7 +36,7 @@ BattleMoveActive GetLivyaMove1(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void LivyaMove2Effect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaMove2Effect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int atkBuffNotch = 1;
 
@@ -69,7 +69,7 @@ BattleMoveActive GetLivyaMove2(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void LivyaUltimateEffect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void LivyaUltimateEffect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int M = 1;
     int X = 5;

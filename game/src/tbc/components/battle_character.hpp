@@ -1,12 +1,12 @@
-#ifndef BATTLE_CHARACTER_H
-#define BATTLE_CHARACTER_H
+#ifndef BATTLE_CHARACTER_HPP
+#define BATTLE_CHARACTER_HPP
 
-#include "../battle_declarations.h"
-#include "../battle_enumerators.h"
-#include "../../static/renderer.h"
-#include "../../static/jersey.h"
-#include "battle_status.h"
-#include "battle_move.h"
+#include "../battle_declarations.hpp"
+#include "../battle_enumerators.hpp"
+#include "../../static/renderer.hpp"
+#include "../../static/jersey.hpp"
+#include "battle_status.hpp"
+#include "battle_move.hpp"
 
 #include <stdio.h>
 #include <string>

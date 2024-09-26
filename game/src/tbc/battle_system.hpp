@@ -1,12 +1,12 @@
-#ifndef BATTLE_SYSTEM_H
-#define BATTLE_SYSTEM_H
+#ifndef BATTLE_SYSTEM_HPP
+#define BATTLE_SYSTEM_HPP
 
 #include <iostream>
 #include <vector>
 
-#include "../defs.h"
-#include "battle_enumerators.h"
-#include "components/battle_character.h"
+#include "../defs.hpp"
+#include "battle_enumerators.hpp"
+#include "components/battle_character.hpp"
 
 typedef struct _Battle_System
 {

@@ -1,5 +1,5 @@
-#ifndef BATTLE_ENUMERATORS_H
-#define BATTLE_ENUMERATORS_H
+#ifndef BATTLE_ENUMERATORS_HPP
+#define BATTLE_ENUMERATORS_HPP
 
 // Battle-related enumerators
 enum BattleState

@@ -3,15 +3,15 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "ui/ui_init.h"
-#include "ui/main_menu.h"
-#include "static/renderer.h"
-#include "static/jersey.h"
-#include "world/world.h"
-#include "audio/audio.h"
-#include "tbc/components/battle_character.h"
-//FIXME: temporary :
-#include "tbc/characters/zerachiel.h"
+#include "ui/ui_init.hpp"
+#include "ui/main_menu.hpp"
+#include "static/renderer.hpp"
+#include "static/jersey.hpp"
+#include "world/world.hpp"
+#include "audio/audio.hpp"
+#include "tbc/components/battle_character.hpp"
+// FIXME: temporary :
+#include "tbc/characters/zerachiel.hpp"
 
 int main(void)
 {
@@ -21,8 +21,8 @@ int main(void)
     Init_MIX();
 
     MainMenu main_menu;
-    
-    //FIXME: Temporary party init (should be done when loading a battle) :
+
+    // FIXME: Temporary party init (should be done when loading a battle) :
     std::vector<BattleCharacter> player_party;
     ZerachielUnit zerachiel(1);
     player_party.push_back(zerachiel);
@@ -53,21 +53,22 @@ int main(void)
         //// Rendering ////
         SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
         SDL_RenderClear(Get_Renderer());
-        switch(displayState) {
-            case MAIN_MENU:
-                main_menu.Render();
-                break;
-            case MAP:
-                test_map.Render();
-                break;
-            case BATTLE:
-                //FIXME: Temporary battle_background rendering
-                SDL_SetRenderDrawColor(Get_Renderer(), 255, 255, 255, 255);
-                SDL_RenderClear(Get_Renderer());
-                SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
-                // End of fix
-                zerachiel.DrawHud(0, HEIGHT - 128);
-                break;
+        switch (displayState)
+        {
+        case MAIN_MENU:
+            main_menu.Render();
+            break;
+        case MAP:
+            test_map.Render();
+            break;
+        case BATTLE:
+            // FIXME: Temporary battle_background rendering
+            SDL_SetRenderDrawColor(Get_Renderer(), 255, 255, 255, 255);
+            SDL_RenderClear(Get_Renderer());
+            SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
+            // End of fix
+            zerachiel.DrawHud(0, HEIGHT - 128);
+            break;
         }
         SDL_RenderPresent(Get_Renderer());
     }

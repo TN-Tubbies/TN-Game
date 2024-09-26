@@ -1,4 +1,4 @@
-#include "battle_move.h"
+#include "battle_move.hpp"
 
 // ------------------------------------------------------------------------------------------------
 // CLASS ------------------------------------------------------------------------------------------
@@ -20,7 +20,7 @@ BattleMovePassive::BattleMovePassive(std::string name, std::string description, 
 }
 
 BattleMoveActive::BattleMoveActive(std::string name, std::string description, enum BattleElement element, enum MoveTargetCategory moveTarget,
-                                   std::function<void(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> RunEffect, int cost, bool isBM, bool isU)
+                                   std::function<void(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> RunEffect, int cost, bool isBM, bool isU)
 {
     this->name = name;
     this->description = description;
@@ -37,7 +37,7 @@ BattleMoveActive::BattleMoveActive(std::string name, std::string description, en
 // ------------------------------------------------------------------------------------------------
 BattleMoveActive GetNullActiveMove(void)
 {
-    std::function<void(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> NullMoveFunction;
+    std::function<void(BattleCharacter * Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> NullMoveFunction;
     return BattleMoveActive("", "", BattleElement_Null, MoveTargetCategory_None, NullMoveFunction, 0, false, false);
 }
 BattleMovePassive GetNullPassiveMove(void)

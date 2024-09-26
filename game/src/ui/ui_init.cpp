@@ -1,21 +1,20 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include "ui_init.h"
+#include "ui_init.hpp"
 
-void Init_IMG(void) {
+void Init_IMG(void)
+{
     int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG | IMG_INIT_TIF | IMG_INIT_WEBP;
-    if (!(IMG_Init(imgFlags) & imgFlags)) {
+    if (!(IMG_Init(imgFlags) & imgFlags))
+    {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in SDL_image initialization: %s", IMG_GetError());
         exit(-1);
     }
     atexit(IMG_Quit);
 }
 
-void Init_MIX(void) {
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+void Init_MIX(void)
+{
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in SDL_mixer initialization: %s", Mix_GetError());
         exit(-1);
     }
@@ -23,9 +22,11 @@ void Init_MIX(void) {
     atexit(Mix_Quit);
 }
 
-SDL_Texture* ModernUILoad(SDL_Renderer* renderer) {
+SDL_Texture *ModernUILoad(SDL_Renderer *renderer)
+{
     SDL_Surface *ModernUI_full = IMG_Load("game/assets/images/modernuserinterface-win/48x48/Modern_UI_Style_2_48x48.png");
-    if (ModernUI_full == NULL) {
+    if (ModernUI_full == NULL)
+    {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load image: %s", IMG_GetError());
         exit(-1);
     }

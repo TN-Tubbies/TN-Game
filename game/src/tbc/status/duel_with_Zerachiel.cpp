@@ -1,4 +1,4 @@
-#include "duel_with_Zerachiel.h"
+#include "duel_with_Zerachiel.hpp"
 
 Status_DuelWithZerachiel::Status_DuelWithZerachiel(BattleCharacter linkedZerachiel)
 {

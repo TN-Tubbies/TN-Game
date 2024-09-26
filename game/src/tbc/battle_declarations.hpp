@@ -1,5 +1,5 @@
-#ifndef BATTLE_DECLARATION_H
-#define BATTLE_DECLARATION_H
+#ifndef BATTLE_DECLARATION_HPP
+#define BATTLE_DECLARATION_HPP
 
 class BattleStatus;
 

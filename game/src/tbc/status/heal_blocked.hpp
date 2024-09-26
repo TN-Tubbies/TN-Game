@@ -1,7 +1,7 @@
-#ifndef HEAL_BLOCKED_H
-#define HEAL_BLOCKED_H
+#ifndef HEAL_BLOCKED_HPP
+#define HEAL_BLOCKED_HPP
 
-#include "../components/battle_status.h"
+#include "../components/battle_status.hpp"
 
 class Status_Heal_Blocked : public BattleStatus
 {

@@ -1,6 +1,6 @@
-#include "zerachiel.h"
+#include "zerachiel.hpp"
 
-void ZerachielBaseMoveEffect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void ZerachielBaseMoveEffect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int M = 1;
 
@@ -39,7 +39,7 @@ BattleMoveActive GetZerachielBaseMove(void)
 
 // ------------------------------------------------------------------------------------------------
 
-void ZerachielMove1Effect(BattleCharacter* Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
+void ZerachielMove1Effect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)
 {
     int N = 1;
     float P = 0.5f;
@@ -248,8 +248,8 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     if (isFriendly)
     {
         name_surf = TTF_RenderUTF8_Solid(Get_Jersey(), zerachielName.c_str(), (SDL_Color){255, 255, 255, 255});
-    } 
-    else 
+    }
+    else
     {
         name_surf = TTF_RenderUTF8_Solid(Get_Jersey(), zerachielName.c_str(), (SDL_Color){255, 0, 0, 255});
     }

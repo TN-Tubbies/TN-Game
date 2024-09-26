@@ -1,7 +1,7 @@
-#ifndef LIVYA_H
-#define LIVYA_H
+#ifndef LIVYA_HPP
+#define LIVYA_HPP
 
-#include "../components/battle_character.h"
+#include "../components/battle_character.hpp"
 
 class LivyaUnit : public BattleCharacter
 {
