@@ -9,7 +9,7 @@ void Init_Jersey(void) {
     }
     atexit(TTF_Quit);
 
-    TTF_Font* jersey = TTF_OpenFont("game/assets/fonts/Jersey/Jersey20-Regular.ttf", 32);
+    TTF_Font* jersey = TTF_OpenFont("game/assets/fonts/Jersey/Jersey20-Regular.ttf", 64);
     if (jersey == NULL){
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load font: %s", TTF_GetError());
         exit(-1);
