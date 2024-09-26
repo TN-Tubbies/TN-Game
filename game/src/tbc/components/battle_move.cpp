@@ -4,6 +4,12 @@
 // CLASS ------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 
+std::string BattleMove::getName() const { return name; }
+std::string BattleMove::getDescription() const { return description; }
+enum MoveTargetCategory BattleMove::getMoveTarget() const { return moveTarget; }
+
+// ------------------------------------------------------------------------------------------------
+
 BattleMovePassive::BattleMovePassive(std::string name, std::string description, enum MoveTargetCategory moveTarget, std::function<void(std::vector<BattleCharacter> Field)> effect, enum PassiveTriggerCategory triggerCategory)
 {
     this->name = name;

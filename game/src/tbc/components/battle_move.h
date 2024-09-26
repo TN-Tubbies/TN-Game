@@ -13,6 +13,10 @@ class BattleMove
 public:
     BattleMove() {};
 
+    std::string getName() const;
+    std::string getDescription() const;
+    enum MoveTargetCategory getMoveTarget() const;
+
 protected:
     std::string name;
     std::string description;

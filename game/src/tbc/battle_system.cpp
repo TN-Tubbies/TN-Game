@@ -11,22 +11,35 @@ Battle_System *StartBattle(std::vector<BattleCharacter> playableCharacters, std:
     NewBattle->enemyCharacters = enemyCharacters;
     NewBattle->currentTurn = 0;
     NewBattle->maxTurnCount = MaxTurnCount;
-    NewBattle->CurrentCharacter = NULL;
+    NewBattle->currentCharacterIndex = 100; // This can't be less than the maximum amount of characters
     NewBattle->isBattleOver = false;
     NewBattle->currentState = BattleState_Starting;
-    NewBattle->currentTurnState = BattleTurnState_Starting;
 
     std::vector<BattleCharacter> merged;
-    for (unsigned int i = 0; i < playableCharacters.size();i++){merged.push_back(playableCharacters[i]);}
-    for (unsigned int i = 0; i < enemyCharacters.size();i++){merged.push_back(enemyCharacters[i]);}
+    for (unsigned int i = 0; i < playableCharacters.size(); i++)
+    {
+        merged.push_back(playableCharacters[i]);
+    }
+    for (unsigned int i = 0; i < enemyCharacters.size(); i++)
+    {
+        merged.push_back(enemyCharacters[i]);
+    }
 
     NewBattle->currentCharacterOrder = merged;
     NewBattle->battlefield = merged;
+
+    if (DEBUG_MODE)
+    {
+        std::clog << "BattleDebug: a battle has been successfully launched." << std::endl;
+    }
+
     return NewBattle;
 }
 
 void DestroyBattle(Battle_System *Battle)
 {
+    // TODO: Adding logs to the log file?
+
     free(Battle);
 }
 
@@ -34,34 +47,83 @@ void DestroyBattle(Battle_System *Battle)
 // SYSTEM -----------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 
-void RunBattleAction(Battle_System *CurrentBattle)
+void RunTurn(Battle_System *CurrentBattle)
 {
-    switch (CurrentBattle->currentState)
+    BattleCharacter currentCharacter = CurrentBattle->currentCharacterOrder[CurrentBattle->currentCharacterIndex];
+    if (DEBUG_MODE)
     {
-    case BattleState_Starting:
-        CurrentBattle->currentCharacterOrder = SortCharactersWRTStat(CurrentBattle->currentCharacterOrder);
-        break;
-    // case BattleState_Turn:
-    //     RunTurn(CurrentBattle);
-    //     break;
-    case BattleState_End:
-        // EndBattle(CurrentBattle);
-        break;
+        std::clog << "BattleDebug: " << currentCharacter.GetName() << " is taking a turn." << std::endl;
+    }
+
+    if (currentCharacter.IsFriendly())
+    {
+        // User turn code here
+
+        // Player choose action code
+    }
+    else
+    {
+        // Enemy turn code here
+        // TODO: Implement enemy AI turn logic
     }
 }
 
-void HandleTurnSystem(Battle_System *CurrentBattle)
+void RunBattleManager(Battle_System *CurrentBattle)
 {
-    switch (CurrentBattle->currentTurnState)
+    if (DEBUG_MODE)
     {
-    case BattleTurnState_Starting:
-        // StartTurn(CurrentBattle);
+        std::clog << "BattleDebug: battle manager started." << std::endl;
+    }
+
+    switch (CurrentBattle->currentState)
+    {
+    case BattleState_Starting:
+        CurrentBattle->currentState = BattleState_TurnStart;
         break;
-        // case BattleTurnState_Turn:
-        //     RunTurn(CurrentBattle);
-        //     break;
-        // case BattleTurnState_Ending:
-        //     EndTurn(CurrentBattle);
-        //     break;
+    case BattleState_TurnStart:
+        CurrentBattle->currentTurn++;
+        if (CurrentBattle->currentTurn >= CurrentBattle->maxTurnCount)
+        {
+            if (DEBUG_MODE)
+            {
+                std::clog << "BattleDebug: battle ended after " << CurrentBattle->currentTurn << " turns (maximum exceeded)." << std::endl;
+            }
+            CurrentBattle->isBattleOver = true;
+            CurrentBattle->currentState = BattleState_TurnEnd;
+            break;
+        }
+        else
+        {
+            CurrentBattle->currentCharacterOrder = SortCharactersWRTStat(CurrentBattle->currentCharacterOrder);
+            CurrentBattle->currentCharacterIndex = 0;
+            CurrentBattle->currentState = BattleState_InATurn;
+            break;
+        }
+    case BattleState_InATurn:
+        CurrentBattle->currentCharacterIndex++;
+        if (CurrentBattle->currentCharacterIndex >= CurrentBattle->currentCharacterOrder.size())
+        {
+            CurrentBattle->currentState = BattleState_TurnEnd;
+            break;
+        }
+        else
+        {
+            RunTurn(CurrentBattle);
+            break;
+        }
+    case BattleState_TurnEnd:
+        if (CurrentBattle->isBattleOver)
+        {
+            CurrentBattle->currentState = BattleState_Ending;
+            break;
+        }
+        else
+        {
+            CurrentBattle->currentState = BattleState_TurnStart;
+            break;
+        }
+    case BattleState_Ending:
+        // EndBattle(CurrentBattle);
+        break;
     }
 }

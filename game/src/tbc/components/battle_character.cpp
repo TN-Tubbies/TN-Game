@@ -64,6 +64,15 @@ BattleCharacter::~BattleCharacter()
 
 // ------------------------------------------------------------------------------------------------
 
+bool BattleCharacter::operator==(BattleCharacter &other) const{
+    return (name == other.name && Type == other.Type && Element == other.Element && isFriendly == other.isFriendly && HP == other.HP && MaxHP == other.MaxHP && BaseAtk == other.BaseAtk && BaseSpeed == other.BaseSpeed && BaseDef == other.BaseDef && BaseMove.getName() == other.BaseMove.getName() && Move1.getName() == other.Move1.getName() && Move2.getName() == other.Move2.getName() && Move3.getName() == other.Move3.getName() && Ultimate.getName() == other.Ultimate.getName() && Passive1.getName() == other.Passive1.getName() && Passive2.getName() == other.Passive2.getName());
+}
+bool BattleCharacter::operator!=(BattleCharacter &other) const{
+    return !(*this == other);
+}
+
+// ------------------------------------------------------------------------------------------------
+
 std::string BattleCharacter::GetName() { return name; }
 enum CharacterType BattleCharacter::GetType() { return Type; }
 enum BattleElement BattleCharacter::GetElement() { return Element; }

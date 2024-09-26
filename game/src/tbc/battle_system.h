@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 
+#include "../defs.h"
 #include "battle_enumerators.h"
 #include "components/battle_character.h"
 
@@ -11,24 +12,22 @@ typedef struct _Battle_System
 {
     std::vector<BattleCharacter> playableCharacters;
     std::vector<BattleCharacter> enemyCharacters;
+    std::vector<BattleCharacter> battlefield;
 
     bool isBattleOver;
     int currentTurn;
     int maxTurnCount;
 
     enum BattleState currentState;
-    enum BattleTurnState currentTurnState;
 
-    BattleCharacter *CurrentCharacter;
+    unsigned int currentCharacterIndex;
     std::vector<BattleCharacter> currentCharacterOrder;
 
-    std::vector<BattleCharacter> battlefield;
 } Battle_System;
 
 Battle_System *StartBattle(std::vector<BattleCharacter> playableCharacters, std::vector<BattleCharacter> enemyCharacters, int MaxTurnCount);
 void DestroyBattle(Battle_System *Battle);
 
-void RunBattleAction(Battle_System *CurrentBattle);
-void HandleTurnSystem(Battle_System *CurrentBattle);
+void RunBattleManager(Battle_System *CurrentBattle);
 
 #endif
