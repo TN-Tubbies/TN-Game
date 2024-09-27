@@ -41,8 +41,8 @@ CFLAGS += $(shell pkg-config --cflags SDL2_mixer)
 LDFLAGS += $(shell pkg-config --libs SDL2_mixer)
 CFLAGS += $(shell pkg-config --cflags SDL2_ttf)
 LDFLAGS += $(shell pkg-config --libs SDL2_ttf)
-# CFLAGS += $(shell pkg-config --cflags sdl2_gfx)
-# LDFLAGS += $(shell pkg-config --libs sdl2_gfx)
+CFLAGS += $(shell pkg-config --cflags sdl2_gfx)
+LDFLAGS += $(shell pkg-config --libs sdl2_gfx)
 
 #compilation
 all: $(TARGET)

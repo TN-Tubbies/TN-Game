@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 
 #include "../static/renderer.hpp"
 #include "../static/jersey.hpp"
@@ -19,12 +20,12 @@ public:
     MenuButton(MenuButton &&);
     ~MenuButton();
     void Render(int x, int y);
+    void RenderHover(int x, int y);
     int GetWidth() { return this->button_width; }
     int GetHeight() { return this->button_height; }
-    SDL_Texture *GetTexture() { return this->button; }
 
 private:
-    SDL_Texture *button;
+    SDL_Texture *texture;
     int button_width;
     int button_height;
 };
