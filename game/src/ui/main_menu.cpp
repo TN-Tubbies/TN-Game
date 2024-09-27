@@ -25,13 +25,13 @@ MenuButton::~MenuButton()
     }
 }
 
-void MenuButton::Render(int x, int y)
+void MenuButton::Render()
 {
     SDL_Rect button_rect = {x, y, this->button_width, this->button_height};
     SDL_RenderCopy(Get_Renderer(), this->texture, NULL, &button_rect);
 }
 
-void MenuButton::RenderHover(int x, int y)
+void MenuButton::RenderHover()
 {
     SDL_Rect button_rect = {x, y, this->button_width, this->button_height};
     roundedBoxColor(Get_Renderer(), x - 5, y - 5, x + this->button_width + 5, y + this->button_height + 5, 8, 0xFF0000FF);
@@ -45,8 +45,18 @@ MainMenu::MainMenu()
     this->title_height = title_surf->h;
     SDL_FreeSurface(title_surf);
 
-    this->buttons.push_back(MenuButton("Map"));
-    this->buttons.push_back(MenuButton("Battle"));
+    this->buttons = new std::vector<MenuButton>();
+
+    (*this->buttons).push_back(MenuButton("Map"));
+    (*this->buttons).push_back(MenuButton("Battle"));
+
+    int y = 2 * HEIGHT / 5;
+    for (MenuButton &button : *this->buttons)
+    {
+        button.SetX(WIDTH / 2 - (button.GetWidth() / 2));
+        button.SetY(y);
+        y += button.GetHeight() + 25;
+    }
 
     this->current_selection = 0;
 }
@@ -54,10 +64,11 @@ MainMenu::MainMenu()
 MainMenu::~MainMenu()
 {
     SDL_DestroyTexture(this->title);
-    for (MenuButton &button : this->buttons)
+    for (MenuButton &button : *this->buttons)
     {
         button.~MenuButton();
     }
+    delete this->buttons;
 }
 
 void MainMenu::Render()
@@ -65,14 +76,13 @@ void MainMenu::Render()
     SDL_Rect title_rect = {WIDTH / 2 - (this->title_width / 2) * 2, HEIGHT / 5, (this->title_width) * 2, (this->title_height) * 2};
     SDL_RenderCopy(Get_Renderer(), this->title, NULL, &title_rect);
 
-    int y = 2*HEIGHT / 5;
-    for (MenuButton &button : this->buttons)
+    
+    for (MenuButton &button : *this->buttons)
     {
-        if (&buttons.at(this->current_selection) == &button)
+        if (&(*buttons).at(this->current_selection) == &button)
         {
-            button.RenderHover(WIDTH / 2 - (button.GetWidth() / 2), y);
+            button.RenderHover();
         }
-        button.Render(WIDTH / 2 - (button.GetWidth() / 2), y);
-        y += button.GetHeight() + 25;
+        button.Render();
     }
 }

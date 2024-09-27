@@ -19,15 +19,21 @@ public:
     MenuButton(std::string text);
     MenuButton(MenuButton &&);
     ~MenuButton();
-    void Render(int x, int y);
-    void RenderHover(int x, int y);
+    void Render();
+    void RenderHover();
     int GetWidth() { return this->button_width; }
     int GetHeight() { return this->button_height; }
+    int GetX() { return this->x; }
+    int GetY() { return this->y; }
+    void SetX(int x) { this->x = x; }
+    void SetY(int y) { this->y = y; }
 
 private:
     SDL_Texture *texture;
     int button_width;
     int button_height;
+    int x;
+    int y;
 };
 
 class MainMenu
@@ -36,7 +42,7 @@ private:
     SDL_Texture *title;
     int title_width;
     int title_height;
-    std::vector<MenuButton> buttons;
+    std::vector<MenuButton> *buttons;
     int current_selection;
 public:
     MainMenu();
@@ -44,7 +50,8 @@ public:
     void Render();
     int GetCurrentSelection() { return this->current_selection; }
     void SetCurrentSelection(int selection) { this->current_selection = selection; }
-    int GetButtonsQuantity() { return this->buttons.size(); }
+    int GetButtonsQuantity() { return (*this->buttons).size(); }
+    std::vector<MenuButton> *GetButtons() { return this->buttons; }
 };
 
 #endif // MAIN_MENU_HPP

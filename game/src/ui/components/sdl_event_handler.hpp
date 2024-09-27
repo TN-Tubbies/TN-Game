@@ -8,4 +8,8 @@
 
 void HandleKeyUp(SDL_Event event, DisplayState *display_state, MainMenu *main_menu);
 
+void HandleMouseHover(SDL_Event event, DisplayState *display_state, MainMenu *main_menu);
+
+void HandleMouseClick(SDL_Event event, DisplayState *display_state, MainMenu *main_menu);
+
 #endif // SDL_EVENT_HANDLER_HPP

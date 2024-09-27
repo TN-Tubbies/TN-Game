@@ -53,7 +53,13 @@ int main(void)
                 continue;
             case SDL_KEYUP:
                 HandleKeyUp(event, &displayState, main_menu);
-                std::cout << displayState << std::endl;
+                break;
+            case SDL_MOUSEMOTION:
+                HandleMouseHover(event, &displayState, main_menu);
+                break;
+            case SDL_MOUSEBUTTONUP:
+                HandleMouseClick(event, &displayState, main_menu);
+                break;
             }
         }
         //// States update ////
