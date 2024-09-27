@@ -12,4 +12,4 @@ void Init_MIX(void);
 
 SDL_Texture *ModernUILoad(SDL_Renderer *renderer);
 
-#endif
+#endif // UI_INIT_HPP

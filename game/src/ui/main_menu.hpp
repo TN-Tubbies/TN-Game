@@ -32,19 +32,19 @@ private:
 
 class MainMenu
 {
-public:
-    MainMenu();
-    ~MainMenu();
-    void Render();
-    int GetCurrentSelection() { return this->current_selection; }
-    void SetCurrentSelection(int selection) { this->current_selection = selection; }
-
 private:
     SDL_Texture *title;
     int title_width;
     int title_height;
     std::vector<MenuButton> buttons;
     int current_selection;
+public:
+    MainMenu();
+    ~MainMenu();
+    void Render();
+    int GetCurrentSelection() { return this->current_selection; }
+    void SetCurrentSelection(int selection) { this->current_selection = selection; }
+    int GetButtonsQuantity() { return this->buttons.size(); }
 };
 
-#endif
+#endif // MAIN_MENU_HPP

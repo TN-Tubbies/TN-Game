@@ -4,6 +4,7 @@ MAINSRCS = main.cpp
 STATICSRCS = jersey.cpp renderer.cpp
 UTILITYSRCS = sdl_compare_surfaces.cpp
 UISRCS = ui_init.cpp main_menu.cpp
+UICOMPONENTSRCS = sdl_event_handler.cpp
 WORLDSRCS = world.cpp map.cpp tile.cpp
 AUDIOSRCS = music.cpp
 # TBC Files
@@ -19,6 +20,7 @@ SRCS = $(patsubst %.cpp, game/src/%.cpp, $(MAINSRCS))
 	SRCS += $(patsubst %.cpp, game/src/static/%.cpp, $(STATICSRCS))
 	SRCS += $(patsubst %.cpp, game/src/utility/%.cpp, $(UTILITYSRCS))
 	SRCS += $(patsubst %.cpp, game/src/ui/%.cpp, $(UISRCS))
+	SRCS += $(patsubst %.cpp, game/src/ui/components/%.cpp, $(UICOMPONENTSRCS))
 	SRCS += $(patsubst %.cpp, game/src/tbc/%.cpp, $(TBCSRCS))
 	SRCS += $(patsubst %.cpp, game/src/world/%.cpp, $(WORLDSRCS))
 	SRCS += $(patsubst %.cpp, game/src/audio/%.cpp, $(AUDIOSRCS))

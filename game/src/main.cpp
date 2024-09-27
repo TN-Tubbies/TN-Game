@@ -3,12 +3,17 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "ui/ui_init.hpp"
-#include "ui/main_menu.hpp"
 #include "static/renderer.hpp"
 #include "static/jersey.hpp"
+
+#include "ui/ui_init.hpp"
+#include "ui/main_menu.hpp"
+#include "ui/components/sdl_event_handler.hpp"
+
 #include "world/world.hpp"
+
 #include "audio/audio.hpp"
+
 #include "tbc/components/battle_character.hpp"
 // FIXME: temporary :
 #include "tbc/characters/zerachiel.hpp"
@@ -20,7 +25,7 @@ int main(void)
     Init_IMG();
     Init_MIX();
 
-    MainMenu main_menu;
+    MainMenu* main_menu = new MainMenu();
 
     // FIXME: Temporary party init (should be done when loading a battle) :
     std::vector<BattleCharacter> player_party;
@@ -46,6 +51,9 @@ int main(void)
             case SDL_QUIT:
                 running = 0;
                 continue;
+            case SDL_KEYUP:
+                HandleKeyUp(event, &displayState, main_menu);
+                std::cout << displayState << std::endl;
             }
         }
         //// States update ////
@@ -56,7 +64,7 @@ int main(void)
         switch (displayState)
         {
         case MAIN_MENU:
-            main_menu.Render();
+            main_menu->Render();
             break;
         case MAP:
             test_map.Render();
@@ -76,5 +84,6 @@ int main(void)
     // SDL_DestroyTexture(modernUI);
     Destroy_Jersey();
     Destroy_Renderer();
+    delete main_menu;
     exit(0);
 }
