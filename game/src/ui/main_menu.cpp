@@ -2,7 +2,7 @@
 
 MenuButton::MenuButton(std::string text)
 {
-    SDL_Surface *button_surf = TTF_RenderUTF8_Solid(Get_Jersey(), text.c_str(), {255, 255, 255});
+    SDL_Surface *button_surf = TTF_RenderUTF8_Solid(Get_Jersey(64), text.c_str(), {255, 255, 255});
     this->texture = SDL_CreateTextureFromSurface(Get_Renderer(), button_surf);
     this->button_width = button_surf->w;
     this->button_height = button_surf->h;
@@ -39,7 +39,7 @@ void MenuButton::RenderHover()
 
 MainMenu::MainMenu()
 {
-    SDL_Surface *title_surf = TTF_RenderUTF8_Solid(Get_Jersey(), "TN-Game", {255, 255, 255});
+    SDL_Surface *title_surf = TTF_RenderUTF8_Solid(Get_Jersey(256), "TN-Game", {255, 255, 255});
     this->title = SDL_CreateTextureFromSurface(Get_Renderer(), title_surf);
     this->title_width = title_surf->w;
     this->title_height = title_surf->h;
@@ -73,7 +73,7 @@ MainMenu::~MainMenu()
 
 void MainMenu::Render()
 {
-    SDL_Rect title_rect = {WIDTH / 2 - (this->title_width / 2) * 2, HEIGHT / 5, (this->title_width) * 2, (this->title_height) * 2};
+    SDL_Rect title_rect = {WIDTH / 2 - this->title_width / 2, HEIGHT / 5, this->title_width, this->title_height};
     SDL_RenderCopy(Get_Renderer(), this->title, NULL, &title_rect);
 
     

@@ -11,7 +11,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 
 #include "../static/renderer.hpp"
-#include "../static/jersey.hpp"
+#include "../static/ttf.hpp"
 
 class MenuButton
 {

@@ -1,7 +1,7 @@
 # Global Files
 TARGET = main
 MAINSRCS = main.cpp
-STATICSRCS = jersey.cpp renderer.cpp
+STATICSRCS = ttf.cpp renderer.cpp
 UTILITYSRCS = sdl_compare_surfaces.cpp
 UISRCS = ui_init.cpp main_menu.cpp
 UICOMPONENTSRCS = sdl_event_handler.cpp
@@ -35,8 +35,8 @@ CFLAGS += -fsanitize=address -fno-omit-frame-pointer -g3
 LDFLAGS += -fsanitize=address
 
 #libraries
-CFLAGS += $(shell pkg-config --cflags SDL2)
-LDFLAGS += $(shell pkg-config --libs SDL2)
+CFLAGS += $(shell pkg-config --cflags sdl2)
+LDFLAGS += $(shell pkg-config --libs sdl2)
 CFLAGS += $(shell pkg-config --cflags SDL2_image)
 LDFLAGS += $(shell pkg-config --libs SDL2_image)
 CFLAGS += $(shell pkg-config --cflags SDL2_mixer)

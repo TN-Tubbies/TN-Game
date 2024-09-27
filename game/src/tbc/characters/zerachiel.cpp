@@ -247,11 +247,11 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     SDL_Surface *name_surf;
     if (isFriendly)
     {
-        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(), zerachielName.c_str(), (SDL_Color){255, 255, 255, 255});
+        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(32), zerachielName.c_str(), (SDL_Color){255, 255, 255, 255});
     }
     else
     {
-        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(), zerachielName.c_str(), (SDL_Color){255, 0, 0, 255});
+        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(32), zerachielName.c_str(), (SDL_Color){255, 0, 0, 255});
     }
     this->DisplayedNameHeight = name_surf->h;
     this->DisplayedNameWidth = name_surf->w;

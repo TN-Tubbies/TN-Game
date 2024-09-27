@@ -4,7 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "static/renderer.hpp"
-#include "static/jersey.hpp"
+#include "static/ttf.hpp"
 
 #include "ui/ui_init.hpp"
 #include "ui/main_menu.hpp"
@@ -21,7 +21,7 @@
 int main(void)
 {
     Init_Renderer();
-    Init_Jersey();
+    Init_TTF();
     Init_IMG();
     Init_MIX();
 
@@ -35,7 +35,7 @@ int main(void)
 
     // FIXME: Temporary Map init
     Map test_map("entrance");
-    test_map.PlayTheme();
+    // test_map.PlayTheme();
     // End of fix
 
     SDL_Event event;

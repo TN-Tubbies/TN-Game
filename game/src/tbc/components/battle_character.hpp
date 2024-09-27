@@ -4,7 +4,7 @@
 #include "../battle_declarations.hpp"
 #include "../battle_enumerators.hpp"
 #include "../../static/renderer.hpp"
-#include "../../static/jersey.hpp"
+#include "../../static/ttf.hpp"
 #include "battle_status.hpp"
 #include "battle_move.hpp"
 

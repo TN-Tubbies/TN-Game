@@ -4,8 +4,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-void Init_Jersey(void);
-TTF_Font *Get_Jersey(void);
+#include <iostream>
+#include <vector>
+
+void Init_TTF(void);
+TTF_Font *Get_Jersey(int size);
 void Destroy_Jersey(void);
 
 #endif
