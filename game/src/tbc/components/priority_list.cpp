@@ -83,37 +83,61 @@ void DestroyPriorityList(PriorityList *list)
     free(list);
 }
 
-// ------------------------------------------------------------------------------------------------
-
-void SortPriorityList(PriorityList *list)
+PriorityEntity *GetEntityFromList(PriorityList *list, int index)
 {
-    PriorityEntity *current, *min, *previous;
-    int minIndex;
-
-    for (current = list->head; current != NULL; current = current->next)
+    if (index < 0 || index > list->size)
     {
-        min = current;
-        minIndex = 0;
-        for (int i = 1; i < list->size; i++)
-        {
-            if (list->head->relativeSpeed < min->relativeSpeed)
-            {
-                min = list->head;
-                minIndex = i;
-            }
-        }
-        if (minIndex != 0)
-        {
-            previous = min;
-            for (int i = minIndex - 1; i >= 0; i--)
-            {
-                previous = previous->next;
-            }
-            previous->next = min->next;
-            min->next = list->head;
-            list->head = min;
-        }
+        return NULL;
     }
+
+    PriorityEntity *current = list->head;
+    for (int i = 1; i < index; i++)
+    {
+        current = current->next;
+    }
+
+    return current;
+}
+
+// ------------------------------------------------------------------------------------------------
+PriorityList *SortPriorityList(PriorityList *list)
+{
+    std::vector<std::vector<int>> indexes_and_speeds;
+    for (int i = 1; i <= list->size; i++)
+    {
+        std::vector<int> index_and_speed;
+        index_and_speed.push_back(i);
+        index_and_speed.push_back(GetEntityFromList(list, i)->relativeSpeed);
+        indexes_and_speeds.push_back(index_and_speed);
+    }
+
+    std::vector<std::vector<int>> indexes_and_speeds_sorted;
+    while (indexes_and_speeds.size() > 0)
+    {
+        int maxIndex = 0;
+        int maxSpeed = indexes_and_speeds[0][1];
+        for (int i = 1; i < indexes_and_speeds.size(); i++)
+        {
+            if (indexes_and_speeds[i][1] > maxSpeed)
+            {
+                maxIndex = i;
+                maxSpeed = indexes_and_speeds[i][1];
+            }
+        }
+
+        indexes_and_speeds_sorted.push_back(indexes_and_speeds[maxIndex]);
+        indexes_and_speeds.erase(indexes_and_speeds.begin() + maxIndex);
+    }
+
+    PriorityList *sortedList = CreateEmptyPriorityList();
+    for (int i = 0; i < list->size; i++)
+    {
+        AddToPriorityList(sortedList, GetEntityFromList(list, indexes_and_speeds_sorted[i][0])->character, indexes_and_speeds_sorted[i][1]);
+    }
+
+    DestroyPriorityList(list);
+
+    return sortedList;
 }
 void CleanPreviousActions(PriorityList *list)
 {

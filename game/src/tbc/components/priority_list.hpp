@@ -24,8 +24,9 @@ PriorityList *CreateEmptyPriorityList();
 void AddToPriorityList(PriorityList *list, BattleCharacter *character, int relativeSpeed);
 void RemoveFromPriorityList(PriorityList *list, BattleCharacter *character);
 void DestroyPriorityList(PriorityList *list);
+PriorityEntity *GetEntityFromList(PriorityList *list, int index);
 
-void SortPriorityList(PriorityList *list);
+PriorityList *SortPriorityList(PriorityList *list);
 void CleanPreviousActions(PriorityList *list);
 
 #endif
