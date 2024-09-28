@@ -10,6 +10,15 @@ PriorityList *CreateEmptyPriorityList()
     list->size = 0;
     return list;
 }
+PriorityList *CreatePriorityList(std::vector<BattleCharacter *> characters)
+{
+    PriorityList *list = CreateEmptyPriorityList();
+    for (unsigned int i = 0; i < characters.size(); i++)
+    {
+        AddToPriorityList(list, characters[i], characters[i]->GetBaseSpeed()); // Default relative speed is the character's speed
+    }
+    return list;
+}
 void AddToPriorityList(PriorityList *list, BattleCharacter *character, int relativeSpeed)
 {
     switch (list->size)
@@ -83,7 +92,7 @@ void DestroyPriorityList(PriorityList *list)
     free(list);
 }
 
-PriorityEntity *GetEntityFromList(PriorityList *list, int index)
+PriorityEntity *GetEntityFromIndex(PriorityList *list, int index)
 {
     if (index < 0 || index > list->size)
     {
@@ -98,8 +107,22 @@ PriorityEntity *GetEntityFromList(PriorityList *list, int index)
 
     return current;
 }
+PriorityEntity *GetEntityFromCharacter(PriorityList *list, BattleCharacter *character)
+{
+    PriorityEntity *current = list->head;
+    while (current != NULL && current->character != character)
+    {
+        current = current->next;
+    }
+    return current;
+}
+BattleCharacter *GetCharacterFromList(PriorityList *list, int index)
+{
+    return GetEntityFromIndex(list, index)->character;
+}
 
 // ------------------------------------------------------------------------------------------------
+
 PriorityList *SortPriorityList(PriorityList *list)
 {
     std::vector<std::vector<int>> indexes_and_speeds;
@@ -107,7 +130,7 @@ PriorityList *SortPriorityList(PriorityList *list)
     {
         std::vector<int> index_and_speed;
         index_and_speed.push_back(i);
-        index_and_speed.push_back(GetEntityFromList(list, i)->relativeSpeed);
+        index_and_speed.push_back(GetEntityFromIndex(list, i)->relativeSpeed);
         indexes_and_speeds.push_back(index_and_speed);
     }
 
@@ -132,7 +155,7 @@ PriorityList *SortPriorityList(PriorityList *list)
     PriorityList *sortedList = CreateEmptyPriorityList();
     for (int i = 0; i < list->size; i++)
     {
-        AddToPriorityList(sortedList, GetEntityFromList(list, indexes_and_speeds_sorted[i][0])->character, indexes_and_speeds_sorted[i][1]);
+        AddToPriorityList(sortedList, GetEntityFromIndex(list, indexes_and_speeds_sorted[i][0])->character, indexes_and_speeds_sorted[i][1]);
     }
 
     DestroyPriorityList(list);

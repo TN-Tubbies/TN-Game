@@ -21,10 +21,14 @@ typedef struct PriorityList
 } PriorityList;
 
 PriorityList *CreateEmptyPriorityList();
+PriorityList *CreatePriorityList(std::vector<BattleCharacter *> characters);
 void AddToPriorityList(PriorityList *list, BattleCharacter *character, int relativeSpeed);
 void RemoveFromPriorityList(PriorityList *list, BattleCharacter *character);
 void DestroyPriorityList(PriorityList *list);
-PriorityEntity *GetEntityFromList(PriorityList *list, int index);
+PriorityEntity *GetEntityFromIndex(PriorityList *list, int index);
+PriorityEntity *GetEntityFromCharacter(PriorityList *list, BattleCharacter *character);
+
+BattleCharacter *GetCharacterFromList(PriorityList *list, int index);
 
 PriorityList *SortPriorityList(PriorityList *list);
 void CleanPreviousActions(PriorityList *list);
