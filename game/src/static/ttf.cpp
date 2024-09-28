@@ -1,6 +1,6 @@
 #include "ttf.hpp"
 
-std::vector<std::pair<int, TTF_Font*>> *JerseyFonts = new std::vector<std::pair<int, TTF_Font*>>();
+static std::vector<std::pair<int, TTF_Font*>> *JerseyFonts = new std::vector<std::pair<int, TTF_Font*>>();
 
 void Init_TTF(void)
 {
@@ -16,7 +16,7 @@ void Init_TTF(void)
 TTF_Font *Init_Jersey(int size)
 {
     TTF_Font *jersey =
-        TTF_OpenFont("game/assets/fonts/Jersey/Jersey20-Regular.ttf", 64);
+        TTF_OpenFont("game/assets/fonts/Jersey/Jersey20-Regular.ttf", size);
     if (jersey == NULL) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load font: %s",
                     TTF_GetError());
