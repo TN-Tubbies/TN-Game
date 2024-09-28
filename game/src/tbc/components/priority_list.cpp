@@ -40,6 +40,7 @@ void AddToPriorityList(PriorityList *list, BattleCharacter *character, int relat
         list->tail = newEntity;
         break;
     }
+    list->size++;
 }
 void RemoveFromPriorityList(PriorityList *list, BattleCharacter *character)
 {

@@ -25,11 +25,11 @@ int main(void)
     Init_IMG();
     Init_MIX();
 
-    MainMenu* main_menu = new MainMenu();
+    MainMenu *main_menu = new MainMenu();
 
     // FIXME: Temporary party init (should be done when loading a battle) :
-    std::vector<BattleCharacter> player_party;
-    ZerachielUnit zerachiel(1);
+    std::vector<BattleCharacter *> player_party;
+    ZerachielUnit *zerachiel = new ZerachielUnit(1);
     player_party.push_back(zerachiel);
     // End of fix
 
@@ -81,7 +81,7 @@ int main(void)
             SDL_RenderClear(Get_Renderer());
             SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
             // End of fix
-            zerachiel.DrawHud(0, HEIGHT - 128);
+            zerachiel->DrawHud(0, HEIGHT - 128);
             break;
         }
         SDL_RenderPresent(Get_Renderer());

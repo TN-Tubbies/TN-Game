@@ -94,7 +94,6 @@ void RunBattleManager(Battle_System *CurrentBattle)
         }
         else
         {
-            CurrentBattle->currentCharacterOrder = SortCharactersWRTStat(CurrentBattle->currentCharacterOrder);
             CurrentBattle->currentCharacterIndex = 0;
             CurrentBattle->currentState = BattleState_InATurn;
             break;

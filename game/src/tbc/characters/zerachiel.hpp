@@ -11,10 +11,4 @@ public:
     ZerachielUnit(bool isFriendly);
 };
 
-BattleMoveActive GetZerachielBaseMove(void);
-BattleMoveActive GetZerachielMove1(void);
-BattleMoveActive GetZerachielMove2(void);
-BattleMoveActive GetZerachielUltimate(void);
-BattleMovePassive GetZerachielPassive1(void);
-
 #endif

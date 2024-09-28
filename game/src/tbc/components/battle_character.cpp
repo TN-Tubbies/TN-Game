@@ -2,58 +2,24 @@
 
 // ------------------------------------------------------------------------------------------------
 
-BattleCharacter::BattleCharacter(
-    std::string name,
-    enum CharacterType Type,
-    enum BattleElement Element,
-    bool isFriendly,
-    int HP,
-    int MaxHP,
-    int Atk,
-    int Speed,
-    int Def,
-    BattleMove BaseMove,
-    BattleMove Move1,
-    BattleMove Move2,
-    BattleMove Move3,
-    BattleMove Ultimate,
-    BattleMove Passive1,
-    BattleMove Passive2)
-{
-    this->name = name;
-    this->Type = Type;
-    this->Element = Element;
-    this->isFriendly = isFriendly;
-    this->HP = HP;
-    this->MaxHP = MaxHP;
-    this->BaseAtk = Atk;
-    this->BaseSpeed = Speed;
-    this->BaseDef = Def;
-    this->BaseMove = BaseMove;
-    this->Move1 = Move1;
-    this->Move2 = Move2;
-    this->Move3 = Move3;
-    this->Ultimate = Ultimate;
-    this->Passive1 = Passive1;
-    this->Passive2 = Passive2;
-
-    this->CurrentAtk = Atk;
-    this->AtkChange = 0;
-    this->CurrentSpeed = Speed;
-    this->SpeedChange = 0;
-    this->CurrentDef = Def;
-    this->DefChange = 0;
-    this->LastDamageReceived = 0;
-
-    std::vector<BattleStatus> affectedStatus;
-    this->AffectedStatus = affectedStatus;
-
-    this->SkillBar = 0;
-    this->UltimateBar = 0;
-}
-
 BattleCharacter::~BattleCharacter()
 {
+    // Delete all statuses
+    for (unsigned int i = 0; i < AffectedStatus.size(); i++)
+    {
+        delete AffectedStatus[i];
+    }
+
+    // Delete moves
+    delete BaseMove;
+    delete Move1;
+    delete Move2;
+    delete Move3;
+    delete Ultimate;
+    delete Passive1;
+    delete Passive2;
+
+    // Delete hud-related textures
     if (HudBG != NULL)
     {
         SDL_DestroyTexture(HudBG);
@@ -68,7 +34,7 @@ BattleCharacter::~BattleCharacter()
 
 bool BattleCharacter::operator==(BattleCharacter &other) const
 {
-    return (name == other.name && Type == other.Type && Element == other.Element && isFriendly == other.isFriendly && HP == other.HP && MaxHP == other.MaxHP && BaseAtk == other.BaseAtk && BaseSpeed == other.BaseSpeed && BaseDef == other.BaseDef && BaseMove.getName() == other.BaseMove.getName() && Move1.getName() == other.Move1.getName() && Move2.getName() == other.Move2.getName() && Move3.getName() == other.Move3.getName() && Ultimate.getName() == other.Ultimate.getName() && Passive1.getName() == other.Passive1.getName() && Passive2.getName() == other.Passive2.getName());
+    return (name == other.name && Type == other.Type && Element == other.Element && isFriendly == other.isFriendly && HP == other.HP && MaxHP == other.MaxHP && BaseAtk == other.BaseAtk && BaseSpeed == other.BaseSpeed && BaseDef == other.BaseDef && (*BaseMove).getName() == (*other.BaseMove).getName() && (*Move1).getName() == (*other.Move1).getName() && (*Move2).getName() == (*other.Move2).getName() && (*Move3).getName() == (*other.Move3).getName() && (*Ultimate).getName() == (*other.Ultimate).getName() && (*Passive1).getName() == (*other.Passive1).getName() && (*Passive2).getName() == (*other.Passive2).getName());
 }
 bool BattleCharacter::operator!=(BattleCharacter &other) const
 {
@@ -280,17 +246,17 @@ int BattleCharacter::GetChangeStat(enum CharacterStat stat)
     }
 }
 
-void BattleCharacter::AddStatus(BattleStatus status) { AffectedStatus.push_back(status); }
-BattleStatus BattleCharacter::GetStatus(std::string statusName)
+void BattleCharacter::AddStatus(BattleStatus *status) { AffectedStatus.push_back(status); }
+BattleStatus *BattleCharacter::GetStatus(std::string statusName)
 {
     for (unsigned int i = 0; i < AffectedStatus.size(); i++)
     {
-        if (AffectedStatus[i].GetName() == statusName)
+        if (AffectedStatus[i]->GetName() == statusName)
         {
             return AffectedStatus[i];
         }
     }
-    return BattleStatus(); // Return empty status if not found
+    return new BattleStatus(); // Return empty status if not found
 }
 bool BattleCharacter::CheckIfAffected(std::string statusName)
 {
@@ -298,7 +264,7 @@ bool BattleCharacter::CheckIfAffected(std::string statusName)
 
     for (unsigned int i = 0; i < AffectedStatus.size(); i++)
     {
-        if (AffectedStatus[i].GetName() == statusName)
+        if (AffectedStatus[i]->GetName() == statusName)
         {
             res = true;
             break;
@@ -311,7 +277,7 @@ void BattleCharacter::RemoveInactiveStatus()
 {
     for (unsigned int i = 0; i < AffectedStatus.size(); i++)
     {
-        if (!AffectedStatus[i].IsActive())
+        if (!AffectedStatus[i]->IsActive())
         {
             AffectedStatus.erase(AffectedStatus.begin() + i);
             i--;
@@ -322,7 +288,7 @@ void BattleCharacter::RemoveStatus(std::string statusName)
 {
     for (unsigned int i = 0; i < AffectedStatus.size(); i++)
     {
-        if (AffectedStatus[i].GetName() == statusName)
+        if (AffectedStatus[i]->GetName() == statusName)
         {
             AffectedStatus.erase(AffectedStatus.begin() + i);
             break;

@@ -42,7 +42,7 @@ protected:
 
     bool isFriendly;
 
-    std::vector<BattleStatus> AffectedStatus;
+    std::vector<BattleStatus *> AffectedStatus;
 
     int SkillBar;
     int UltimateBar;
@@ -53,33 +53,16 @@ protected:
     int DisplayedNameHeight;
 
 public:
-    BattleMove BaseMove;
-    BattleMove Move1;
-    BattleMove Move2;
-    BattleMove Move3;
-    BattleMove Ultimate;
-    BattleMove Passive1;
-    BattleMove Passive2;
+    BattleMove *BaseMove;
+    BattleMove *Move1;
+    BattleMove *Move2;
+    BattleMove *Move3;
+    BattleMove *Ultimate;
+    BattleMove *Passive1;
+    BattleMove *Passive2;
 
     // Construct
     BattleCharacter() {};
-    BattleCharacter(
-        std::string name,
-        enum CharacterType Type,
-        enum BattleElement Element,
-        bool isFriendly,
-        int HP,
-        int MaxHP,
-        int BaseAtk,
-        int BaseSpeed,
-        int BaseDef,
-        BattleMove BaseMove,
-        BattleMove Move1,
-        BattleMove Move2,
-        BattleMove Move3,
-        BattleMove Ultimate,
-        BattleMove Passive1,
-        BattleMove Passive2);
 
     // Destruct
     ~BattleCharacter();
@@ -108,8 +91,8 @@ public:
     int GetChangeStat(enum CharacterStat stat);
     void ChangeStat(enum CharacterStat stat, int notch);
 
-    void AddStatus(BattleStatus status);
-    BattleStatus GetStatus(std::string statusName);
+    void AddStatus(BattleStatus *status);
+    BattleStatus *GetStatus(std::string statusName);
     bool CheckIfAffected(std::string statusName);
     void RemoveInactiveStatus();
     void RemoveStatus(std::string statusName);
@@ -119,7 +102,5 @@ public:
 
     void DrawHud(int x, int y);
 };
-
-std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> array);
 
 #endif
