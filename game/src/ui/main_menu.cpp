@@ -2,7 +2,7 @@
 
 MenuButton::MenuButton(std::string text)
 {
-    SDL_Surface *button_surf = TTF_RenderUTF8_Solid(Get_Jersey(64), text.c_str(), {255, 255, 255});
+    SDL_Surface *button_surf = TTF_RenderUTF8_Blended(Get_Roboto(64), text.c_str(), {255, 255, 255});
     this->texture = SDL_CreateTextureFromSurface(Get_Renderer(), button_surf);
     this->button_width = button_surf->w;
     this->button_height = button_surf->h;

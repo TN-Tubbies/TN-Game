@@ -10,6 +10,6 @@
 void Init_TTF(void);
 TTF_Font *Get_Jersey(int size);
 TTF_Font *Get_Roboto(int size);
-void Destroy_TFF(void);
+void Destroy_TTF(void);
 
 #endif
