@@ -1,4 +1,5 @@
 #include "battle_character.hpp"
+#include <SDL2/SDL2_gfxPrimitives.h>
 
 // ------------------------------------------------------------------------------------------------
 
@@ -382,9 +383,37 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 
 void BattleCharacter::DrawHud(int x, int y)
 {
-    SDL_Rect bg_rect = {x, y, 128, 128};
+    int y_offset = 5;
+    int HudWidth = 128;
+    int HudHeight = 128;
+    int bar_height = 10;
+
+    SDL_Rect bg_rect = {x, y, HudWidth, HudHeight};
     SDL_RenderCopy(Get_Renderer(), HudBG, NULL, &bg_rect);
 
-    SDL_Rect name_rect = {x + 10, y + 10, DisplayedNameWidth, DisplayedNameHeight};
+    //Name
+    int center_name_x = x + HudWidth / 2 - DisplayedNameWidth / 2;
+    SDL_Rect name_rect = {center_name_x, y + y_offset, DisplayedNameWidth, DisplayedNameHeight};
     SDL_RenderCopy(Get_Renderer(), DisplayedName, NULL, &name_rect);
+    y_offset += DisplayedNameHeight + 10;
+
+    // HP //
+    rectangleColor(Get_Renderer(), x + 5, y + y_offset, x + HudWidth - 5, y + y_offset + bar_height, 0xFFFFFFFF);
+    if (this->HP <= this->MaxHP / 4)
+    {
+        boxColor(Get_Renderer(), x + 6, y + y_offset + 1, x + 6 + (HudWidth - 13) * this->HP/ this->MaxHP, y + y_offset + bar_height - 2, 0xFF0000FF);
+    }
+    else
+    {
+        boxColor(Get_Renderer(), x + 6, y + y_offset + 1, x + 6 + (HudWidth - 13) * this->HP / this->MaxHP, y + y_offset + bar_height - 2, 0xFFFFFFFF);
+    }
+    y_offset += bar_height + 1;
+
+    int center_hp_x = x + HudWidth / 2 - (DisplayedHPWidth + DisplayedMaxHPWidth) / 2;
+    SDL_Rect hp_rect = {center_hp_x, y + y_offset, DisplayedHPWidth, DisplayedHPHeight};
+    SDL_RenderCopy(Get_Renderer(), DisplayedHP, NULL, &hp_rect);
+    int center_max_hp_x = center_hp_x + DisplayedHPWidth;
+    SDL_Rect max_hp_rect = {center_max_hp_x, y + y_offset, DisplayedMaxHPWidth, DisplayedMaxHPHeight};
+    SDL_RenderCopy(Get_Renderer(), DisplayedMaxHP, NULL, &max_hp_rect);
+    y_offset += DisplayedHPHeight + 5;
 }

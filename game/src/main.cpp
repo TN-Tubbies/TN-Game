@@ -77,7 +77,7 @@ int main(void)
             break;
         case BATTLE:
             // FIXME: Temporary battle_background rendering
-            SDL_SetRenderDrawColor(Get_Renderer(), 255, 255, 255, 255);
+            SDL_SetRenderDrawColor(Get_Renderer(), 150, 150, 150, 255);
             SDL_RenderClear(Get_Renderer());
             SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
             // End of fix

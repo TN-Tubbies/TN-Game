@@ -33,7 +33,6 @@ void MenuButton::Render()
 
 void MenuButton::RenderHover()
 {
-    SDL_Rect button_rect = {x, y, this->button_width, this->button_height};
     roundedBoxColor(Get_Renderer(), x - 5, y - 5, x + this->button_width + 5, y + this->button_height + 5, 8, 0xFF0000FF);
 }
 

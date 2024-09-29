@@ -14,7 +14,9 @@
 #include <algorithm>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 // Classes:
 // Débloque des équipements particuliers
@@ -47,10 +49,18 @@ protected:
     int SkillBar;
     int UltimateBar;
 
+    // HUD
     SDL_Texture *HudBG;
     SDL_Texture *DisplayedName;
     int DisplayedNameWidth;
     int DisplayedNameHeight;
+    SDL_Texture *DisplayedHP;
+    int DisplayedHPWidth;
+    int DisplayedHPHeight;
+    SDL_Texture *DisplayedMaxHP;
+    int DisplayedMaxHPWidth;
+    int DisplayedMaxHPHeight;
+    
 
 public:
     BattleMove BaseMove;
