@@ -88,7 +88,7 @@ int main(void)
     }
 
     // SDL_DestroyTexture(modernUI);
-    Destroy_Jersey();
+    Destroy_TTF();
     Destroy_Renderer();
     delete main_menu;
     exit(0);
