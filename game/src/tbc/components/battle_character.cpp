@@ -1,5 +1,7 @@
 #include "battle_character.hpp"
 #include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keycode.h>
 
 // ------------------------------------------------------------------------------------------------
 
@@ -62,6 +64,10 @@ BattleCharacter::~BattleCharacter()
     if (DisplayedName != NULL)
     {
         SDL_DestroyTexture(DisplayedName);
+    }
+    for (unsigned int i = 0; i < BattleButtons.size(); i++)
+    {
+        delete BattleButtons[i];
     }
 }
 
@@ -404,7 +410,7 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 // HUD RELATED FUNCTIONS --------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 
-void BattleCharacter::DrawHud(int x, int y)
+void BattleCharacter::RenderHud(int x, int y)
 {
     int y_offset = 5;
     int HudWidth = 128;
@@ -439,4 +445,79 @@ void BattleCharacter::DrawHud(int x, int y)
     SDL_Rect max_hp_rect = {center_max_hp_x, y + y_offset, DisplayedMaxHPWidth, DisplayedMaxHPHeight};
     SDL_RenderCopy(Get_Renderer(), DisplayedMaxHP, NULL, &max_hp_rect);
     y_offset += DisplayedHPHeight + 5;
+}
+
+void BattleCharacter::RenderButtons()
+{
+    for (unsigned int i = 0; i < BattleButtons.size(); i++)
+    {
+        if (BattleButtons[i] == currentBattleButton)
+        {
+            BattleButtons[i]->RenderHover();
+        }
+        BattleButtons[i]->Render();
+    }
+}
+
+void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState) {
+    switch (event.key.keysym.sym) 
+    {
+    case SDLK_ESCAPE:
+        *displayState = MAIN_MENU;
+        break;
+    default:
+        if (currentBattleButton) 
+        {
+        if (currentBattleButton->GetKey() == event.key.keysym.sym) 
+        {
+            std::cout << "Button Pressed: "
+                    << currentBattleButton->GetText().c_str() << std::endl;
+        } else {
+            for (unsigned int i = 0; i < BattleButtons.size(); i++) 
+            {
+            if (BattleButtons[i]->GetKey() == event.key.keysym.sym) 
+            {
+                currentBattleButton = BattleButtons[i];
+            }
+            }
+        }
+        } else {
+        for (unsigned int i = 0; i < BattleButtons.size(); i++) 
+        {
+            if (BattleButtons[i]->GetKey() == event.key.keysym.sym) 
+            {
+            currentBattleButton = BattleButtons[i];
+            }
+        }
+        }
+        break;
+    }
+}
+
+bool isMouseHovering(int mouse_x, int mouse_y, BattleButton *button) {
+    return (mouse_x >= button->GetX() && mouse_x <= button->GetX() + button->GetWidth() && mouse_y >= button->GetY() && mouse_y <= button->GetY() + button->GetHeight());
+}
+
+void BattleCharacter::HandleMouseHover(SDL_Event event) {
+    int x = event.motion.x;
+    int y = event.motion.y;
+    for (unsigned int i = 0; i < BattleButtons.size(); i++) 
+    {
+        if (isMouseHovering(x, y, BattleButtons[i])) 
+        {
+        currentBattleButton = BattleButtons[i];
+        }
+    }
+}
+
+void BattleCharacter::HandleMouseClick(SDL_Event event) {
+    int x = event.button.x;
+    int y = event.button.y;
+    for (unsigned int i = 0; i < BattleButtons.size(); i++) 
+    {
+        if (isMouseHovering(x, y, BattleButtons[i])) 
+        {
+        std::cout << "Button Pressed: " << BattleButtons[i]->GetText().c_str() << std::endl;
+        }
+    }
 }

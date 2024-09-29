@@ -274,4 +274,11 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     this->DisplayedMaxHPWidth = max_hp_surf->w;
     this->DisplayedMaxHP = SDL_CreateTextureFromSurface(Get_Renderer(), max_hp_surf);
     SDL_FreeSurface(max_hp_surf);
+
+    // UI & Buttons //
+    std::vector<BattleButton *> buttons = std::vector<BattleButton *>();
+    buttons.push_back(new BattleButton("BasicAtk", WIDTH - 10, HEIGHT - 10, SDLK_a));
+    buttons.push_back(new BattleButton("Skill 1", WIDTH - 35 - buttons[0]->GetWidth(), HEIGHT - 10, SDLK_e));
+    buttons.push_back(new BattleButton("Skill 2", WIDTH - 10, HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_f));
+    this->BattleButtons = buttons;
 }

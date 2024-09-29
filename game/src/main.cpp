@@ -8,7 +8,6 @@
 
 #include "ui/ui_init.hpp"
 #include "ui/main_menu.hpp"
-#include "ui/components/sdl_event_handler.hpp"
 
 #include "world/world.hpp"
 
@@ -52,13 +51,45 @@ int main(void)
                 running = 0;
                 continue;
             case SDL_KEYUP:
-                HandleKeyUp(event, &displayState, main_menu);
+                switch (displayState) 
+                {
+                    case BATTLE:
+                        zerachiel.HandleKeyUp(event, &displayState);
+                        break;
+                    case MAIN_MENU:
+                        main_menu->HandleKeyUp(event, &displayState);
+                        break;
+                    case MAP:
+                        if (event.key.keysym.sym == SDLK_ESCAPE)
+                        {
+                            displayState = MAIN_MENU;
+                        }
+                        break;
+                }
                 break;
             case SDL_MOUSEMOTION:
-                HandleMouseHover(event, &displayState, main_menu);
+                switch (displayState) {
+                    case BATTLE:
+                        zerachiel.HandleMouseHover(event);
+                        break;
+                    case MAIN_MENU:
+                        main_menu->HandleMouseHover(event);
+                        break;
+                    case MAP:
+                        break;
+                }
                 break;
             case SDL_MOUSEBUTTONUP:
-                HandleMouseClick(event, &displayState, main_menu);
+                switch (displayState) {
+                    case BATTLE:
+                        zerachiel.HandleMouseClick(event);
+                        break;
+                    case MAIN_MENU:
+                        main_menu->HandleMouseClick(event, &displayState);
+                        break;
+                    case MAP:
+                        break;
+                }
                 break;
             }
         }
@@ -81,7 +112,8 @@ int main(void)
             SDL_RenderClear(Get_Renderer());
             SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
             // End of fix
-            zerachiel.DrawHud(0, HEIGHT - 128);
+            zerachiel.RenderHud(0, HEIGHT - 128);
+            zerachiel.RenderButtons();
             break;
         }
         SDL_RenderPresent(Get_Renderer());

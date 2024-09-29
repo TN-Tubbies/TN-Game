@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include <iostream>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -48,10 +47,9 @@ public:
     MainMenu();
     ~MainMenu();
     void Render();
-    int GetCurrentSelection() { return this->current_selection; }
-    void SetCurrentSelection(int selection) { this->current_selection = selection; }
-    int GetButtonsQuantity() { return (*this->buttons).size(); }
-    std::vector<MenuButton> *GetButtons() { return this->buttons; }
+    void HandleKeyUp(SDL_Event event, DisplayState *displayState);
+    void HandleMouseHover(SDL_Event event);
+    void HandleMouseClick(SDL_Event event, DisplayState *displayState);
 };
 
 #endif // MAIN_MENU_HPP

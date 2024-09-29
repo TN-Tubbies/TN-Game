@@ -8,6 +8,8 @@
 #include "battle_status.hpp"
 #include "battle_move.hpp"
 
+#include "battle_ui.hpp"
+
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -60,6 +62,10 @@ protected:
     SDL_Texture *DisplayedMaxHP;
     int DisplayedMaxHPWidth;
     int DisplayedMaxHPHeight;
+
+    // UI & Buttons
+    std::vector<BattleButton*> BattleButtons;
+    BattleButton* currentBattleButton;
     
     // Methods
     void AddToHP(int quantity);
@@ -129,7 +135,13 @@ public:
     void AddToSkillBar(int adding);
     void AddToUltimateBar(int adding);
 
-    void DrawHud(int x, int y);
+    void RenderHud(int x, int y);
+
+    void RenderButtons();
+
+    void HandleKeyUp(SDL_Event event, DisplayState *displayState);
+    void HandleMouseHover(SDL_Event event);
+    void HandleMouseClick(SDL_Event event);
 };
 
 std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> array);
