@@ -61,6 +61,8 @@ protected:
     int DisplayedMaxHPWidth;
     int DisplayedMaxHPHeight;
     
+    // Methods
+    void AddToHP(int quantity);
 
 public:
     BattleMove BaseMove;

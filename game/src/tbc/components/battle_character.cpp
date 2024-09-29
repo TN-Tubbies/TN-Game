@@ -194,17 +194,40 @@ float BattleCharacter::GetElementReactionCoefficient(enum BattleElement Incoming
     }
 }
 
-void BattleCharacter::TakeDamage(int damage, enum BattleElement IncomingElement)
+void BattleCharacter::AddToHP(int quantity)
 {
-    int readDamage = (int)damage * GetElementReactionCoefficient(IncomingElement);
-    if (HP - readDamage < 0)
+    if (HP + quantity > MaxHP)
+    {
+        HP = MaxHP;
+    }
+    else if (HP + quantity < 0)
     {
         HP = 0;
     }
     else
     {
-        HP -= readDamage;
+        HP += quantity;
     }
+    std::string hp_string = std::to_string(HP);
+    SDL_Surface *hp_surf;
+    if (HP < MaxHP / 4)
+    {
+        hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(10), hp_string.c_str(), (SDL_Color){255, 0, 0, 255});
+    }
+    else
+    {
+        hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(10), hp_string.c_str(), (SDL_Color){255, 255, 255, 255});
+    }
+    this->DisplayedHPHeight = hp_surf->h;
+    this->DisplayedHPWidth = hp_surf->w;
+    this->DisplayedHP = SDL_CreateTextureFromSurface(Get_Renderer(), hp_surf);
+    SDL_FreeSurface(hp_surf);
+}
+
+void BattleCharacter::TakeDamage(int damage, enum BattleElement IncomingElement)
+{
+    int readDamage = (int)damage * GetElementReactionCoefficient(IncomingElement);
+    AddToHP(-readDamage);
 }
 
 void BattleCharacter::ChangeStat(enum CharacterStat stat, int notch)
