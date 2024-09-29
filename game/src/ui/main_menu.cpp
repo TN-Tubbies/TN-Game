@@ -39,7 +39,7 @@ void MenuButton::RenderHover()
 
 MainMenu::MainMenu()
 {
-    SDL_Surface *title_surf = TTF_RenderUTF8_Solid(Get_Jersey(256), "TN-Game", {255, 255, 255});
+    SDL_Surface *title_surf = TTF_RenderUTF8_Solid(Get_Jersey(128), "TN-Game", {255, 255, 255});
     this->title = SDL_CreateTextureFromSurface(Get_Renderer(), title_surf);
     this->title_width = title_surf->w;
     this->title_height = title_surf->h;
