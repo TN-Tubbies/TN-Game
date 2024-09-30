@@ -17,6 +17,7 @@ enum MoveTargetCategory
     MoveTargetCategory_None,
     MoveTargetCategory_Self,
     MoveTargetCategory_OneEnemy,
+    MoveTargetCategory_OneAlly,
 };
 enum PassiveTriggerCategory
 {

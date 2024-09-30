@@ -4,7 +4,7 @@
 // CONST & DESTR ----------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 
-Battle_System *StartBattle(std::vector<BattleCharacter *> playableCharacters, std::vector<BattleCharacter *> enemyCharacters, int MaxTurnCount)
+Battle_System *StartBattle(std::vector<BattleCharacter *> playableCharacters, std::vector<BattleCharacter *> enemyCharacters, std::string background_path, int MaxTurnCount)
 {
     Battle_System *NewBattle = (Battle_System *)malloc(sizeof(Battle_System));
     NewBattle->playableCharacters = playableCharacters;
@@ -27,6 +27,17 @@ Battle_System *StartBattle(std::vector<BattleCharacter *> playableCharacters, st
     NewBattle->battlefield = merged;
     NewBattle->currentPriorityList = CreatePriorityList(merged);
 
+    SDL_Surface *background = IMG_Load(background_path.c_str());
+    if (!background)
+    {
+        std::cerr << "Error loading battle background: " << IMG_GetError() << std::endl;
+        return NULL;
+    }
+    NewBattle->backgroundTexture = SDL_CreateTextureFromSurface(Get_Renderer(), background);
+    NewBattle->backgroundWidth = background->w;
+    NewBattle->backgroundHeight = background->h;
+    SDL_FreeSurface(background);
+
     if (DEBUG_MODE)
     {
         std::clog << "BattleDebug: a battle has been successfully launched." << std::endl;
@@ -37,6 +48,9 @@ Battle_System *StartBattle(std::vector<BattleCharacter *> playableCharacters, st
 
 void DestroyBattle(Battle_System *Battle)
 {
+    DestroyPriorityList(Battle->currentPriorityList);
+    SDL_DestroyTexture(Battle->backgroundTexture);
+
     // TODO: Adding logs to the log file?
 
     free(Battle);
