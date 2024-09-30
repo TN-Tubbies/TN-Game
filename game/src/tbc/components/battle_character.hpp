@@ -82,7 +82,7 @@ public:
     BattleMove *Passive2;
 
     // Construct
-    BattleCharacter() {};
+    BattleCharacter();
 
     // Destruct
     ~BattleCharacter();
@@ -120,6 +120,7 @@ public:
     void AddToSkillBar(int adding);
     void AddToUltimateBar(int adding);
 
+    void GeneralHudInit();
     void RenderHud(int x, int y);
     int GetHudWidth() { return HudWidth; }
     int GetHudHeight() { return HudHeight; }

@@ -5,6 +5,8 @@
 
 // ------------------------------------------------------------------------------------------------
 
+BattleCharacter::BattleCharacter() {}
+
 BattleCharacter::~BattleCharacter()
 {
     // Delete all statuses
@@ -375,6 +377,70 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 // ------------------------------------------------------------------------------------------------
 // HUD RELATED FUNCTIONS --------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
+
+void BattleCharacter::GeneralHudInit() 
+{
+    std::cout << "GeneralHudInit for character :" << this->name.c_str() << std::endl;
+    // HUD //
+    SDL_Surface *name_surf;
+    if (isFriendly)
+    {
+        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(32), this->name.c_str(), (SDL_Color){255, 255, 255, 255});
+    }
+    else
+    {
+        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(32), this->name.c_str(), (SDL_Color){255, 0, 0, 255});
+    }
+    if (name_surf == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit for %s, name_surf: %s", this->name.c_str() , SDL_GetError());
+        exit(-1);
+    }
+    this->DisplayedNameHeight = name_surf->h;
+    this->DisplayedNameWidth = name_surf->w;
+    this->DisplayedName = SDL_CreateTextureFromSurface(Get_Renderer(), name_surf);
+    if (this->DisplayedName == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit, DisplayedName: %s", SDL_GetError());
+        exit(-1);
+    }
+    SDL_FreeSurface(name_surf);
+
+    std::string hp_string = std::to_string(HP);
+    SDL_Surface *hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(10), hp_string.c_str(), (SDL_Color){255, 255, 255, 255});
+    if (hp_surf == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit, hp_surf: %s", SDL_GetError());
+        exit(-1);
+    }
+    this->DisplayedHPHeight = hp_surf->h;
+    this->DisplayedHPWidth = hp_surf->w;
+    this->DisplayedHP = SDL_CreateTextureFromSurface(Get_Renderer(), hp_surf);
+    if (this->DisplayedHP == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit, DisplayedHP: %s", SDL_GetError());
+        exit(-1);
+    }
+    SDL_FreeSurface(hp_surf);
+
+    std::string max_hp_string = " / " + std::to_string(MaxHP);
+    SDL_Surface *max_hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(10), max_hp_string.c_str(), (SDL_Color){255, 255, 255, 255});
+    if (max_hp_surf == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit, max_hp_surf: %s", SDL_GetError());
+        exit(-1);
+    }
+    this->DisplayedMaxHPHeight = max_hp_surf->h;
+    this->DisplayedMaxHPWidth = max_hp_surf->w;
+    this->DisplayedMaxHP = SDL_CreateTextureFromSurface(Get_Renderer(), max_hp_surf);
+    if (this->DisplayedMaxHP == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit, DisplayedMaxHP: %s", SDL_GetError());
+        exit(-1);
+    }
+    SDL_FreeSurface(max_hp_surf);
+
+}
 
 void BattleCharacter::RenderHud(int x, int y)
 {

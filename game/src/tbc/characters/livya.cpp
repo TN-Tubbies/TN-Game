@@ -94,20 +94,16 @@ BattleMovePassive *GetLivyaPassive1(void)
 
 LivyaUnit::LivyaUnit(bool isFriendly)
 {
-    std::string livyaName = "Livya";
-    CharacterType livyaType = CharacterType_DPS;
-    BattleElement livyaElement = BattleElement_Light;
-    this->isFriendly = isFriendly;
-
     int MaxHP = 100;
     int HP = MaxHP;
     int Atk = 5;
     int Speed = 5;
     int Def = 5;
 
-    this->name = name;
-    this->Type = Type;
-    this->Element = Element;
+    this->name = "Livya";
+    this->Type = CharacterType_DPS;
+    this->Element = BattleElement_Lightening;
+    this->isFriendly = isFriendly;
     this->HP = HP;
     this->MaxHP = MaxHP;
     this->BaseAtk = Atk;
@@ -134,6 +130,21 @@ LivyaUnit::LivyaUnit(bool isFriendly)
     this->SkillBar = 0;
     this->UltimateBar = 0;
 
-    // HUD //
-    
+    GeneralHudInit();
+
+    // Personalized HUD elements //
+    SDL_Texture *bg = IMG_LoadTexture(Get_Renderer(), "game/assets/images/ui/faded_bg.png");
+    if (bg == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in ui_init, bg load: %s", SDL_GetError());
+        exit(-1);
+    }
+    this->HudBG = bg;
+
+    // UI & Buttons //
+    std::vector<BattleButton *> buttons = std::vector<BattleButton *>();
+    buttons.push_back(new BattleButton("BasicAtk", WIDTH - 10, HEIGHT - 10, SDLK_a));
+    buttons.push_back(new BattleButton("Skill 1", WIDTH - 35 - buttons[0]->GetWidth(), HEIGHT - 10, SDLK_e));
+    buttons.push_back(new BattleButton("Skill 2", WIDTH - 10, HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_f));
+    this->BattleButtons = buttons;
 }
