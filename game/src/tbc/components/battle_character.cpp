@@ -379,8 +379,6 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 void BattleCharacter::RenderHud(int x, int y)
 {
     int y_offset = 5;
-    int HudWidth = 128;
-    int HudHeight = 128;
     int bar_height = 10;
 
     SDL_Rect bg_rect = {x, y, HudWidth, HudHeight};

@@ -52,6 +52,8 @@ protected:
     int UltimateBar;
 
     // HUD
+    int HudWidth;
+    int HudHeight;
     SDL_Texture *HudBG;
     SDL_Texture *DisplayedName;
     int DisplayedNameWidth;
@@ -119,6 +121,8 @@ public:
     void AddToUltimateBar(int adding);
 
     void RenderHud(int x, int y);
+    int GetHudWidth() { return HudWidth; }
+    int GetHudHeight() { return HudHeight; }
 
     void RenderButtons();
 

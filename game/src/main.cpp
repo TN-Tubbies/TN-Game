@@ -3,6 +3,8 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
+#include <vector>
+
 #include "static/renderer.hpp"
 #include "static/ttf.hpp"
 
@@ -13,8 +15,9 @@
 
 #include "audio/audio.hpp"
 
-#include "tbc/components/battle_character.hpp"
-// FIXME: temporary :
+#include "tbc/battle_system.hpp"
+
+//FIXME: Temporary
 #include "tbc/characters/zerachiel.hpp"
 
 int main(void)
@@ -26,15 +29,15 @@ int main(void)
 
     MainMenu *main_menu = new MainMenu();
 
-    // FIXME: Temporary party init (should be done when loading a battle) :
-    std::vector<BattleCharacter *> player_party;
-    ZerachielUnit *zerachiel = new ZerachielUnit(1);
-    player_party.push_back(zerachiel);
-    // End of fix
+    //FIXME: Temporary :
+    std::vector<BattleCharacter*> playableCharacters = std::vector<BattleCharacter*>();
+    std::vector<BattleCharacter*> enemyCharacters = std::vector<BattleCharacter*>();
 
+    Battle_System *battle = StartBattle(playableCharacters, enemyCharacters, 10);
+    
     // FIXME: Temporary Map init
     Map test_map("entrance");
-    // test_map.PlayTheme();
+    //test_map.PlayTheme();
     // End of fix
 
     SDL_Event event;
@@ -54,7 +57,6 @@ int main(void)
                 switch (displayState) 
                 {
                     case BATTLE:
-                        zerachiel->HandleKeyUp(event, &displayState);
                         break;
                     case MAIN_MENU:
                         main_menu->HandleKeyUp(event, &displayState);
@@ -70,7 +72,6 @@ int main(void)
             case SDL_MOUSEMOTION:
                 switch (displayState) {
                     case BATTLE:
-                        zerachiel->HandleMouseHover(event);
                         break;
                     case MAIN_MENU:
                         main_menu->HandleMouseHover(event);
@@ -82,7 +83,6 @@ int main(void)
             case SDL_MOUSEBUTTONUP:
                 switch (displayState) {
                     case BATTLE:
-                        zerachiel->HandleMouseClick(event);
                         break;
                     case MAIN_MENU:
                         main_menu->HandleMouseClick(event, &displayState);
@@ -94,6 +94,7 @@ int main(void)
             }
         }
         //// States update ////
+        RunBattleManager(battle);
 
         //// Rendering ////
         SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
@@ -107,13 +108,7 @@ int main(void)
             test_map.Render();
             break;
         case BATTLE:
-            // FIXME: Temporary battle_background rendering
-            SDL_SetRenderDrawColor(Get_Renderer(), 150, 150, 150, 255);
-            SDL_RenderClear(Get_Renderer());
-            SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
-            // End of fix
-            zerachiel->RenderHud(0, HEIGHT - 128);
-            zerachiel->RenderButtons();
+            RenderBattle(battle);
             break;
         }
         SDL_RenderPresent(Get_Renderer());
@@ -123,5 +118,6 @@ int main(void)
     Destroy_TTF();
     Destroy_Renderer();
     delete main_menu;
+    DestroyBattle(battle);
     exit(0);
 }
