@@ -31,12 +31,12 @@ int main(void)
     MainMenu *main_menu = new MainMenu();
 
     //FIXME: Temporary :
-    std::vector<BattleCharacter*> playableCharacters = std::vector<BattleCharacter*>();
+    std::vector<BattleCharacter*> *playableCharacters = new std::vector<BattleCharacter*>();
     ZerachielUnit *zerachiel = new ZerachielUnit(1);
-    playableCharacters.push_back(zerachiel);
-    std::vector<BattleCharacter*> enemyCharacters = std::vector<BattleCharacter*>();
+    playableCharacters->push_back(zerachiel);
+    std::vector<BattleCharacter*> *enemyCharacters = new std::vector<BattleCharacter*>();
     LivyaUnit *livya = new LivyaUnit(0);
-    enemyCharacters.push_back(livya);
+    enemyCharacters->push_back(livya);
 
     Battle_System *battle = StartBattle(playableCharacters, enemyCharacters,"game/assets/images/maps/entrance/full_img.png" , 10);
     

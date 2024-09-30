@@ -133,4 +133,7 @@ LivyaUnit::LivyaUnit(bool isFriendly)
 
     this->SkillBar = 0;
     this->UltimateBar = 0;
+
+    // HUD //
+    
 }

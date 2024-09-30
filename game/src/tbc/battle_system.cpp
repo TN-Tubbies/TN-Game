@@ -4,7 +4,7 @@
 // CONST & DESTR ----------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 
-Battle_System *StartBattle(std::vector<BattleCharacter *> playableCharacters, std::vector<BattleCharacter *> enemyCharacters, std::string background_path, int MaxTurnCount)
+Battle_System *StartBattle(std::vector<BattleCharacter *> *playableCharacters, std::vector<BattleCharacter *> *enemyCharacters, std::string background_path, int MaxTurnCount)
 {
     Battle_System *NewBattle = (Battle_System *)malloc(sizeof(Battle_System));
     NewBattle->playableCharacters = playableCharacters;
@@ -15,16 +15,17 @@ Battle_System *StartBattle(std::vector<BattleCharacter *> playableCharacters, st
     NewBattle->isBattleOver = false;
     NewBattle->currentState = BattleState_Starting;
 
+    NewBattle->battlefield = new std::vector<BattleCharacter *>();
+
     std::vector<BattleCharacter *> merged;
-    for (unsigned int i = 0; i < playableCharacters.size(); i++)
+    for (unsigned int i = 0; i < playableCharacters->size(); i++)
     {
-        merged.push_back(playableCharacters[i]);
+        NewBattle->battlefield->push_back((*playableCharacters)[i]);
     }
-    for (unsigned int i = 0; i < enemyCharacters.size(); i++)
+    for (unsigned int i = 0; i < enemyCharacters->size(); i++)
     {
-        merged.push_back(enemyCharacters[i]);
+        NewBattle->battlefield->push_back((*enemyCharacters)[i]);
     }
-    NewBattle->battlefield = merged;
     NewBattle->currentPriorityList = CreatePriorityList(merged);
 
     SDL_Surface *background = IMG_Load(background_path.c_str());
@@ -50,6 +51,9 @@ void DestroyBattle(Battle_System *Battle)
 {
     DestroyPriorityList(Battle->currentPriorityList);
     SDL_DestroyTexture(Battle->backgroundTexture);
+    delete Battle->battlefield;
+    delete Battle->playableCharacters;
+    delete Battle->enemyCharacters;
 
     // TODO: Adding logs to the log file?
 
