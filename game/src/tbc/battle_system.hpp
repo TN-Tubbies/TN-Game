@@ -7,12 +7,13 @@
 #include "../defs.hpp"
 #include "battle_enumerators.hpp"
 #include "components/battle_character.hpp"
+#include "components/priority_list.hpp"
 
 typedef struct _Battle_System
 {
-    std::vector<BattleCharacter> playableCharacters;
-    std::vector<BattleCharacter> enemyCharacters;
-    std::vector<BattleCharacter> battlefield;
+    std::vector<BattleCharacter *> playableCharacters;
+    std::vector<BattleCharacter *> enemyCharacters;
+    std::vector<BattleCharacter *> battlefield;
 
     bool isBattleOver;
     int currentTurn;
@@ -20,8 +21,8 @@ typedef struct _Battle_System
 
     enum BattleState currentState;
 
-    unsigned int currentCharacterIndex;
-    std::vector<BattleCharacter> currentCharacterOrder;
+    unsigned int actionMadeAmount;
+    PriorityList *currentPriorityList;
 
 } Battle_System;
 

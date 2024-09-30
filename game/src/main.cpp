@@ -24,11 +24,11 @@ int main(void)
     Init_IMG();
     Init_MIX();
 
-    MainMenu* main_menu = new MainMenu();
+    MainMenu *main_menu = new MainMenu();
 
     // FIXME: Temporary party init (should be done when loading a battle) :
-    std::vector<BattleCharacter> player_party;
-    ZerachielUnit zerachiel(1);
+    std::vector<BattleCharacter *> player_party;
+    ZerachielUnit *zerachiel = new ZerachielUnit(1);
     player_party.push_back(zerachiel);
     // End of fix
 
@@ -54,7 +54,7 @@ int main(void)
                 switch (displayState) 
                 {
                     case BATTLE:
-                        zerachiel.HandleKeyUp(event, &displayState);
+                        zerachiel->HandleKeyUp(event, &displayState);
                         break;
                     case MAIN_MENU:
                         main_menu->HandleKeyUp(event, &displayState);
@@ -70,7 +70,7 @@ int main(void)
             case SDL_MOUSEMOTION:
                 switch (displayState) {
                     case BATTLE:
-                        zerachiel.HandleMouseHover(event);
+                        zerachiel->HandleMouseHover(event);
                         break;
                     case MAIN_MENU:
                         main_menu->HandleMouseHover(event);
@@ -82,7 +82,7 @@ int main(void)
             case SDL_MOUSEBUTTONUP:
                 switch (displayState) {
                     case BATTLE:
-                        zerachiel.HandleMouseClick(event);
+                        zerachiel->HandleMouseClick(event);
                         break;
                     case MAIN_MENU:
                         main_menu->HandleMouseClick(event, &displayState);
@@ -112,8 +112,8 @@ int main(void)
             SDL_RenderClear(Get_Renderer());
             SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
             // End of fix
-            zerachiel.RenderHud(0, HEIGHT - 128);
-            zerachiel.RenderButtons();
+            zerachiel->RenderHud(0, HEIGHT - 128);
+            zerachiel->RenderButtons();
             break;
         }
         SDL_RenderPresent(Get_Renderer());

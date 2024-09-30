@@ -10,7 +10,7 @@ enum MoveTargetCategory BattleMove::getMoveTarget() const { return moveTarget; }
 
 // ------------------------------------------------------------------------------------------------
 
-BattleMovePassive::BattleMovePassive(std::string name, std::string description, enum MoveTargetCategory moveTarget, std::function<void(std::vector<BattleCharacter> Field)> effect, enum PassiveTriggerCategory triggerCategory)
+BattleMovePassive::BattleMovePassive(std::string name, std::string description, enum MoveTargetCategory moveTarget, std::function<void(std::vector<BattleCharacter *> Field)> effect, enum PassiveTriggerCategory triggerCategory)
 {
     this->name = name;
     this->description = description;
@@ -20,7 +20,7 @@ BattleMovePassive::BattleMovePassive(std::string name, std::string description, 
 }
 
 BattleMoveActive::BattleMoveActive(std::string name, std::string description, enum BattleElement element, enum MoveTargetCategory moveTarget,
-                                   std::function<void(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> RunEffect, int cost, bool isBM, bool isU)
+                                   std::function<void(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter *> Field)> RunEffect, int cost, bool isBM, bool isU)
 {
     this->name = name;
     this->description = description;
@@ -35,13 +35,13 @@ BattleMoveActive::BattleMoveActive(std::string name, std::string description, en
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
-BattleMoveActive GetNullActiveMove(void)
+BattleMoveActive *GetNullActiveMove(void)
 {
-    std::function<void(BattleCharacter * Self, std::vector<int> TargetID, std::vector<BattleCharacter> Field)> NullMoveFunction;
-    return BattleMoveActive("", "", BattleElement_Null, MoveTargetCategory_None, NullMoveFunction, 0, false, false);
+    std::function<void(BattleCharacter * Self, std::vector<int> TargetID, std::vector<BattleCharacter *> Field)> NullMoveFunction = [](BattleCharacter *, std::vector<int>, std::vector<BattleCharacter *>) {};
+    return new BattleMoveActive("", "", BattleElement_Null, MoveTargetCategory_None, NullMoveFunction, 0, false, false);
 }
-BattleMovePassive GetNullPassiveMove(void)
+BattleMovePassive *GetNullPassiveMove(void)
 {
-    std::function<void(std::vector<BattleCharacter> Field)> NullMoveFunction;
-    return BattleMovePassive("", "", MoveTargetCategory_None, NullMoveFunction, PassiveTriggerCategory_None);
+    std::function<void(std::vector<BattleCharacter *> Field)> NullMoveFunction2 = [](std::vector<BattleCharacter *> Field) {};
+    return new BattleMovePassive("", "", MoveTargetCategory_None, NullMoveFunction2, PassiveTriggerCategory_None);
 }

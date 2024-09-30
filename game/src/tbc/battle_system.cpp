@@ -4,18 +4,18 @@
 // CONST & DESTR ----------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 
-Battle_System *StartBattle(std::vector<BattleCharacter> playableCharacters, std::vector<BattleCharacter> enemyCharacters, int MaxTurnCount)
+Battle_System *StartBattle(std::vector<BattleCharacter *> playableCharacters, std::vector<BattleCharacter *> enemyCharacters, int MaxTurnCount)
 {
     Battle_System *NewBattle = (Battle_System *)malloc(sizeof(Battle_System));
     NewBattle->playableCharacters = playableCharacters;
     NewBattle->enemyCharacters = enemyCharacters;
     NewBattle->currentTurn = 0;
     NewBattle->maxTurnCount = MaxTurnCount;
-    NewBattle->currentCharacterIndex = 100; // This can't be less than the maximum amount of characters
+    NewBattle->actionMadeAmount = 100; // This can't be less than the maximum amount of characters
     NewBattle->isBattleOver = false;
     NewBattle->currentState = BattleState_Starting;
 
-    std::vector<BattleCharacter> merged;
+    std::vector<BattleCharacter *> merged;
     for (unsigned int i = 0; i < playableCharacters.size(); i++)
     {
         merged.push_back(playableCharacters[i]);
@@ -24,9 +24,8 @@ Battle_System *StartBattle(std::vector<BattleCharacter> playableCharacters, std:
     {
         merged.push_back(enemyCharacters[i]);
     }
-
-    NewBattle->currentCharacterOrder = merged;
     NewBattle->battlefield = merged;
+    NewBattle->currentPriorityList = CreatePriorityList(merged);
 
     if (DEBUG_MODE)
     {
@@ -49,22 +48,40 @@ void DestroyBattle(Battle_System *Battle)
 
 void RunTurn(Battle_System *CurrentBattle)
 {
-    BattleCharacter currentCharacter = CurrentBattle->currentCharacterOrder[CurrentBattle->currentCharacterIndex];
-    if (DEBUG_MODE)
+    CurrentBattle->currentPriorityList = SortPriorityList(CurrentBattle->currentPriorityList);
+
+    // Getting the first "active" character from the priority list
+    PriorityEntity *currentEntity = CurrentBattle->currentPriorityList->head;
+    while (currentEntity != NULL && currentEntity->hasMadeAction)
     {
-        std::clog << "BattleDebug: " << currentCharacter.GetName() << " is taking a turn." << std::endl;
+        currentEntity = currentEntity->next;
     }
-
-    if (currentCharacter.IsFriendly())
+    if (currentEntity == NULL)
     {
-        // User turn code here
-
-        // Player choose action code
+        std::cerr << "BattleError: no character can move, but still in a turn." << std::endl;
+        return;
     }
     else
     {
-        // Enemy turn code here
-        // TODO: Implement enemy AI turn logic
+        BattleCharacter *currentCharacter = currentEntity->character;
+
+        if (DEBUG_MODE)
+        {
+            std::clog << "BattleDebug: " << currentCharacter->GetName() << " is taking a turn." << std::endl;
+        }
+
+        if (currentCharacter->IsFriendly())
+        {
+            // User turn code here
+            // TODO: Player choose action code
+        }
+        else
+        {
+            // Enemy turn code here
+            // TODO: Implement enemy AI turn logic
+        }
+
+        currentEntity->hasMadeAction = true;
     }
 }
 
@@ -94,14 +111,14 @@ void RunBattleManager(Battle_System *CurrentBattle)
         }
         else
         {
-            CurrentBattle->currentCharacterOrder = SortCharactersWRTStat(CurrentBattle->currentCharacterOrder);
-            CurrentBattle->currentCharacterIndex = 0;
+            CurrentBattle->currentPriorityList = SortPriorityList(CurrentBattle->currentPriorityList);
+            CurrentBattle->actionMadeAmount = 0;
             CurrentBattle->currentState = BattleState_InATurn;
             break;
         }
     case BattleState_InATurn:
-        CurrentBattle->currentCharacterIndex++;
-        if (CurrentBattle->currentCharacterIndex >= CurrentBattle->currentCharacterOrder.size())
+        CurrentBattle->actionMadeAmount++;
+        if (CurrentBattle->actionMadeAmount >= CurrentBattle->currentPriorityList->size)
         {
             CurrentBattle->currentState = BattleState_TurnEnd;
             break;
