@@ -13,4 +13,8 @@
 
 void RenderBattle(Battle_System *battle);
 
+void BattleHandleKeyUp(Battle_System *battle, SDL_Event event, DisplayState *displayState);
+void BattleHandleMouseHover(Battle_System *battle, SDL_Event event);
+void BattleHandleMouseClick(Battle_System *battle, SDL_Event event);
+
 #endif // BATTLE_RENDER_HPP

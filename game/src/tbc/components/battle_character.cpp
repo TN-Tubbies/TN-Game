@@ -1,7 +1,4 @@
 #include "battle_character.hpp"
-#include <SDL2/SDL2_gfxPrimitives.h>
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_keycode.h>
 
 // ------------------------------------------------------------------------------------------------
 
@@ -380,8 +377,9 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 
 void BattleCharacter::GeneralHudInit() 
 {
-    std::cout << "GeneralHudInit for character :" << this->name.c_str() << std::endl;
     // HUD //
+    this->HudWidth = 128;
+    this->HudHeight = 128;
     SDL_Surface *name_surf;
     if (isFriendly)
     {

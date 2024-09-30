@@ -62,6 +62,7 @@ int main(void)
                 switch (displayState) 
                 {
                     case BATTLE:
+                        BattleHandleKeyUp(battle, event, &displayState);
                         break;
                     case MAIN_MENU:
                         main_menu->HandleKeyUp(event, &displayState);
@@ -77,6 +78,7 @@ int main(void)
             case SDL_MOUSEMOTION:
                 switch (displayState) {
                     case BATTLE:
+                        BattleHandleMouseHover(battle, event);
                         break;
                     case MAIN_MENU:
                         main_menu->HandleMouseHover(event);
@@ -88,6 +90,7 @@ int main(void)
             case SDL_MOUSEBUTTONUP:
                 switch (displayState) {
                     case BATTLE:
+                        BattleHandleMouseClick(battle, event);
                         break;
                     case MAIN_MENU:
                         main_menu->HandleMouseClick(event, &displayState);
