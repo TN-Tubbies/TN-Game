@@ -30,7 +30,7 @@ typedef struct _Battle_System
 
 } Battle_System;
 
-Battle_System *StartBattle(std::vector<BattleCharacter> playableCharacters, std::vector<BattleCharacter> enemyCharacters, std::string background_path, int MaxTurnCount);
+Battle_System *StartBattle(std::vector<BattleCharacter*> playableCharacters, std::vector<BattleCharacter*> enemyCharacters, std::string background_path, int MaxTurnCount);
 void DestroyBattle(Battle_System *Battle);
 
 void RunBattleManager(Battle_System *CurrentBattle);

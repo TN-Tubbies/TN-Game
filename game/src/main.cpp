@@ -8,6 +8,7 @@
 #include "static/renderer.hpp"
 #include "static/ttf.hpp"
 
+#include "tbc/characters/livya.hpp"
 #include "ui/ui_init.hpp"
 #include "ui/main_menu.hpp"
 
@@ -16,9 +17,9 @@
 #include "audio/audio.hpp"
 
 #include "tbc/battle_system.hpp"
+#include "tbc/battle_render.hpp"
 
-//FIXME: Temporary
-#include "tbc/characters/zerachiel.hpp"
+#include "tbc/all_characters.hpp"
 
 int main(void)
 {
@@ -31,9 +32,13 @@ int main(void)
 
     //FIXME: Temporary :
     std::vector<BattleCharacter*> playableCharacters = std::vector<BattleCharacter*>();
+    ZerachielUnit *zerachiel = new ZerachielUnit(1);
+    playableCharacters.push_back(zerachiel);
     std::vector<BattleCharacter*> enemyCharacters = std::vector<BattleCharacter*>();
+    LivyaUnit *livya = new LivyaUnit(0);
+    enemyCharacters.push_back(livya);
 
-    Battle_System *battle = StartBattle(playableCharacters, enemyCharacters, 10);
+    Battle_System *battle = StartBattle(playableCharacters, enemyCharacters,"game/assets/images/maps/entrance/full_img.png" , 10);
     
     // FIXME: Temporary Map init
     Map test_map("entrance");

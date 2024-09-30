@@ -1,6 +1,9 @@
 #ifndef BATTLE_RENDER_HPP
 #define BATTLE_RENDER_HPP
 
+#include "../static/renderer.hpp"
+#include "../static/ttf.hpp"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>

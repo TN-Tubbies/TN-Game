@@ -8,9 +8,9 @@ WORLDSRCS = world.cpp map.cpp tile.cpp
 AUDIOSRCS = music.cpp
 # TBC Files
 COMPONENTSRCS = battle_character.cpp battle_move.cpp battle_status.cpp priority_list.cpp battle_ui.cpp
-CHARACTERSRCS = zerachiel.cpp #livya.cpp
+CHARACTERSRCS = zerachiel.cpp livya.cpp
 STATUSSRCS = duel_with_Zerachiel.cpp heal_blocked.cpp
-TBCSRCS = battle_system.cpp
+TBCSRCS = battle_system.cpp battle_render.cpp
 	TBCSRCS += $(patsubst %.cpp, components/%.cpp, $(COMPONENTSRCS))
 	TBCSRCS += $(patsubst %.cpp, characters/%.cpp, $(CHARACTERSRCS))
 	TBCSRCS += $(patsubst %.cpp, status/%.cpp, $(STATUSSRCS))
