@@ -8,12 +8,16 @@
 #include "battle_enumerators.hpp"
 #include "components/battle_character.hpp"
 #include "components/priority_list.hpp"
+#include "../static/renderer.hpp"
 
 typedef struct _Battle_System
 {
     std::vector<BattleCharacter *> playableCharacters;
     std::vector<BattleCharacter *> enemyCharacters;
     std::vector<BattleCharacter *> battlefield;
+
+    SDL_Texture *backgroundTexture;
+    int backgroundWidth, backgroundHeight;
 
     bool isBattleOver;
     int currentTurn;
@@ -26,7 +30,7 @@ typedef struct _Battle_System
 
 } Battle_System;
 
-Battle_System *StartBattle(std::vector<BattleCharacter> playableCharacters, std::vector<BattleCharacter> enemyCharacters, int MaxTurnCount);
+Battle_System *StartBattle(std::vector<BattleCharacter> playableCharacters, std::vector<BattleCharacter> enemyCharacters, std::string background_path, int MaxTurnCount);
 void DestroyBattle(Battle_System *Battle);
 
 void RunBattleManager(Battle_System *CurrentBattle);
