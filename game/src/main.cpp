@@ -122,6 +122,8 @@ int main(void)
     // SDL_DestroyTexture(modernUI);
     Destroy_TTF();
     Destroy_Renderer();
+    delete zerachiel;
+    delete livya;
     delete main_menu;
     DestroyBattle(battle);
     exit(0);

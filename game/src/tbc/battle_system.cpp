@@ -17,7 +17,6 @@ Battle_System *StartBattle(std::vector<BattleCharacter *> *playableCharacters, s
 
     NewBattle->battlefield = new std::vector<BattleCharacter *>();
 
-    std::vector<BattleCharacter *> merged;
     for (unsigned int i = 0; i < playableCharacters->size(); i++)
     {
         NewBattle->battlefield->push_back((*playableCharacters)[i]);
@@ -26,7 +25,7 @@ Battle_System *StartBattle(std::vector<BattleCharacter *> *playableCharacters, s
     {
         NewBattle->battlefield->push_back((*enemyCharacters)[i]);
     }
-    NewBattle->currentPriorityList = CreatePriorityList(merged);
+    NewBattle->currentPriorityList = CreatePriorityList(NewBattle->battlefield);
 
     SDL_Surface *background = IMG_Load(background_path.c_str());
     if (!background)

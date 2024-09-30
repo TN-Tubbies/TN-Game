@@ -21,7 +21,7 @@ typedef struct PriorityList
 } PriorityList;
 
 PriorityList *CreateEmptyPriorityList();
-PriorityList *CreatePriorityList(std::vector<BattleCharacter *> characters);
+PriorityList *CreatePriorityList(std::vector<BattleCharacter *> *characters);
 void AddToPriorityList(PriorityList *list, BattleCharacter *character, int relativeSpeed);
 void RemoveFromPriorityList(PriorityList *list, BattleCharacter *character);
 void DestroyPriorityList(PriorityList *list);

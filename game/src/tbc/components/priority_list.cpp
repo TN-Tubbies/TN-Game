@@ -10,12 +10,12 @@ PriorityList *CreateEmptyPriorityList()
     list->size = 0;
     return list;
 }
-PriorityList *CreatePriorityList(std::vector<BattleCharacter *> characters)
+PriorityList *CreatePriorityList(std::vector<BattleCharacter *> *characters)
 {
     PriorityList *list = CreateEmptyPriorityList();
-    for (unsigned int i = 0; i < characters.size(); i++)
+    for (unsigned int i = 0; i < characters->size(); i++)
     {
-        AddToPriorityList(list, characters[i], characters[i]->GetBaseSpeed()); // Default relative speed is the character's speed
+        AddToPriorityList(list, characters->at(i), characters->at(i)->GetBaseSpeed()); // Default relative speed is the character's speed
     }
     return list;
 }
