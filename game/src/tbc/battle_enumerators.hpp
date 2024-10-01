@@ -43,7 +43,6 @@ enum PassiveTriggerCategory
 enum BattleElement
 {
     BattleElement_Null,
-    BattleElement_Physical,
     BattleElement_Light,
     BattleElement_Dark,
     BattleElement_Quantum,
