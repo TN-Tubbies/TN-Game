@@ -130,16 +130,9 @@ LivyaUnit::LivyaUnit(bool isFriendly)
     this->SkillBar = 0;
     this->UltimateBar = 0;
 
-    GeneralHudInit();
+    GeneralHudInit("game/assets/images/ui/faded_bg.png");
 
     // Personalized HUD elements //
-    SDL_Texture *bg = IMG_LoadTexture(Get_Renderer(), "game/assets/images/ui/faded_bg.png");
-    if (bg == NULL)
-    {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in ui_init, bg load: %s", SDL_GetError());
-        exit(-1);
-    }
-    this->HudBG = bg;
 
     // UI & Buttons //
     std::vector<BattleButton *> buttons = std::vector<BattleButton *>();

@@ -1,4 +1,5 @@
 #include "battle_character.hpp"
+#include <string>
 
 // ------------------------------------------------------------------------------------------------
 
@@ -375,11 +376,20 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 // HUD RELATED FUNCTIONS --------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 
-void BattleCharacter::GeneralHudInit() 
+void BattleCharacter::GeneralHudInit(std::string bg_path) 
 {
     // HUD //
     this->HudWidth = 128;
     this->HudHeight = 128;
+    
+    SDL_Texture *bg = IMG_LoadTexture(Get_Renderer(), bg_path.c_str());
+    if (bg == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in ui_init, bg load: %s", SDL_GetError());
+        exit(-1);
+    }
+    this->HudBG = bg;
+    
     SDL_Surface *name_surf;
     if (isFriendly)
     {

@@ -120,7 +120,7 @@ public:
     void AddToSkillBar(int adding);
     void AddToUltimateBar(int adding);
 
-    void GeneralHudInit();
+    void GeneralHudInit(std::string bg_path);
     void RenderHud(int x, int y);
     int GetHudWidth() { return HudWidth; }
     int GetHudHeight() { return HudHeight; }
