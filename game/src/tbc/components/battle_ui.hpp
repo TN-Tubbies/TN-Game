@@ -17,14 +17,13 @@ class BattleButton
 {
     private:
         std::string text;
-        SDL_Texture *texture;
+        SDL_Texture *img_texture;
         int button_width;
         int button_height;
-        int text_height;
         int x;
         int y;
-        int text_x;
-        int text_y;
+        int img_x;
+        int img_y;
         SDL_Texture *key_texture;
         int key_width;
         int key_height;
@@ -35,7 +34,7 @@ class BattleButton
         SDL_KeyCode key;
 
     public:
-        BattleButton(std::string text, int x2, int y2, SDL_KeyCode key);
+        BattleButton(std::string logo_path, int x2, int y2, SDL_KeyCode key);
         ~BattleButton();
         
         void Render();
@@ -47,6 +46,15 @@ class BattleButton
         std::string GetText() { return this->text; }
         int GetX();
         int GetY();
+};
+
+class UltimateButton : public BattleButton
+{
+    public:
+        UltimateButton(std::string logo_path, int x2, int y2, SDL_KeyCode key) : BattleButton(logo_path, x2, y2, key) {}
+        ~UltimateButton();
+        void Render();
+
 };
 
 #endif // BATTLE_UI_HPP
