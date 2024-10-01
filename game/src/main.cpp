@@ -5,6 +5,7 @@
 
 #include <vector>
 
+#include "defs.hpp"
 #include "static/renderer.hpp"
 #include "static/ttf.hpp"
 
@@ -102,7 +103,20 @@ int main(void)
             }
         }
         //// States update ////
-        RunBattleManager(battle);
+        
+        switch (displayState)
+        {
+            case QUIT:
+                running = 0;
+                break;
+            case BATTLE:
+                RunBattleManager(battle);
+                break;
+            case MAIN_MENU:
+                break;
+            case MAP:
+                break;
+        }
 
         //// Rendering ////
         SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);

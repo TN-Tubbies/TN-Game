@@ -7,7 +7,7 @@ void ZerachielBaseMoveEffect(BattleCharacter *Self, std::vector<int> TargetID, s
     for (unsigned int i = 0; i < TargetID.size(); i++)
     {
         BattleCharacter *target = Field[TargetID[i]];
-        target->TakeDamage(M, BattleElement_Physical);
+        target->TakeDamage(M, BattleElement_Light);
     }
     for (unsigned int i = 0; i < Field.size(); i++)
     {
@@ -28,7 +28,7 @@ BattleMoveActive *GetZerachielBaseMove(void)
     return new BattleMoveActive(
         "Entre vous et moi",
         "Restaure 15% de la BS.\nInflige M% de dégâts à la cible, et la fait entrer en duel avec Zerachiel. Si un autre adversaire est déjà en duel avec Zerachiel, ce précédent duel est annulé.",
-        BattleElement_Physical,
+        BattleElement_Light,
         MoveTargetCategory_OneEnemy,
         ZerachielBaseMoveEffect,
         -15,

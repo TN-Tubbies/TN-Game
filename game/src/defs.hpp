@@ -15,7 +15,8 @@ enum DisplayState
 {
     MAIN_MENU,
     MAP,
-    BATTLE
+    BATTLE,
+    QUIT
 };
 
 #endif
