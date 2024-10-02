@@ -3,6 +3,7 @@
 
 #include "../battle_declarations.hpp"
 #include "../battle_enumerators.hpp"
+#include "../all_status.hpp"
 #include "../../static/renderer.hpp"
 #include "../../static/ttf.hpp"
 #include "battle_status.hpp"
@@ -42,7 +43,9 @@ protected:
     int SpeedChange;
     int CurrentDef;
     int DefChange;
+    int LastDamageDealt;
     int LastDamageReceived;
+    BattleCharacter *LastTarget;
 
     bool isFriendly;
 
@@ -66,9 +69,9 @@ protected:
     int DisplayedMaxHPHeight;
 
     // UI & Buttons
-    std::vector<BattleButton*> BattleButtons;
-    BattleButton* currentBattleButton;
-    
+    std::vector<BattleButton *> BattleButtons;
+    BattleButton *currentBattleButton;
+
     // Methods
     void AddToHP(int quantity);
 
@@ -87,11 +90,11 @@ public:
     // Destruct
     ~BattleCharacter();
 
-    // Operators
+    // Operators ----------------------------------------------------------------------------------
     bool operator==(BattleCharacter &other) const;
     bool operator!=(BattleCharacter &other) const;
 
-    // Getters
+    // Getters ------------------------------------------------------------------------------------
     std::string GetName();
     enum CharacterType GetType();
     enum BattleElement GetElement();
@@ -103,9 +106,31 @@ public:
     int GetBaseStat(enum CharacterStat stat);
     int GetCurrentStat(enum CharacterStat stat);
     bool IsFriendly();
+    int GetLastDamageDealt() { return LastDamageDealt; }
     int GetLastDamageReceived();
+    BattleCharacter *GetLastTarget() { return LastTarget; }
 
-    void TakeDamage(int damage, enum BattleElement IncomingElement);
+    // Setters ------------------------------------------------------------------------------------
+    void SetName(std::string name) { this->name = name; }
+    void SetType(enum CharacterType type) { this->Type = type; }
+    void SetElement(enum BattleElement element) { this->Element = element; }
+    void SetHP(int HP) { this->HP = HP; }
+    void SetMaxHP(int MaxHP) { this->MaxHP = MaxHP; }
+    void SetBaseAtk(int BaseAtk) { this->BaseAtk = BaseAtk; }
+    void SetBaseSpeed(int BaseSpeed) { this->BaseSpeed = BaseSpeed; }
+    void SetBaseDef(int BaseDef) { this->BaseDef = BaseDef; }
+    void SetCurrentAtk(int CurrentAtk) { this->CurrentAtk = CurrentAtk; }
+    void SetAtkChange(int AtkChange) { this->AtkChange = AtkChange; }
+    void SetCurrentSpeed(int CurrentSpeed) { this->CurrentSpeed = CurrentSpeed; }
+    void SetSpeedChange(int SpeedChange) { this->SpeedChange = SpeedChange; }
+    void SetCurrentDef(int CurrentDef) { this->CurrentDef = CurrentDef; }
+    void SetDefChange(int DefChange) { this->DefChange = DefChange; }
+    void SetLastDamageDealt(int LastDamageDealt) { this->LastDamageDealt = LastDamageDealt; }
+    void SetLastDamageReceived(int LastDamageReceived) { this->LastDamageReceived = LastDamageReceived; }
+    void SetLastTarget(BattleCharacter *LastTarget) { this->LastTarget = LastTarget; }
+
+    void TakeDamage(BattleCharacter *launcher, int damage);
+    void TakeDamage(BattleCharacter *launcher, int damage, enum BattleElement IncomingElement);
     float GetElementReactionCoefficient(enum BattleElement IncomingElement);
 
     int GetChangeStat(enum CharacterStat stat);

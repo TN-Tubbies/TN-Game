@@ -7,4 +7,6 @@ Status_Heal_Blocked::Status_Heal_Blocked(int turnPersistence)
     hasTimer = true;
     timerDuration = turnPersistence;
     removeAfterBattle = true;
+    trigger = PassiveTriggerCategory_OnHeal;
+    linkedCharacter = nullptr;
 }

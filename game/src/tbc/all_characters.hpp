@@ -3,5 +3,6 @@
 
 #include "characters/zerachiel.hpp"
 #include "characters/livya.hpp"
+#include "characters/cicero.hpp"
 
 #endif
