@@ -1,5 +1,6 @@
 #include "battle_render.hpp"
 #include <SDL2/SDL_render.h>
+#include <iostream>
 
 void RenderBattle(Battle_System *battle)
 {
@@ -9,7 +10,7 @@ void RenderBattle(Battle_System *battle)
     for (unsigned int i = 0; i < battle->playableCharacters->size(); i++)
     {
         battle->playableCharacters->at(i)->RenderHud(x, HEIGHT - battle->playableCharacters->at(i)->GetHudHeight());
-        x += 10 + battle->playableCharacters[i].at(i)->GetHudWidth();
+        x += 10 + battle->playableCharacters->at(i)->GetHudWidth();
     }
     x = WIDTH;
     for (unsigned int i = 0; i < battle->enemyCharacters->size(); i++)

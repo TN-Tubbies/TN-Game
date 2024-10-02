@@ -9,6 +9,7 @@
 #include "static/renderer.hpp"
 #include "static/ttf.hpp"
 
+#include "tbc/characters/cicero.hpp"
 #include "tbc/characters/livya.hpp"
 #include "ui/ui_init.hpp"
 #include "ui/main_menu.hpp"
@@ -34,7 +35,10 @@ int main(void)
     //FIXME: Temporary :
     std::vector<BattleCharacter*> *playableCharacters = new std::vector<BattleCharacter*>();
     ZerachielUnit *zerachiel = new ZerachielUnit(1);
+    CiceroUnit *cicero = new CiceroUnit(1);
     playableCharacters->push_back(zerachiel);
+    playableCharacters->push_back(cicero);
+
     std::vector<BattleCharacter*> *enemyCharacters = new std::vector<BattleCharacter*>();
     LivyaUnit *livya = new LivyaUnit(0);
     enemyCharacters->push_back(livya);

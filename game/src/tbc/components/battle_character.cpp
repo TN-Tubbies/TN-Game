@@ -550,6 +550,7 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
         break;
     }
 }
+}
 
 bool isMouseHovering(int mouse_x, int mouse_y, BattleButton *button)
 {
