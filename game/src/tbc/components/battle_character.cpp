@@ -197,9 +197,18 @@ void BattleCharacter::AddToHP(int quantity)
     SDL_FreeSurface(hp_surf);
 }
 
-void BattleCharacter::TakeDamage(int damage, enum BattleElement IncomingElement)
+void BattleCharacter::TakeDamage(BattleCharacter *launcher, int damage)
 {
+    launcher->SetLastDamageDealt(damage);
+    launcher->SetLastTarget(this);
+    AddToHP(-damage);
+}
+void BattleCharacter::TakeDamage(BattleCharacter *launcher, int damage, enum BattleElement IncomingElement)
+{
+    // FIXME: Implement atk and defense influences
     int readDamage = (int)damage * GetElementReactionCoefficient(IncomingElement);
+    launcher->SetLastDamageDealt(damage);
+    launcher->SetLastTarget(this);
     AddToHP(-readDamage);
 }
 
@@ -402,7 +411,7 @@ void BattleCharacter::GeneralHudInit(std::string bg_path)
     }
     if (name_surf == NULL)
     {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit for %s, name_surf: %s", this->name.c_str() , SDL_GetError());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit for %s, name_surf: %s", this->name.c_str(), SDL_GetError());
         exit(-1);
     }
     this->DisplayedNameHeight = name_surf->h;
@@ -448,7 +457,6 @@ void BattleCharacter::GeneralHudInit(std::string bg_path)
         exit(-1);
     }
     SDL_FreeSurface(max_hp_surf);
-
 }
 
 void BattleCharacter::RenderHud(int x, int y)
@@ -459,7 +467,7 @@ void BattleCharacter::RenderHud(int x, int y)
     SDL_Rect bg_rect = {x, y, HudWidth, HudHeight};
     SDL_RenderCopy(Get_Renderer(), HudBG, NULL, &bg_rect);
 
-    //Name
+    // Name
     int center_name_x = x + HudWidth / 2 - DisplayedNameWidth / 2;
     SDL_Rect name_rect = {center_name_x, y + y_offset, DisplayedNameWidth, DisplayedNameHeight};
     SDL_RenderCopy(Get_Renderer(), DisplayedName, NULL, &name_rect);
@@ -469,7 +477,7 @@ void BattleCharacter::RenderHud(int x, int y)
     rectangleColor(Get_Renderer(), x + 5, y + y_offset, x + HudWidth - 5, y + y_offset + bar_height, 0xFFFFFFFF);
     if (this->HP <= this->MaxHP / 4)
     {
-        boxColor(Get_Renderer(), x + 6, y + y_offset + 1, x + 6 + (HudWidth - 13) * this->HP/ this->MaxHP, y + y_offset + bar_height - 2, 0xFF0000FF);
+        boxColor(Get_Renderer(), x + 6, y + y_offset + 1, x + 6 + (HudWidth - 13) * this->HP / this->MaxHP, y + y_offset + bar_height - 2, 0xFF0000FF);
     }
     else
     {
@@ -503,14 +511,15 @@ void BattleCharacter::RenderButtons()
     }
 }
 
-void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState) {
-    switch (event.key.keysym.sym) 
+void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
+{
+    switch (event.key.keysym.sym)
     {
     case SDLK_ESCAPE:
         *displayState = MAIN_MENU;
         break;
     default:
-        if (currentBattleButton) 
+        if (currentBattleButton)
         {
         if (currentBattleButton->GetKey() == event.key.keysym.sym) 
         {
@@ -530,26 +539,30 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState) {
         } else {
         for (unsigned int i = 0; i < BattleButtons.size(); i++) 
         {
-            if (BattleButtons[i]->GetKey() == event.key.keysym.sym) 
+            for (unsigned int i = 0; i < BattleButtons.size(); i++)
             {
-            currentBattleButton = BattleButtons[i];
+                if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
+                {
+                    currentBattleButton = BattleButtons[i];
+                }
             }
-        }
         }
         break;
     }
 }
 
-bool isMouseHovering(int mouse_x, int mouse_y, BattleButton *button) {
+bool isMouseHovering(int mouse_x, int mouse_y, BattleButton *button)
+{
     return (mouse_x >= button->GetX() && mouse_x <= button->GetX() + button->GetWidth() && mouse_y >= button->GetY() && mouse_y <= button->GetY() + button->GetHeight());
 }
 
-void BattleCharacter::HandleMouseHover(SDL_Event event) {
+void BattleCharacter::HandleMouseHover(SDL_Event event)
+{
     int x = event.motion.x;
     int y = event.motion.y;
-    for (unsigned int i = 0; i < BattleButtons.size(); i++) 
+    for (unsigned int i = 0; i < BattleButtons.size(); i++)
     {
-        if (isMouseHovering(x, y, BattleButtons[i])) 
+        if (isMouseHovering(x, y, BattleButtons[i]))
         {
             if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {}
             else {
@@ -559,12 +572,13 @@ void BattleCharacter::HandleMouseHover(SDL_Event event) {
     }
 }
 
-void BattleCharacter::HandleMouseClick(SDL_Event event) {
+void BattleCharacter::HandleMouseClick(SDL_Event event)
+{
     int x = event.button.x;
     int y = event.button.y;
-    for (unsigned int i = 0; i < BattleButtons.size(); i++) 
+    for (unsigned int i = 0; i < BattleButtons.size(); i++)
     {
-        if (isMouseHovering(x, y, BattleButtons[i])) 
+        if (isMouseHovering(x, y, BattleButtons[i]))
         {
             if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {} 
             else {

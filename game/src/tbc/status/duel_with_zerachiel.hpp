@@ -7,7 +7,7 @@
 class Status_DuelWithZerachiel : public BattleStatus
 {
 public:
-    Status_DuelWithZerachiel(BattleCharacter linkedZerachiel);
+    Status_DuelWithZerachiel(BattleCharacter *linkedZerachiel);
 };
 
 #endif

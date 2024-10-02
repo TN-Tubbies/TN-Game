@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "../battle_enumerators.hpp"
+
 class BattleCharacter;
 
 class BattleStatus
@@ -21,6 +23,8 @@ protected:
     bool isActive;
     bool hasTimer;
     int timerDuration;
+
+    enum PassiveTriggerCategory trigger;
 
     bool removeAfterBattle;
     BattleCharacter *linkedCharacter;
