@@ -1,9 +1,10 @@
 #include "battle_character.hpp"
-#include <string>
 
 // ------------------------------------------------------------------------------------------------
 
-BattleCharacter::BattleCharacter() {}
+BattleCharacter::BattleCharacter() {
+    this->currentBattleButton = NULL;
+}
 
 BattleCharacter::~BattleCharacter()
 {
@@ -487,13 +488,18 @@ void BattleCharacter::RenderHud(int x, int y)
 
 void BattleCharacter::RenderButtons()
 {
-    for (unsigned int i = 0; i < BattleButtons.size(); i++)
+    for (BattleButton *battleButton:BattleButtons)
     {
-        if (BattleButtons[i] == currentBattleButton)
+        if (currentBattleButton == battleButton)
         {
-            BattleButtons[i]->RenderHover();
+            battleButton->RenderHover();
         }
-        BattleButtons[i]->Render();
+        if (dynamic_cast<UltimateButton*>(battleButton)){
+            UltimateButton* ultimateButton = dynamic_cast<UltimateButton*>(battleButton);
+            ultimateButton->Render(UltimateBar);
+        } else {
+            battleButton->Render();
+        }
     }
 }
 
@@ -508,14 +514,16 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState) {
         {
         if (currentBattleButton->GetKey() == event.key.keysym.sym) 
         {
-            std::cout << "Button Pressed: "
-                    << currentBattleButton->GetText().c_str() << std::endl;
+            std::cout << "Button Pressed: " << currentBattleButton->GetText().c_str() << std::endl;
         } else {
             for (unsigned int i = 0; i < BattleButtons.size(); i++) 
             {
-            if (BattleButtons[i]->GetKey() == event.key.keysym.sym) 
+            if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
             {
-                currentBattleButton = BattleButtons[i];
+                if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {} 
+                else {
+                    currentBattleButton = BattleButtons[i];
+                }
             }
             }
         }
@@ -543,7 +551,10 @@ void BattleCharacter::HandleMouseHover(SDL_Event event) {
     {
         if (isMouseHovering(x, y, BattleButtons[i])) 
         {
-        currentBattleButton = BattleButtons[i];
+            if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {}
+            else {
+                currentBattleButton = BattleButtons[i];
+            }
         }
     }
 }
@@ -555,7 +566,10 @@ void BattleCharacter::HandleMouseClick(SDL_Event event) {
     {
         if (isMouseHovering(x, y, BattleButtons[i])) 
         {
-        std::cout << "Button Pressed: " << BattleButtons[i]->GetText().c_str() << std::endl;
+            if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {} 
+            else {
+                std::cout << "Button Pressed: " << BattleButtons[i]->GetText().c_str() << std::endl;
+            }
         }
     }
 }

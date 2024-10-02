@@ -237,8 +237,22 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
 
     // UI & Buttons //
     std::vector<BattleButton *> buttons = std::vector<BattleButton *>();
-    buttons.push_back(new BattleButton("game/assets/images/characters/zerachiel/basic.png", WIDTH - 10, HEIGHT - 10, SDLK_a));
-    buttons.push_back(new BattleButton("game/assets/images/characters/zerachiel/skill1.png", WIDTH - 35 - buttons[0]->GetWidth(), HEIGHT - 10, SDLK_e));
-    buttons.push_back(new BattleButton("game/assets/images/characters/zerachiel/skill2.png", WIDTH - 10, HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_f));
+    buttons.push_back(
+        new BattleButton("game/assets/images/characters/zerachiel/basic.png",
+                         "game/assets/images/ui/light_button_bg.png",
+                         WIDTH - 10, HEIGHT - 10, SDLK_a));
+    buttons.push_back(new BattleButton(
+        "game/assets/images/characters/zerachiel/skill1.png",
+        "game/assets/images/ui/light_button_bg.png",
+        WIDTH - 35 - buttons[0]->GetWidth(), HEIGHT - 10, SDLK_e));
+    buttons.push_back(new BattleButton(
+        "game/assets/images/characters/zerachiel/skill2.png",
+        "game/assets/images/ui/light_button_bg.png", WIDTH - 10,
+        HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_f));
+    buttons.push_back(
+        new UltimateButton("game/assets/images/characters/zerachiel/ult.png",
+                           "game/assets/images/ui/light_button_bg.png",
+                           WIDTH - 35 - buttons[0]->GetWidth(),
+                           HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_r));
     this->BattleButtons = buttons;
 }

@@ -52,6 +52,8 @@ protected:
     int UltimateBar;
 
     // HUD
+    int HudX;
+    int HudY;
     int HudWidth;
     int HudHeight;
     SDL_Texture *HudBG;
