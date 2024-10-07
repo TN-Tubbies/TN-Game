@@ -26,7 +26,7 @@ private:
 
     std::string MapName;
     int Height, Width;
-    int XPos, YPos;
+    std::array<int, 2> TL_TileID;
     std::vector<std::vector<Tile>> MapTiles;
 
     SDL_Texture *FloorTexture;
@@ -47,15 +47,17 @@ public:
     Map(std::string data_file_path, std::string img_folder_path);
     ~Map();
 
-    int GetID() const;
-    int GetHeight() const;
-    int GetWidth() const;
-    std::string GetMapName() const;
-    int GetXPos();
-    int GetYPos();
-    std::vector<std::vector<Tile>> GetMapTiles();
-    std::vector<std::vector<int>> GetLinkedMaps();
+    int GetID() const { return ID; }
+    int GetHeight() const { return Height; }
+    int GetWidth() const { return Width; }
+    int GetTLTileXIndex() { return TL_TileID[0]; }
+    int GetTLTileYIndex() { return TL_TileID[1]; }
+    std::string GetMapName() const { return MapName; }
+    std::vector<std::vector<Tile>> GetMapTiles() { return MapTiles; }
+    std::vector<std::vector<int>> GetLinkedMaps() { return LinkedMaps; }
 
+    std::array<int, 2> GetTile(int mouse_x, int mouse_y);
+    void MoveMap(int delta_x, int delta_y);
     void Render(void);
     void PlayTheme(void);
 };

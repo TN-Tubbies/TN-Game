@@ -52,8 +52,7 @@ Map::Map(std::string normalize_map_name)
     this->MapName = map_name;
     this->Height = height;
     this->Width = width;
-    this->XPos = 0;
-    this->YPos = 0;
+    this->TL_TileID = {0, 0};
     this->LinkedMaps = processed_links;
     this->MapTheme = new Music(music_path);
 
@@ -213,8 +212,7 @@ Map::Map(std::string data_file_path, std::string img_folder_path)
     this->MapName = map_name;
     this->Height = height;
     this->Width = width;
-    this->XPos = 0;
-    this->YPos = 0;
+    this->TL_TileID = {0, 0};
     this->LinkedMaps = processed_links;
     this->MapTheme = new Music(music_path);
 
@@ -338,28 +336,33 @@ Map::~Map(void)
 }
 
 // Getters
-int Map::GetID() const { return ID; }
-int Map::GetHeight() const { return Height; }
-int Map::GetWidth() const { return Width; }
-int Map::GetXPos() { return XPos; }
-int Map::GetYPos() { return YPos; }
-std::string Map::GetMapName() const { return MapName; }
-std::vector<std::vector<Tile>> Map::GetMapTiles() { return MapTiles; }
-std::vector<std::vector<int>> Map::GetLinkedMaps() { return LinkedMaps; }
+std::array<int, 2> Map::GetTile(int mouse_x, int mouse_y)
+{
+    int x = (int)mouse_x / TILE_SIZE;
+    int y = (int)mouse_y / TILE_SIZE;
+
+    int tile_XID = std::min(x + TL_TileID[0], Width * TILE_SIZE);
+    int tile_YID = std::min(y + TL_TileID[1], Height * TILE_SIZE);
+
+    return std::array<int, 2>{tile_XID, tile_YID};
+}
+
+// ------------------------------------------------------------------------------------------------
+
+void Map::MoveMap(int delta_x, int delta_y)
+{
+    // FIXME: This should slide the map up and right according to the given deltas
+}
+
+// ------------------------------------------------------------------------------------------------
 
 // Render
 void Map::Render(void)
 {
-    SDL_Renderer *renderer = Get_Renderer();
-
-    int widthInPixels = Width * TILE_SIZE;
-    int heightInPixels = Height * TILE_SIZE;
-    SDL_Rect dest = {.x = XPos, .y = YPos, .w = widthInPixels, .h = heightInPixels};
-
-    // Render sky over wall over floor
-    SDL_RenderCopy(renderer, FloorTexture, NULL, &dest);
-    SDL_RenderCopy(renderer, WallTexture, NULL, &dest);
-    SDL_RenderCopy(renderer, SkyTexture, NULL, &dest);
+    SDL_Rect dest = {.x = TL_TileID[0] * TILE_SIZE, .y = TL_TileID[1] * TILE_SIZE, .w = Width * TILE_SIZE, .h = Height * TILE_SIZE};
+    SDL_RenderCopy(Get_Renderer(), FloorTexture, NULL, &dest);
+    SDL_RenderCopy(Get_Renderer(), WallTexture, NULL, &dest);
+    SDL_RenderCopy(Get_Renderer(), SkyTexture, NULL, &dest);
 }
 
 // Music player

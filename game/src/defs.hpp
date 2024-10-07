@@ -13,9 +13,14 @@
 
 enum DisplayState
 {
-    MAIN_MENU,
+    DISPLAY_STATE_MENU,
     MAP,
     BATTLE
+};
+
+enum SpriteSheetTypes
+{
+    SPRITE_SHEET_MAIN_CHARACTER
 };
 
 #endif

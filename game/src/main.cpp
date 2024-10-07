@@ -30,24 +30,24 @@ int main(void)
 
     MainMenu *main_menu = new MainMenu();
 
-    //FIXME: Temporary :
-    std::vector<BattleCharacter*> *playableCharacters = new std::vector<BattleCharacter*>();
+    // FIXME: Temporary :
+    std::vector<BattleCharacter *> *playableCharacters = new std::vector<BattleCharacter *>();
     ZerachielUnit *zerachiel = new ZerachielUnit(1);
     playableCharacters->push_back(zerachiel);
-    std::vector<BattleCharacter*> *enemyCharacters = new std::vector<BattleCharacter*>();
+    std::vector<BattleCharacter *> *enemyCharacters = new std::vector<BattleCharacter *>();
     LivyaUnit *livya = new LivyaUnit(0);
     enemyCharacters->push_back(livya);
 
-    Battle_System *battle = StartBattle(playableCharacters, enemyCharacters,"game/assets/images/maps/entrance/full_img.png" , 10);
-    
+    Battle_System *battle = StartBattle(playableCharacters, enemyCharacters, "game/assets/images/maps/entrance/full_img.png", 10);
+
     // FIXME: Temporary Map init
     Map test_map("entrance");
-    //test_map.PlayTheme();
-    // End of fix
+    // test_map.PlayTheme();
+    //  End of fix
 
     SDL_Event event;
     int running = 1;
-    DisplayState displayState = MAIN_MENU;
+    DisplayState displayState = DISPLAY_STATE_MENU;
 
     while (running)
     {
@@ -59,44 +59,46 @@ int main(void)
                 running = 0;
                 continue;
             case SDL_KEYUP:
-                switch (displayState) 
+                switch (displayState)
                 {
-                    case BATTLE:
-                        BattleHandleKeyUp(battle, event, &displayState);
-                        break;
-                    case MAIN_MENU:
-                        main_menu->HandleKeyUp(event, &displayState);
-                        break;
-                    case MAP:
-                        if (event.key.keysym.sym == SDLK_ESCAPE)
-                        {
-                            displayState = MAIN_MENU;
-                        }
-                        break;
+                case BATTLE:
+                    BattleHandleKeyUp(battle, event, &displayState);
+                    break;
+                case DISPLAY_STATE_MENU:
+                    main_menu->HandleKeyUp(event, &displayState);
+                    break;
+                case MAP:
+                    if (event.key.keysym.sym == SDLK_ESCAPE)
+                    {
+                        displayState = DISPLAY_STATE_MENU;
+                    }
+                    break;
                 }
                 break;
             case SDL_MOUSEMOTION:
-                switch (displayState) {
-                    case BATTLE:
-                        BattleHandleMouseHover(battle, event);
-                        break;
-                    case MAIN_MENU:
-                        main_menu->HandleMouseHover(event);
-                        break;
-                    case MAP:
-                        break;
+                switch (displayState)
+                {
+                case BATTLE:
+                    BattleHandleMouseHover(battle, event);
+                    break;
+                case DISPLAY_STATE_MENU:
+                    main_menu->HandleMouseHover(event);
+                    break;
+                case MAP:
+                    break;
                 }
                 break;
             case SDL_MOUSEBUTTONUP:
-                switch (displayState) {
-                    case BATTLE:
-                        BattleHandleMouseClick(battle, event);
-                        break;
-                    case MAIN_MENU:
-                        main_menu->HandleMouseClick(event, &displayState);
-                        break;
-                    case MAP:
-                        break;
+                switch (displayState)
+                {
+                case BATTLE:
+                    BattleHandleMouseClick(battle, event);
+                    break;
+                case DISPLAY_STATE_MENU:
+                    main_menu->HandleMouseClick(event, &displayState);
+                    break;
+                case MAP:
+                    break;
                 }
                 break;
             }
@@ -109,7 +111,7 @@ int main(void)
         SDL_RenderClear(Get_Renderer());
         switch (displayState)
         {
-        case MAIN_MENU:
+        case DISPLAY_STATE_MENU:
             main_menu->Render();
             break;
         case MAP:
