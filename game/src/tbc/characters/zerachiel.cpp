@@ -171,7 +171,9 @@ void ZerachielPassive1Effect(std::vector<BattleCharacter *> Field)
         }
     }
 
-    std::random_shuffle(enemyIDs.begin(), enemyIDs.end());
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(enemyIDs.begin(), enemyIDs.end(), g);
     Field[enemyIDs[0]]->AddStatus(new Status_DuelWithZerachiel(Field[ZerachielID]));
 }
 BattleMovePassive *GetZerachielPassive1(void)
