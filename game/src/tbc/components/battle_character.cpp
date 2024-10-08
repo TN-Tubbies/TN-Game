@@ -386,12 +386,12 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 // HUD RELATED FUNCTIONS --------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 
-void BattleCharacter::GeneralHudInit(std::string bg_path) 
+void BattleCharacter::GeneralHudInit(std::string bg_path)
 {
     // HUD //
     this->HudWidth = 128;
     this->HudHeight = 128;
-    
+
     SDL_Texture *bg = IMG_LoadTexture(Get_Renderer(), bg_path.c_str());
     if (bg == NULL)
     {
@@ -399,7 +399,7 @@ void BattleCharacter::GeneralHudInit(std::string bg_path)
         exit(-1);
     }
     this->HudBG = bg;
-    
+
     SDL_Surface *name_surf;
     if (isFriendly)
     {
@@ -425,7 +425,7 @@ void BattleCharacter::GeneralHudInit(std::string bg_path)
     SDL_FreeSurface(name_surf);
 
     std::string hp_string = std::to_string(HP);
-    SDL_Surface *hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(10), hp_string.c_str(), (SDL_Color){255, 255, 255, 255});
+    SDL_Surface *hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(14), hp_string.c_str(), (SDL_Color){255, 255, 255, 255});
     if (hp_surf == NULL)
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit, hp_surf: %s", SDL_GetError());
@@ -442,7 +442,7 @@ void BattleCharacter::GeneralHudInit(std::string bg_path)
     SDL_FreeSurface(hp_surf);
 
     std::string max_hp_string = " / " + std::to_string(MaxHP);
-    SDL_Surface *max_hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(10), max_hp_string.c_str(), (SDL_Color){255, 255, 255, 255});
+    SDL_Surface *max_hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(14), max_hp_string.c_str(), (SDL_Color){255, 255, 255, 255});
     if (max_hp_surf == NULL)
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit, max_hp_surf: %s", SDL_GetError());
@@ -463,6 +463,7 @@ void BattleCharacter::RenderHud(int x, int y)
 {
     int y_offset = 5;
     int bar_height = 10;
+    int x_offset = 30;
 
     SDL_Rect bg_rect = {x, y, HudWidth, HudHeight};
     SDL_RenderCopy(Get_Renderer(), HudBG, NULL, &bg_rect);
@@ -521,15 +522,15 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
     default:
         if (currentBattleButton)
         {
-        if (currentBattleButton->GetKey() == event.key.keysym.sym) 
+        if (currentBattleButton->GetKey() == event.key.keysym.sym)
         {
             std::cout << "Button Pressed: " << currentBattleButton->GetText().c_str() << std::endl;
         } else {
-            for (unsigned int i = 0; i < BattleButtons.size(); i++) 
+            for (unsigned int i = 0; i < BattleButtons.size(); i++)
             {
             if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
             {
-                if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {} 
+                if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {}
                 else {
                     currentBattleButton = BattleButtons[i];
                 }
@@ -537,7 +538,7 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
             }
         }
         } else {
-        for (unsigned int i = 0; i < BattleButtons.size(); i++) 
+        for (unsigned int i = 0; i < BattleButtons.size(); i++)
         {
             for (unsigned int i = 0; i < BattleButtons.size(); i++)
             {
@@ -581,7 +582,7 @@ void BattleCharacter::HandleMouseClick(SDL_Event event)
     {
         if (isMouseHovering(x, y, BattleButtons[i]))
         {
-            if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {} 
+            if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {}
             else {
                 std::cout << "Button Pressed: " << BattleButtons[i]->GetText().c_str() << std::endl;
             }

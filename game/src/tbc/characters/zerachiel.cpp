@@ -258,7 +258,7 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     this->SkillBar = 0;
     this->UltimateBar = 0;
 
-    GeneralHudInit("game/assets/images/ui/faded_bg.png");
+    GeneralHudInit("game/assets/images/ui/faded_bg_light_player.png");
 
     // Personalized HUD elements //
 

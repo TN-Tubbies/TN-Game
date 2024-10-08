@@ -187,7 +187,7 @@ LivyaUnit::LivyaUnit(bool isFriendly)
     this->SkillBar = 0;
     this->UltimateBar = 0;
 
-    GeneralHudInit("game/assets/images/ui/faded_bg.png");
+    GeneralHudInit("game/assets/images/ui/faded_bg_lightning_enemy.png");
 
     // Personalized HUD elements //
 
