@@ -179,6 +179,8 @@ CiceroUnit::CiceroUnit(bool isFriendly)
     this->SkillBar = 0;
     this->UltimateBar = 0;
 
+    this->battle_sprite = new BattleSprite("game/assets/images/characters/zerachiel/battle_sprite.png", 0, 0);
+
     GeneralHudInit("game/assets/images/ui/faded_bg_dark_player.png");
 
     // Personalized HUD elements //

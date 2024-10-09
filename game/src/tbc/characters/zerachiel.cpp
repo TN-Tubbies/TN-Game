@@ -259,6 +259,7 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     this->UltimateBar = 0;
 
     GeneralHudInit("game/assets/images/ui/faded_bg_light_player.png");
+    this->battle_sprite = new BattleSprite("game/assets/images/characters/zerachiel/battle_sprite.png", 0, 0);
 
     // Personalized HUD elements //
 

@@ -48,19 +48,33 @@ BattleButton::~BattleButton()
     SDL_DestroyTexture(this->key_texture);
 }
 
-void BattleButton::Render()
+UltimateButton::~UltimateButton()
+{
+    SDL_DestroyTexture(this->img_texture);
+    SDL_DestroyTexture(this->key_texture);
+}
+
+void BattleButton::Render(bool usable)
 {
     SDL_Rect bg_rect = {img_x, img_y, this->button_width, this->button_height};
-    SDL_RenderCopy(Get_Renderer(), this->bg_texture, NULL, &bg_rect);
+    if (usable)
+    {
+        SDL_RenderCopy(Get_Renderer(), this->bg_texture, NULL, &bg_rect);
+    } else {
+        filledCircleRGBA(Get_Renderer(), this->x, this->y, (this->button_width + 4) / 2, 50, 50, 50, 75);
+    }
     //ATTENTION : Les marges sont hardcodées (25 de chaque coté, c'est lié aux images)
     SDL_Rect img_rect = {img_x-25, img_y-25, this->button_width+50, this->button_height+50};
     SDL_RenderCopy(Get_Renderer(), this->img_texture, NULL, &img_rect);
-    filledCircleRGBA(Get_Renderer(), key_x, key_y, key_width + 2, 0, 0, 0, 255);
     SDL_Rect key_text_rect = {key_text_x, key_text_y, this->key_width, this->key_height};
-    SDL_RenderCopy(Get_Renderer(), this->key_texture, NULL, &key_text_rect);
+    if (usable)
+    {
+        filledCircleRGBA(Get_Renderer(), key_x, key_y, key_width + 2, 0, 0, 0, 255);
+        SDL_RenderCopy(Get_Renderer(), this->key_texture, NULL, &key_text_rect);
+    }
 }
 
-void UltimateButton::Render(int charge) {
+void UltimateButton::Render(int charge, bool usable) {
     filledCircleRGBA(Get_Renderer(), this->x, this->y, (this->button_width+4)/2, 50, 50, 50, 75);
     int y_filling_offset = 128 - (128 * charge / 100);
     SDL_Rect bg_rect_src = {0,y_filling_offset,128,128};
@@ -69,9 +83,11 @@ void UltimateButton::Render(int charge) {
     //ATTENTION : Les marges sont hardcodées (25 de chaque coté, c'est lié aux images)
     SDL_Rect img_rect = {img_x-15, img_y-15, this->button_width+30, this->button_height+30};
     SDL_RenderCopy(Get_Renderer(), this->img_texture, NULL, &img_rect);
-    filledCircleRGBA(Get_Renderer(), key_x, key_y, key_width + 2, 0, 0, 0, 255);
     SDL_Rect key_text_rect = {key_text_x, key_text_y, this->key_width, this->key_height};
-    SDL_RenderCopy(Get_Renderer(), this->key_texture, NULL, &key_text_rect);
+    if (usable) {
+        filledCircleRGBA(Get_Renderer(), key_x, key_y, key_width + 2, 0, 0, 0, 255);
+        SDL_RenderCopy(Get_Renderer(), this->key_texture, NULL, &key_text_rect);
+    }
 }
 
 void BattleButton::RenderHover()
@@ -87,4 +103,27 @@ int BattleButton::GetX()
 int BattleButton::GetY()
 {
     return (this->y - this->button_height / 2);
+}
+
+BattleSprite::BattleSprite(std::string sprite_path, int x, int y)
+{
+    this->sprite_texture = IMG_LoadTexture(Get_Renderer(), sprite_path.c_str());
+    if (this->sprite_texture == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load image: %s", sprite_path.c_str());
+    }
+    this->x = x;
+    this->y = y;
+    SDL_QueryTexture(this->sprite_texture, NULL, NULL, &this->sprite_width, &this->sprite_height);
+}
+
+BattleSprite::~BattleSprite()
+{
+    SDL_DestroyTexture(this->sprite_texture);
+}
+
+void BattleSprite::Render()
+{
+    SDL_Rect sprite_rect = {this->x, this->y, this->sprite_width, this->sprite_height};
+    SDL_RenderCopy(Get_Renderer(), this->sprite_texture, NULL, &sprite_rect);
 }

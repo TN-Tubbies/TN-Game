@@ -539,12 +539,9 @@ void BattleCharacter::RenderButtons()
         }
         if (dynamic_cast<UltimateButton*>(battleButton)){
             UltimateButton* ultimateButton = dynamic_cast<UltimateButton*>(battleButton);
-            ultimateButton->Render(UltimateBar);
+            ultimateButton->Render(UltimateBar, buttonIsUsable(ultimateButton));
         } else {
-            if (buttonIsUsable(battleButton))
-            {
-                battleButton->Render();
-            }
+            battleButton->Render(buttonIsUsable(battleButton));
         }
     }
 }

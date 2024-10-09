@@ -74,6 +74,7 @@ protected:
     // UI & Buttons
     std::vector<BattleButton *> BattleButtons;
     BattleButton *currentBattleButton;
+    BattleSprite *battle_sprite;
 
     // Methods
     void AddToHP(int quantity);

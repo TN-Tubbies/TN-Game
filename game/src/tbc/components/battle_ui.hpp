@@ -40,7 +40,7 @@ class BattleButton
         BattleButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key, BattleMoveActive *move);
         ~BattleButton();
         
-        virtual void Render();
+        virtual void Render(bool usable);
         void RenderHover();
         
         int GetWidth() { return this->button_width; }
@@ -56,8 +56,28 @@ class UltimateButton : public BattleButton
     public:
         UltimateButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key, BattleMoveActive *move) : BattleButton(logo_path, bg_path, x2, y2, key, move) {}
         ~UltimateButton();
-        void Render(int charge);
+        void Render(int charge, bool usable);
 
+};
+
+class BattleSprite
+{
+    private:
+        SDL_Texture *sprite_texture;
+        int sprite_width;
+        int sprite_height;
+        int x;
+        int y;
+
+    public:
+        BattleSprite(std::string sprite_path, int x, int y);
+        ~BattleSprite();
+        void Render();
+        int GetWidth() { return this->sprite_width; }
+        int GetHeight() { return this->sprite_height; }
+        int GetX() { return this->x; }
+        int GetY() { return this->y; }
+        void SetSprite(std::string sprite_path) { this->sprite_texture = IMG_LoadTexture(Get_Renderer(), sprite_path.c_str()); }
 };
 
 #endif // BATTLE_UI_HPP
