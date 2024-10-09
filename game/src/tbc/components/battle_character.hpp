@@ -157,6 +157,9 @@ public:
 
     void RenderButtons();
 
+    void RenderSprite();
+    BattleSprite *GetSprite() { return battle_sprite; }
+
     void HandleKeyUp(SDL_Event event, DisplayState *displayState);
     void HandleMouseHover(SDL_Event event);
     void HandleMouseClick(SDL_Event event);

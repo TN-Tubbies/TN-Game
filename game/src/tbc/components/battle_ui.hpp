@@ -78,6 +78,10 @@ class BattleSprite
         int GetX() { return this->x; }
         int GetY() { return this->y; }
         void SetSprite(std::string sprite_path) { this->sprite_texture = IMG_LoadTexture(Get_Renderer(), sprite_path.c_str()); }
+        void SetX(int x) { this->x = x; }
+        void SetY(int y) { this->y = y; }
+        void SetWidth(int width) { this->sprite_width = width; }
+        void SetHeight(int height) { this->sprite_height = height; }
 };
 
 #endif // BATTLE_UI_HPP

@@ -179,7 +179,7 @@ CiceroUnit::CiceroUnit(bool isFriendly)
     this->SkillBar = 0;
     this->UltimateBar = 0;
 
-    this->battle_sprite = new BattleSprite("game/assets/images/characters/zerachiel/battle_sprite.png", 0, 0);
+    this->battle_sprite = new BattleSprite("game/assets/images/characters/cicero/battle_sprite.png", 0, 0);
 
     GeneralHudInit("game/assets/images/ui/faded_bg_dark_player.png");
 
@@ -188,22 +188,22 @@ CiceroUnit::CiceroUnit(bool isFriendly)
     // UI & Buttons //
     std::vector<BattleButton *> buttons = std::vector<BattleButton *>();
     buttons.push_back(
-        new BattleButton("game/assets/images/characters/zerachiel/basic.png",
+        new BattleButton("game/assets/images/characters/cicero/basic.png",
                          "game/assets/images/ui/dark_button_bg.png",
                          WIDTH - 10, HEIGHT - 10, SDLK_a,
                          GetCiceroBaseMove()));
     buttons.push_back(new BattleButton(
-        "game/assets/images/characters/zerachiel/skill1.png",
+        "game/assets/images/characters/cicero/skill1.png",
         "game/assets/images/ui/dark_button_bg.png",
         WIDTH - 35 - buttons[0]->GetWidth(), HEIGHT - 10, SDLK_e,
         GetCiceroMove1()));
     buttons.push_back(new BattleButton(
-        "game/assets/images/characters/zerachiel/skill2.png",
+        "game/assets/images/characters/cicero/skill2.png",
         "game/assets/images/ui/dark_button_bg.png", WIDTH - 10,
         HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_f,
         GetCiceroMove2()));
     buttons.push_back(
-        new UltimateButton("game/assets/images/characters/zerachiel/ult.png",
+        new UltimateButton("game/assets/images/characters/cicero/ult.png",
                            "game/assets/images/ui/quantum_button_bg.png",
                            WIDTH - 35 - buttons[0]->GetWidth(),
                            HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_r,

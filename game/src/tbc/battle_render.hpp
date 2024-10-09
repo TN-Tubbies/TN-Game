@@ -17,4 +17,6 @@ void BattleHandleKeyUp(Battle_System *battle, SDL_Event event, DisplayState *dis
 void BattleHandleMouseHover(Battle_System *battle, SDL_Event event);
 void BattleHandleMouseClick(Battle_System *battle, SDL_Event event);
 
+void OrganizeSpritesCoordinates(Battle_System *battle);
+
 #endif // BATTLE_RENDER_HPP

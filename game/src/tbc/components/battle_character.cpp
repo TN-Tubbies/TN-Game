@@ -546,6 +546,11 @@ void BattleCharacter::RenderButtons()
     }
 }
 
+void BattleCharacter::RenderSprite()
+{
+    battle_sprite->Render();
+}
+
 bool BattleCharacter::buttonIsUsable(BattleButton *button) {
     if (button->GetMove()->getCost() > 0)
     {
