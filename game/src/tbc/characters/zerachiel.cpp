@@ -255,7 +255,7 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     std::vector<BattleStatus *> affectedStatus;
     this->AffectedStatus = affectedStatus;
 
-    this->SkillBar = 50;
+    this->SkillBar = 0;
     this->UltimateBar = 0;
 
     GeneralHudInit("game/assets/images/ui/faded_bg_light_player.png");

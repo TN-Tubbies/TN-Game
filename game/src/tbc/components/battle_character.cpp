@@ -565,7 +565,7 @@ bool BattleCharacter::buttonIsUsable(BattleButton *button) {
     {
         return true;
     }
-    else if (button->GetMove()->getCost() <= 0)
+    else if (button->GetMove()->getCost() <= 0 && !button->GetMove()->IsUltimate())
     {
         return true;
     }
@@ -627,9 +627,12 @@ void BattleCharacter::HandleMouseHover(SDL_Event event)
     int y = event.motion.y;
     for (unsigned int i = 0; i < BattleButtons.size(); i++)
     {
-        if (buttonIsUsable(BattleButtons[i]))
+        if (isMouseHovering(x,y,BattleButtons[i]))
         {
-            currentBattleButton = BattleButtons[i];
+            if (buttonIsUsable(BattleButtons[i]))
+            {
+                currentBattleButton = BattleButtons[i];
+            }
         }
     }
 }
