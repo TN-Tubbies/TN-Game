@@ -541,8 +541,37 @@ void BattleCharacter::RenderButtons()
             UltimateButton* ultimateButton = dynamic_cast<UltimateButton*>(battleButton);
             ultimateButton->Render(UltimateBar);
         } else {
-            battleButton->Render();
+            if (buttonIsUsable(battleButton))
+            {
+                battleButton->Render();
+            }
         }
+    }
+}
+
+bool BattleCharacter::buttonIsUsable(BattleButton *button) {
+    if (button->GetMove()->getCost() > 0)
+    {
+        if (SkillBar >= button->GetMove()->getCost())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else if (button->GetMove()->IsUltimate() && UltimateBar == 100)
+    {
+        return true;
+    }
+    else if (button->GetMove()->getCost() <= 0)
+    {
+        return true;
+    }
+    else 
+    {
+        return false;
     }
 }
 
@@ -564,8 +593,8 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
             {
             if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
             {
-                if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {}
-                else {
+                if (buttonIsUsable(BattleButtons[i]))
+                {
                     currentBattleButton = BattleButtons[i];
                 }
             }
@@ -598,12 +627,9 @@ void BattleCharacter::HandleMouseHover(SDL_Event event)
     int y = event.motion.y;
     for (unsigned int i = 0; i < BattleButtons.size(); i++)
     {
-        if (isMouseHovering(x, y, BattleButtons[i]))
+        if (buttonIsUsable(BattleButtons[i]))
         {
-            if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {}
-            else {
-                currentBattleButton = BattleButtons[i];
-            }
+            currentBattleButton = BattleButtons[i];
         }
     }
 }
@@ -616,8 +642,8 @@ void BattleCharacter::HandleMouseClick(SDL_Event event)
     {
         if (isMouseHovering(x, y, BattleButtons[i]))
         {
-            if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {}
-            else {
+            if (buttonIsUsable(BattleButtons[i]))
+            {
                 std::cout << "Button Pressed: " << BattleButtons[i]->GetMove()->getName().c_str() << std::endl;
             }
         }

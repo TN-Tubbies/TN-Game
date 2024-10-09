@@ -77,6 +77,7 @@ protected:
 
     // Methods
     void AddToHP(int quantity);
+    bool buttonIsUsable(BattleButton *button);
 
 public:
     BattleMove *BaseMove;
