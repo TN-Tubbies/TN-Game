@@ -389,7 +389,7 @@ std::vector<BattleCharacter> SortCharactersWRTStat(std::vector<BattleCharacter> 
 void BattleCharacter::GeneralHudInit(std::string bg_path)
 {
     // HUD //
-    this->HudWidth = 128;
+    this->HudWidth = 256;
     this->HudHeight = 128;
 
     SDL_Texture *bg = IMG_LoadTexture(Get_Renderer(), bg_path.c_str());
@@ -462,38 +462,72 @@ void BattleCharacter::GeneralHudInit(std::string bg_path)
 void BattleCharacter::RenderHud(int x, int y)
 {
     int y_offset = 5;
-    int bar_height = 10;
-    int x_offset = 30;
+    int bar_thickness = 12;
+    int x_offset = 64;
 
+
+    // BG //
     SDL_Rect bg_rect = {x, y, HudWidth, HudHeight};
     SDL_RenderCopy(Get_Renderer(), HudBG, NULL, &bg_rect);
 
-    // Name
+
+    // Name //
     int center_name_x = x + HudWidth / 2 - DisplayedNameWidth / 2;
     SDL_Rect name_rect = {center_name_x, y + y_offset, DisplayedNameWidth, DisplayedNameHeight};
     SDL_RenderCopy(Get_Renderer(), DisplayedName, NULL, &name_rect);
     y_offset += DisplayedNameHeight + 10;
 
+
     // HP //
-    rectangleColor(Get_Renderer(), x + 5, y + y_offset, x + HudWidth - 5, y + y_offset + bar_height, 0xFFFFFFFF);
+    rectangleColor(Get_Renderer(), x + x_offset + 5, y + y_offset, x + HudWidth - x_offset - 5, y + y_offset + bar_thickness, 0xFFFFFFFF);
     if (this->HP <= this->MaxHP / 4)
     {
-        boxColor(Get_Renderer(), x + 6, y + y_offset + 1, x + 6 + (HudWidth - 13) * this->HP / this->MaxHP, y + y_offset + bar_height - 2, 0xFF0000FF);
+        boxColor(Get_Renderer(), x + x_offset + 7, y + y_offset + 2, x + 7 + (HudWidth - x_offset - 15) * this->HP / this->MaxHP, y + y_offset + bar_thickness - 3, 0xFF0000FF);
     }
     else
     {
-        boxColor(Get_Renderer(), x + 6, y + y_offset + 1, x + 6 + (HudWidth - 13) * this->HP / this->MaxHP, y + y_offset + bar_height - 2, 0xFFFFFFFF);
+        boxColor(Get_Renderer(), x + x_offset + 7, y + y_offset + 2, x + 7 + (HudWidth - x_offset - 15) * this->HP / this->MaxHP, y + y_offset + bar_thickness - 3, 0xFFFFFFFF);
     }
-    y_offset += bar_height + 1;
+    y_offset += bar_thickness + 1;
 
     int center_hp_x = x + HudWidth / 2 - (DisplayedHPWidth + DisplayedMaxHPWidth) / 2;
     SDL_Rect hp_rect = {center_hp_x, y + y_offset, DisplayedHPWidth, DisplayedHPHeight};
     SDL_RenderCopy(Get_Renderer(), DisplayedHP, NULL, &hp_rect);
+
     int center_max_hp_x = center_hp_x + DisplayedHPWidth;
     SDL_Rect max_hp_rect = {center_max_hp_x, y + y_offset, DisplayedMaxHPWidth, DisplayedMaxHPHeight};
     SDL_RenderCopy(Get_Renderer(), DisplayedMaxHP, NULL, &max_hp_rect);
+
     y_offset += DisplayedHPHeight + 5;
+
+    // Skill Bar //
+    if (isFriendly)
+    {
+        rectangleColor(Get_Renderer(), x + x_offset - 30, y + HudHeight - 5, x + x_offset - 30 + bar_thickness, y + 10 + DisplayedNameHeight, 0xFFFFFFFF);
+        int max_bar_height = y + 10 + DisplayedNameHeight + 2;
+        int min_bar_height = y + HudHeight - 8;
+        int bar_height = min_bar_height - (min_bar_height - max_bar_height) * SkillBar / 100;
+        if (SkillBar > 0)
+        {
+            boxColor(Get_Renderer(), x + x_offset - 28, min_bar_height, x + x_offset - 28 + bar_thickness - 5, bar_height, 0xFFFFFFFF);
+        }
+        if (currentBattleButton) {
+            if (currentBattleButton->GetMove()->getCost() > 0)
+            {
+                int cost_height = bar_height + (min_bar_height - max_bar_height) * currentBattleButton->GetMove()->getCost() / 100;
+                boxRGBA(Get_Renderer(), x + x_offset - 28, bar_height, x + x_offset - 28 + bar_thickness - 5, cost_height, 255, 0, 0, 100);
+            }
+            if (currentBattleButton->GetMove()->getCost() < 0)
+            {
+                int cost_height = bar_height + (min_bar_height - max_bar_height) * currentBattleButton->GetMove()->getCost() / 100;
+                boxRGBA(Get_Renderer(), x + x_offset - 28, bar_height, x + x_offset - 28 + bar_thickness - 5, cost_height, 0, 255, 0, 100);
+            }
+        }
+    }
+
+
 }
+
 
 void BattleCharacter::RenderButtons()
 {
@@ -524,7 +558,7 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
         {
         if (currentBattleButton->GetKey() == event.key.keysym.sym)
         {
-            std::cout << "Button Pressed: " << currentBattleButton->GetText().c_str() << std::endl;
+            std::cout << "Button Pressed: " << currentBattleButton->GetMove()->getName().c_str() << std::endl;
         } else {
             for (unsigned int i = 0; i < BattleButtons.size(); i++)
             {
@@ -584,7 +618,7 @@ void BattleCharacter::HandleMouseClick(SDL_Event event)
         {
             if (dynamic_cast<UltimateButton*>(BattleButtons[i]) && this->UltimateBar < 100) {}
             else {
-                std::cout << "Button Pressed: " << BattleButtons[i]->GetText().c_str() << std::endl;
+                std::cout << "Button Pressed: " << BattleButtons[i]->GetMove()->getName().c_str() << std::endl;
             }
         }
     }

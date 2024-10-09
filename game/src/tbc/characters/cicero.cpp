@@ -188,19 +188,23 @@ CiceroUnit::CiceroUnit(bool isFriendly)
     buttons.push_back(
         new BattleButton("game/assets/images/characters/zerachiel/basic.png",
                          "game/assets/images/ui/dark_button_bg.png",
-                         WIDTH - 10, HEIGHT - 10, SDLK_a));
+                         WIDTH - 10, HEIGHT - 10, SDLK_a,
+                         GetCiceroBaseMove()));
     buttons.push_back(new BattleButton(
         "game/assets/images/characters/zerachiel/skill1.png",
         "game/assets/images/ui/dark_button_bg.png",
-        WIDTH - 35 - buttons[0]->GetWidth(), HEIGHT - 10, SDLK_e));
+        WIDTH - 35 - buttons[0]->GetWidth(), HEIGHT - 10, SDLK_e,
+        GetCiceroMove1()));
     buttons.push_back(new BattleButton(
         "game/assets/images/characters/zerachiel/skill2.png",
         "game/assets/images/ui/dark_button_bg.png", WIDTH - 10,
-        HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_f));
+        HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_f,
+        GetCiceroMove2()));
     buttons.push_back(
         new UltimateButton("game/assets/images/characters/zerachiel/ult.png",
                            "game/assets/images/ui/quantum_button_bg.png",
                            WIDTH - 35 - buttons[0]->GetWidth(),
-                           HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_r));
+                           HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_r,
+                           GetCiceroUltimate()));
     this->BattleButtons = buttons;
 }

@@ -1,8 +1,8 @@
 #include "battle_ui.hpp"
 
-BattleButton::BattleButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key)
+BattleButton::BattleButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key, BattleMoveActive *move)
 {   
-    this->text = logo_path;
+    this->move = move;
     this->img_texture = IMG_LoadTexture(Get_Renderer(), logo_path.c_str());
     if (this->img_texture == NULL)
     {

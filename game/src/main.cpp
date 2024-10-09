@@ -38,7 +38,7 @@ int main(void)
     CiceroUnit *cicero = new CiceroUnit(1);
     playableCharacters->push_back(zerachiel);
     playableCharacters->push_back(cicero);
-
+    
     std::vector<BattleCharacter*> *enemyCharacters = new std::vector<BattleCharacter*>();
     LivyaUnit *livya = new LivyaUnit(0);
     enemyCharacters->push_back(livya);

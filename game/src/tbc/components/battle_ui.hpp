@@ -13,10 +13,12 @@
 #include "../../static/renderer.hpp"
 #include "../../static/ttf.hpp"
 
+class BattleMoveActive;
+
 class BattleButton
 {
     protected:
-        std::string text;
+        BattleMoveActive *move;
         SDL_Texture *img_texture;
         SDL_Texture *bg_texture;
         int button_width;
@@ -35,7 +37,7 @@ class BattleButton
         SDL_KeyCode key;
 
     public:
-        BattleButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key);
+        BattleButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key, BattleMoveActive *move);
         ~BattleButton();
         
         virtual void Render();
@@ -44,7 +46,7 @@ class BattleButton
         int GetWidth() { return this->button_width; }
         int GetHeight() { return this->button_height; }
         SDL_KeyCode GetKey() { return this->key; }
-        std::string GetText() { return this->text; }
+        BattleMoveActive *GetMove() { return this->move; }
         int GetX();
         int GetY();
 };
@@ -52,7 +54,7 @@ class BattleButton
 class UltimateButton : public BattleButton
 {
     public:
-        UltimateButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key) : BattleButton(logo_path, bg_path, x2, y2, key) {}
+        UltimateButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key, BattleMoveActive *move) : BattleButton(logo_path, bg_path, x2, y2, key, move) {}
         ~UltimateButton();
         void Render(int charge);
 
