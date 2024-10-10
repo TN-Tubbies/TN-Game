@@ -66,9 +66,9 @@ protected:
     int DisplayedMaxHPHeight;
 
     // UI & Buttons
-    std::vector<BattleButton*> BattleButtons;
-    BattleButton* currentBattleButton;
-    
+    std::vector<BattleButton *> BattleButtons;
+    BattleButton *currentBattleButton;
+
     // Methods
     void AddToHP(int quantity);
 

@@ -4,6 +4,7 @@
 
 Entity::Entity()
 {
+    this->name = "";
     this->x = 0;
     this->y = 0;
     this->angle = 0.0;
@@ -14,18 +15,21 @@ Entity::Entity()
     this->SpriteHeight = 0;
     this->SpriteRect = nullptr;
     this->CurrentSpriteIndex = 0;
+    this->direction = SpriteDirection_Down;
 }
-Entity::Entity(int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType)
+Entity::Entity(std::string _name, int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType)
 {
+    this->name = _name;
     this->x = x;
     this->y = y;
     this->angle = 0.0;
     this->IsWalking = false;
     this->Speed = speed;
+    this->direction = SpriteDirection_Down;
 
     // Selecting what are the sprite sizes --------------------------------------------------------
 
-    int ***sprite_sizes;
+    int ***sprite_sizes = NULL;
 
     if (SheetType == SPRITE_SHEET_MAIN_CHARACTER)
     {
@@ -35,13 +39,13 @@ Entity::Entity(int x, int y, int speed, std::string sprite_path, enum SpriteShee
             {{2, 0, 26, 44}, {4, 128, 26, 44}, {35, 126, 28, 44}},
             {{94, 0, 52, 44}, {576, 126, 30, 44}, {608, 128, 30, 44}}};
 
-        sprite_sizes = new int **[4];
+        sprite_sizes = (int ***)malloc(4 * sizeof(int **));
         for (int i = 0; i < 4; ++i)
         {
-            sprite_sizes[i] = new int *[3];
+            sprite_sizes[i] = (int **)malloc(3 * sizeof(int *));
             for (int j = 0; j < 3; ++j)
             {
-                sprite_sizes[i][j] = new int[4];
+                sprite_sizes[i][j] = (int *)malloc(4 * sizeof(int));
                 for (int k = 0; k < 4; ++k)
                 {
                     sprite_sizes[i][j][k] = base_sprite_sizes[i][j][k];
@@ -86,10 +90,36 @@ Entity::Entity(int x, int y, int speed, std::string sprite_path, enum SpriteShee
     }
     this->SpriteRect = srcs;
     this->CurrentSpriteIndex = 0;
+
+    // Freeing allocated memory
+    if (SheetType == SPRITE_SHEET_MAIN_CHARACTER)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            for (int j = 0; j < 3; ++j)
+            {
+                free(sprite_sizes[i][j]);
+            }
+            free(sprite_sizes[i]);
+        }
+        free(sprite_sizes);
+    }
 }
 
 // ------------------------------------------------------------------------------------------------
 
+void Entity::Render()
+{
+    SDL_Rect src = this->SpriteRect[this->direction][this->CurrentSpriteIndex];
+
+    SDL_Rect dst;
+    dst.x = this->x * TILE_SIZE;
+    dst.y = this->y * TILE_SIZE;
+    dst.w = src.w;
+    dst.h = src.h;
+
+    SDL_RenderCopy(Get_Renderer(), this->Sprites, &src, &dst);
+}
 void Entity::UpdateSprite()
 {
 }
@@ -105,6 +135,11 @@ void Entity::TeleportTo(int x, int y)
 
 void Entity::MoveTo(int x, int y)
 {
+    if (DEBUG_MODE)
+    {
+        std::clog << "Entity \"" << this->name << "\" move to " << x << " " << y << std::endl;
+    }
+
     // FIXME: Implement the selection of the path
     std::array<int, 2> TargettedTile = {0, 0};
     std::array<int, 2> MoveVector = {TargettedTile[0] - this->GetX(), TargettedTile[1] - this->GetY()};

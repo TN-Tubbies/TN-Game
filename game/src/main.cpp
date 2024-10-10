@@ -30,6 +30,15 @@ int main(void)
 
     MainMenu *main_menu = new MainMenu();
 
+    int player_x = 0;
+    int player_y = 0;
+    int player_speed = 1;
+    std::string player_sprite_path = "game/assets/images/sprites/Conference_woman_32x32.bmp";
+    Player *player = new Player(player_x, player_y, player_speed, player_sprite_path, SPRITE_SHEET_MAIN_CHARACTER);
+    World *hub_world = new World("game/data/worlds/hub.json", player);
+    World *current_world = hub_world;
+    player->TeleportTo(DEFAULT_POSITION_X, DEFAULT_POSITION_Y);
+
     // FIXME: Temporary :
     std::vector<BattleCharacter *> *playableCharacters = new std::vector<BattleCharacter *>();
     ZerachielUnit *zerachiel = new ZerachielUnit(1);
@@ -37,16 +46,12 @@ int main(void)
     std::vector<BattleCharacter *> *enemyCharacters = new std::vector<BattleCharacter *>();
     LivyaUnit *livya = new LivyaUnit(0);
     enemyCharacters->push_back(livya);
+    //  End of fix
 
     Battle_System *battle = StartBattle(playableCharacters, enemyCharacters, "game/assets/images/maps/entrance/full_img.png", 10);
 
-    // FIXME: Temporary Map init
-    Map test_map("entrance");
-    // test_map.PlayTheme();
-    //  End of fix
-
     SDL_Event event;
-    int running = 1;
+    bool running = true;
     DisplayState displayState = DISPLAY_STATE_MENU;
 
     while (running)
@@ -56,7 +61,7 @@ int main(void)
             switch (event.type)
             {
             case SDL_QUIT:
-                running = 0;
+                running = false;
                 continue;
             case SDL_KEYUP:
                 switch (displayState)
@@ -71,6 +76,10 @@ int main(void)
                     if (event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         displayState = DISPLAY_STATE_MENU;
+                    }
+                    else
+                    {
+                        current_world->HandleKeyUp(event);
                     }
                     break;
                 }
@@ -98,13 +107,27 @@ int main(void)
                     main_menu->HandleMouseClick(event, &displayState);
                     break;
                 case MAP:
+                    current_world->HandleMouseClickUp(event);
+                    break;
+                }
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                switch (displayState)
+                {
+                case MAP:
+                    current_world->HandleMouseClickDown(event);
+                    break;
+                default:
                     break;
                 }
                 break;
             }
         }
         //// States update ////
-        RunBattleManager(battle);
+        if (displayState == BATTLE)
+        {
+            RunBattleManager(battle);
+        }
 
         //// Rendering ////
         SDL_SetRenderDrawColor(Get_Renderer(), 0, 0, 0, 255);
@@ -115,7 +138,8 @@ int main(void)
             main_menu->Render();
             break;
         case MAP:
-            test_map.Render();
+            player->GetCurrentMap()->Render();
+            player->Render();
             break;
         case BATTLE:
             RenderBattle(battle);
@@ -129,6 +153,8 @@ int main(void)
     Destroy_Renderer();
     delete zerachiel;
     delete livya;
+    delete hub_world;
+    delete player;
     delete main_menu;
     DestroyBattle(battle);
     exit(0);

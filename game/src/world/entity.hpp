@@ -18,11 +18,14 @@
 class Entity
 {
 protected:
+    std::string name;
     // X and Y coordinates are in tiles
+    // angle is in radians
     int x, y;
     float angle;
     bool IsWalking;
     int Speed;
+    enum SpriteDirection direction;
 
     SDL_Texture *Sprites;
     int CurrentSpriteIndex;
@@ -31,13 +34,16 @@ protected:
 
 public:
     Entity();
-    Entity(int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType);
+    Entity(std::string _name, int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType);
 
+    std::string GetName() const { return name; }
     int GetX() const { return x; }
     int GetY() const { return y; }
     float GetAngle() const { return angle; }
 
+    void Render();
     void UpdateSprite();
+
     void TeleportTo(int x, int y);
     void MoveTo(int x, int y);
 };

@@ -1,0 +1,5 @@
+{
+	"world_name": "<world name>",
+	"map_names": ["<map name>", "<map name>"],
+	"first_map_name": "<map name>"
+}

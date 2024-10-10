@@ -13,6 +13,7 @@ private:
 
 public:
     Player(int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType);
+    ~Player();
 
     Map *GetCurrentMap() { return CurrentMap; }
     void SetCurrentMap(Map *map) { this->CurrentMap = map; }

@@ -351,7 +351,8 @@ std::array<int, 2> Map::GetTile(int mouse_x, int mouse_y)
 
 void Map::MoveMap(int delta_x, int delta_y)
 {
-    // FIXME: This should slide the map up and right according to the given deltas
+    TL_TileID[0] += delta_x;
+    TL_TileID[1] += delta_y;
 }
 
 // ------------------------------------------------------------------------------------------------
