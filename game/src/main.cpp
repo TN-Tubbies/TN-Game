@@ -32,7 +32,7 @@ int main(void)
 
     int player_x = 0;
     int player_y = 0;
-    int player_speed = 10;
+    int player_speed = 2; // In pixels per frame
     std::string player_sprite_path = "game/assets/images/sprites/Conference_woman_32x32.bmp";
     Player *player = new Player(player_x, player_y, player_speed, player_sprite_path, SPRITE_SHEET_MAIN_CHARACTER);
     World *hub_world = new World("game/data/worlds/hub.json", player);

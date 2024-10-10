@@ -24,9 +24,11 @@ class Map
 private:
     int ID;
 
+    // Height and width are in tiles
     std::string MapName;
     int Height, Width;
-    std::array<int, 2> TL_TileID;
+    std::array<unsigned int, 2> TL_TileID;
+    std::array<unsigned int, 2> BR_TileID;
     std::vector<std::vector<Tile>> MapTiles;
 
     SDL_Texture *FloorTexture;
@@ -52,9 +54,13 @@ public:
     int GetWidth() const { return Width; }
     int GetTLTileXIndex() { return TL_TileID[0]; }
     int GetTLTileYIndex() { return TL_TileID[1]; }
+    int GetBRTileXIndex() { return BR_TileID[0]; }
+    int GetBRTileYIndex() { return BR_TileID[1]; }
     std::string GetMapName() const { return MapName; }
     std::vector<std::vector<Tile>> GetMapTiles() { return MapTiles; }
     std::vector<std::vector<int>> GetLinkedMaps() { return LinkedMaps; }
+
+    bool IsAtEdge();
 
     std::array<int, 2> GetTile(int mouse_x, int mouse_y);
     void MoveMap(int delta_x, int delta_y);

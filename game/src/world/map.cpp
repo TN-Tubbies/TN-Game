@@ -53,6 +53,11 @@ Map::Map(std::string normalize_map_name)
     this->Height = height;
     this->Width = width;
     this->TL_TileID = {0, 0};
+
+    this->BR_TileID = {0, 0};
+    this->BR_TileID[0] = std::min(this->Width, (int)std::floor(WIDTH / TILE_SIZE));
+    this->BR_TileID[1] = std::min(this->Height, (int)std::floor(HEIGHT / TILE_SIZE));
+
     this->LinkedMaps = processed_links;
     this->MapTheme = new Music(music_path);
 
@@ -212,7 +217,11 @@ Map::Map(std::string data_file_path, std::string img_folder_path)
     this->MapName = map_name;
     this->Height = height;
     this->Width = width;
-    this->TL_TileID = {0, 0};
+
+    this->BR_TileID = {0, 0};
+    this->BR_TileID[0] = std::min(this->Width, (int)std::floor(WIDTH / TILE_SIZE));
+    this->BR_TileID[1] = std::min(this->Height, (int)std::floor(HEIGHT / TILE_SIZE));
+
     this->LinkedMaps = processed_links;
     this->MapTheme = new Music(music_path);
 
@@ -341,18 +350,25 @@ std::array<int, 2> Map::GetTile(int mouse_x, int mouse_y)
     int x = (int)mouse_x / TILE_SIZE;
     int y = (int)mouse_y / TILE_SIZE;
 
-    int tile_XID = std::min(x + TL_TileID[0], Width * TILE_SIZE);
-    int tile_YID = std::min(y + TL_TileID[1], Height * TILE_SIZE);
+    int tile_XID = std::min((int)(x + TL_TileID[0]), Width * TILE_SIZE);
+    int tile_YID = std::min((int)(y + TL_TileID[1]), Height * TILE_SIZE);
 
     return std::array<int, 2>{tile_XID, tile_YID};
 }
 
 // ------------------------------------------------------------------------------------------------
 
+bool Map::IsAtEdge()
+{
+    return TL_TileID[0] == 0 || TL_TileID[1] == 0 || BR_TileID[0] == WIDTH * TILE_SIZE || BR_TileID[1] == HEIGHT * TILE_SIZE;
+}
+
 void Map::MoveMap(int delta_x, int delta_y)
 {
-    TL_TileID[0] += delta_x;
-    TL_TileID[1] += delta_y;
+    TL_TileID[0] += (int)std::floor(delta_x / TILE_SIZE);
+    TL_TileID[1] += (int)std::floor(delta_y / TILE_SIZE);
+    BR_TileID[0] += (int)std::floor(delta_x / TILE_SIZE);
+    BR_TileID[1] += (int)std::floor(delta_y / TILE_SIZE);
 }
 
 // ------------------------------------------------------------------------------------------------

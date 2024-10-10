@@ -9,6 +9,8 @@
 class Player : public Entity
 {
 private:
+    int DisplayedX;
+    int DisplayedY;
     Map *CurrentMap;
 
 public:
@@ -21,6 +23,8 @@ public:
     void SetIsWalking(bool is_walking) { this->IsWalking = is_walking; }
 
     void MoveTo(int mouse_x, int mouse_y);
+
+    void Render();
 };
 
 #endif
