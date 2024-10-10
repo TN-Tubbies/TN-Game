@@ -11,8 +11,8 @@
 #define TILE_SIZE 64 // In pixels
 #define PATH_TO_EMPTY_TILE "game/assets/images/empty_tile.png"
 
-#define DEFAULT_POSITION_X 5
-#define DEFAULT_POSITION_Y 5
+#define DEFAULT_POSITION_X 5 * TILE_SIZE
+#define DEFAULT_POSITION_Y 5 * TILE_SIZE
 
 enum DisplayState
 {

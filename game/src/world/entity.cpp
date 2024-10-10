@@ -113,8 +113,8 @@ void Entity::Render()
     SDL_Rect src = this->SpriteRect[this->direction][this->CurrentSpriteIndex];
 
     SDL_Rect dst;
-    dst.x = this->x * TILE_SIZE;
-    dst.y = this->y * TILE_SIZE;
+    dst.x = this->x;
+    dst.y = this->y;
     dst.w = src.w;
     dst.h = src.h;
 
@@ -122,6 +122,17 @@ void Entity::Render()
 }
 void Entity::UpdateSprite()
 {
+}
+
+// ------------------------------------------------------------------------------------------------
+
+int Entity::GetXTile() const
+{
+    return this->x / TILE_SIZE;
+}
+int Entity::GetYTile() const
+{
+    return this->y / TILE_SIZE;
 }
 
 // ------------------------------------------------------------------------------------------------

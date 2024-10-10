@@ -19,7 +19,7 @@ class Entity
 {
 protected:
     std::string name;
-    // X and Y coordinates are in tiles
+    // X, Y coordinates and speed are in pixels
     // angle is in radians
     int x, y;
     float angle;
@@ -39,6 +39,8 @@ public:
     std::string GetName() const { return name; }
     int GetX() const { return x; }
     int GetY() const { return y; }
+    int GetXTile() const;
+    int GetYTile() const;
     float GetAngle() const { return angle; }
 
     void Render();

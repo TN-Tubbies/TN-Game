@@ -32,12 +32,13 @@ int main(void)
 
     int player_x = 0;
     int player_y = 0;
-    int player_speed = 1;
+    int player_speed = 10;
     std::string player_sprite_path = "game/assets/images/sprites/Conference_woman_32x32.bmp";
     Player *player = new Player(player_x, player_y, player_speed, player_sprite_path, SPRITE_SHEET_MAIN_CHARACTER);
     World *hub_world = new World("game/data/worlds/hub.json", player);
     World *current_world = hub_world;
     player->TeleportTo(DEFAULT_POSITION_X, DEFAULT_POSITION_Y);
+    std::cout << "Player at " << player->GetXTile() << ", " << player->GetYTile() << std::endl;
 
     // FIXME: Temporary :
     std::vector<BattleCharacter *> *playableCharacters = new std::vector<BattleCharacter *>();
@@ -107,6 +108,7 @@ int main(void)
                     main_menu->HandleMouseClick(event, &displayState);
                     break;
                 case MAP:
+                    current_world->GetPlayer()->SetIsWalking(false);
                     current_world->HandleMouseClickUp(event);
                     break;
                 }
@@ -115,7 +117,7 @@ int main(void)
                 switch (displayState)
                 {
                 case MAP:
-                    current_world->HandleMouseClickDown(event);
+                    current_world->GetPlayer()->SetIsWalking(true);
                     break;
                 default:
                     break;
@@ -127,6 +129,12 @@ int main(void)
         if (displayState == BATTLE)
         {
             RunBattleManager(battle);
+        }
+        if (current_world->GetPlayer()->GetIsWalking())
+        {
+            int mouse_x, mouse_y;
+            SDL_GetMouseState(&mouse_x, &mouse_y);
+            current_world->GetPlayer()->MoveTo(mouse_x, mouse_y);
         }
 
         //// Rendering ////

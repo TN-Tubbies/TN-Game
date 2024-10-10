@@ -16,9 +16,11 @@ public:
     ~Player();
 
     Map *GetCurrentMap() { return CurrentMap; }
+    bool GetIsWalking() const { return IsWalking; }
     void SetCurrentMap(Map *map) { this->CurrentMap = map; }
+    void SetIsWalking(bool is_walking) { this->IsWalking = is_walking; }
 
-    void MoveTo(int delta_x, int delta_y);
+    void MoveTo(int mouse_x, int mouse_y);
 };
 
 #endif

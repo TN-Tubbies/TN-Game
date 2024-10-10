@@ -21,6 +21,8 @@ public:
     World(std::string file_name, Player *_player);
     ~World();
 
+    Player *GetPlayer() const { return player; }
+
     void HandleKeyUp(SDL_Event event);
     void HandleMouseClickUp(SDL_Event event);
     void HandleMouseClickDown(SDL_Event event);
