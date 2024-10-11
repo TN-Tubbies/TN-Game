@@ -376,7 +376,7 @@ void Map::MoveMap(int delta_x, int delta_y)
 // Render
 void Map::Render(void)
 {
-    SDL_Rect dest = {.x = TL_TileID[0] * TILE_SIZE, .y = TL_TileID[1] * TILE_SIZE, .w = Width * TILE_SIZE, .h = Height * TILE_SIZE};
+    SDL_Rect dest = {.x = (int)TL_TileID[0] * TILE_SIZE, .y = (int)TL_TileID[1] * TILE_SIZE, .w = Width * TILE_SIZE, .h = Height * TILE_SIZE};
     SDL_RenderCopy(Get_Renderer(), FloorTexture, NULL, &dest);
     SDL_RenderCopy(Get_Renderer(), WallTexture, NULL, &dest);
     SDL_RenderCopy(Get_Renderer(), SkyTexture, NULL, &dest);
