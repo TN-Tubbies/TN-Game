@@ -13,6 +13,8 @@
 #include "../../static/renderer.hpp"
 #include "../../static/ttf.hpp"
 
+enum IsTarget { primary, secondary, none };
+
 class BattleMoveActive;
 
 class BattleButton
@@ -64,6 +66,8 @@ class BattleSprite
 {
     private:
         SDL_Texture *sprite_texture;
+        SDL_Texture *primary_target_texture;
+        SDL_Texture *secondary_target_texture;
         int sprite_width;
         int sprite_height;
         int x;
@@ -72,7 +76,7 @@ class BattleSprite
     public:
         BattleSprite(std::string sprite_path, int x, int y);
         ~BattleSprite();
-        void Render();
+        void Render(IsTarget isTarget);
         int GetWidth() { return this->sprite_width; }
         int GetHeight() { return this->sprite_height; }
         int GetX() { return this->x; }

@@ -111,6 +111,19 @@ BattleSprite::BattleSprite(std::string sprite_path, int x, int y)
     if (this->sprite_texture == NULL)
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load image: %s", sprite_path.c_str());
+        exit(-1);
+    }
+    this->primary_target_texture = IMG_LoadTexture(Get_Renderer(), "game/assets/images/ui/target.png");
+    if (this->primary_target_texture == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load image: %s", "game/assets/images/ui/target.png");
+        exit(-1);
+    }
+    this->secondary_target_texture = IMG_LoadTexture(Get_Renderer(), "game/assets/images/ui/secondary_target.png");
+    if (this->secondary_target_texture == NULL)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load image: %s", "game/assets/images/ui/secondary_target.png");
+        exit(-1);
     }
     this->x = x;
     this->y = y;
@@ -122,8 +135,25 @@ BattleSprite::~BattleSprite()
     SDL_DestroyTexture(this->sprite_texture);
 }
 
-void BattleSprite::Render()
+void BattleSprite::Render(IsTarget isTarget)
 {
     SDL_Rect sprite_rect = {this->x, this->y, this->sprite_width, this->sprite_height};
     SDL_RenderCopy(Get_Renderer(), this->sprite_texture, NULL, &sprite_rect);
+    switch (isTarget)
+    {
+    case primary:
+    {
+        SDL_Rect target_rect = {this->x+this->sprite_width/2 - 64 , this->y+this->sprite_height/2 - 64, 128, 128};
+        SDL_RenderCopy(Get_Renderer(), this->primary_target_texture, NULL, &target_rect);
+        break;
+    }
+    case secondary:
+    {
+        SDL_Rect target_rect = {this->x + this->sprite_width / 2 - 64, this->y + this->sprite_height / 2 - 64, 128, 128};
+        SDL_RenderCopy(Get_Renderer(), this->secondary_target_texture, NULL, &target_rect);
+        break;
+    }
+    default:
+        break;
+    }
 }

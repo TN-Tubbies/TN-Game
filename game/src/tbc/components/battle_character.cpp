@@ -4,6 +4,7 @@
 
 BattleCharacter::BattleCharacter() {
     this->currentBattleButton = NULL;
+    this->isTarget = none;
 }
 
 BattleCharacter::~BattleCharacter()
@@ -549,7 +550,7 @@ void BattleCharacter::RenderButtons()
 
 void BattleCharacter::RenderSprite()
 {
-    battle_sprite->Render();
+    battle_sprite->Render(isTarget);
 }
 
 bool BattleCharacter::buttonIsUsable(BattleButton *button) {
@@ -578,9 +579,6 @@ bool BattleCharacter::buttonIsUsable(BattleButton *button) {
     }
 }
 
-void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
-{
-    switch (event.key.keysym.sym)
 void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
 {
     switch (event.key.keysym.sym)
@@ -632,13 +630,9 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
 
 bool isMouseHovering(int mouse_x, int mouse_y, BattleButton *button)
 {
-bool isMouseHovering(int mouse_x, int mouse_y, BattleButton *button)
-{
     return (mouse_x >= button->GetX() && mouse_x <= button->GetX() + button->GetWidth() && mouse_y >= button->GetY() && mouse_y <= button->GetY() + button->GetHeight());
 }
 
-void BattleCharacter::HandleMouseHover(SDL_Event event)
-{
 void BattleCharacter::HandleMouseHover(SDL_Event event)
 {
     int x = event.motion.x;
@@ -656,8 +650,6 @@ void BattleCharacter::HandleMouseHover(SDL_Event event)
     }
 }
 
-void BattleCharacter::HandleMouseClick(SDL_Event event)
-{
 void BattleCharacter::HandleMouseClick(SDL_Event event)
 {
     int x = event.button.x;
