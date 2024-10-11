@@ -412,6 +412,7 @@ void BattleCharacter::GeneralHudInit(std::string bg_path)
     if (name_surf == NULL)
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit for %s, name_surf: %s", this->name.c_str(), SDL_GetError());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit for %s, name_surf: %s", this->name.c_str(), SDL_GetError());
         exit(-1);
     }
     this->DisplayedNameHeight = name_surf->h;
@@ -580,11 +581,15 @@ bool BattleCharacter::buttonIsUsable(BattleButton *button) {
 void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
 {
     switch (event.key.keysym.sym)
+void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
+{
+    switch (event.key.keysym.sym)
     {
     case SDLK_ESCAPE:
-        *displayState = MAIN_MENU;
+        *displayState = DISPLAY_STATE_MENU;
         break;
     default:
+        if (currentBattleButton)
         if (currentBattleButton)
         {
         if (currentBattleButton->GetKey() == event.key.keysym.sym)
@@ -612,6 +617,13 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
                     currentBattleButton = BattleButtons[i];
                 }
             }
+            for (unsigned int i = 0; i < BattleButtons.size(); i++)
+            {
+                if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
+                {
+                    currentBattleButton = BattleButtons[i];
+                }
+            }
         }
         break;
     }
@@ -620,13 +632,18 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
 
 bool isMouseHovering(int mouse_x, int mouse_y, BattleButton *button)
 {
+bool isMouseHovering(int mouse_x, int mouse_y, BattleButton *button)
+{
     return (mouse_x >= button->GetX() && mouse_x <= button->GetX() + button->GetWidth() && mouse_y >= button->GetY() && mouse_y <= button->GetY() + button->GetHeight());
 }
 
 void BattleCharacter::HandleMouseHover(SDL_Event event)
 {
+void BattleCharacter::HandleMouseHover(SDL_Event event)
+{
     int x = event.motion.x;
     int y = event.motion.y;
+    for (unsigned int i = 0; i < BattleButtons.size(); i++)
     for (unsigned int i = 0; i < BattleButtons.size(); i++)
     {
         if (isMouseHovering(x,y,BattleButtons[i]))
@@ -641,10 +658,14 @@ void BattleCharacter::HandleMouseHover(SDL_Event event)
 
 void BattleCharacter::HandleMouseClick(SDL_Event event)
 {
+void BattleCharacter::HandleMouseClick(SDL_Event event)
+{
     int x = event.button.x;
     int y = event.button.y;
     for (unsigned int i = 0; i < BattleButtons.size(); i++)
+    for (unsigned int i = 0; i < BattleButtons.size(); i++)
     {
+        if (isMouseHovering(x, y, BattleButtons[i]))
         if (isMouseHovering(x, y, BattleButtons[i]))
         {
             if (buttonIsUsable(BattleButtons[i]))

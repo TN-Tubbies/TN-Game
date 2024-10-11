@@ -4,7 +4,7 @@ MAINSRCS = main.cpp
 STATICSRCS = ttf.cpp renderer.cpp
 UTILITYSRCS = sdl_compare_surfaces.cpp
 UISRCS = ui_init.cpp main_menu.cpp
-WORLDSRCS = world.cpp map.cpp tile.cpp
+WORLDSRCS = world.cpp map.cpp tile.cpp entity.cpp player.cpp
 AUDIOSRCS = music.cpp
 # TBC Files
 COMPONENTSRCS = battle_character.cpp battle_move.cpp battle_status.cpp priority_list.cpp battle_ui.cpp
