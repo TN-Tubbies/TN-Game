@@ -2,33 +2,22 @@
 
 void ZerachielBaseMoveEffect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter *> Field)
 {
-    int M = 1;
+    int Damage = 0;
+    int DefenseDropNotch = -1;
 
-    for (unsigned int i = 0; i < TargetID.size(); i++)
-    {
-        BattleCharacter *target = Field[TargetID[i]];
-        target->TakeDamage(M, BattleElement_Physical);
-    }
-    for (unsigned int i = 0; i < Field.size(); i++)
-    {
-        if (Field[i]->CheckIfAffected("DuelWithZerachiel"))
-        {
-            Field[i]->RemoveStatus("DuelWithZerachiel");
-        }
-    }
+    Field[TargetID[0]]->TakeDamage(Self, Damage, BattleElement_Light);
 
-    for (unsigned int i = 0; i < TargetID.size(); i++)
+    if (Field[TargetID[0]]->CheckIfAffected("DuelWithZerachiel"))
     {
-        Status_DuelWithZerachiel *status = new Status_DuelWithZerachiel(*Self);
-        Field[TargetID[i]]->AddStatus(status);
+        Field[TargetID[0]]->ChangeStat(CharacterStat_Def, DefenseDropNotch);
     }
 }
 BattleMoveActive *GetZerachielBaseMove(void)
 {
     return new BattleMoveActive(
-        "Entre vous et moi",
-        "Restaure 15% de la BS.\nInflige M% de dégâts à la cible, et la fait entrer en duel avec Zerachiel. Si un autre adversaire est déjà en duel avec Zerachiel, ce précédent duel est annulé.",
-        BattleElement_Physical,
+        "Je t'ai dans mon viseur",
+        "Restaure M % de la BS.Inflige N % de dégâts à la cible. Si celle-ci est en duel avec Zerachiel, sa défense est diminuée de O %.",
+        BattleElement_Light,
         MoveTargetCategory_OneEnemy,
         ZerachielBaseMoveEffect,
         -15,
@@ -113,7 +102,7 @@ void ZerachielUltimateEffect(BattleCharacter *Self, std::vector<int> TargetID, s
         for (int j = 0; j < X; j++)
         {
             BattleCharacter *target = Field[TargetID[i]];
-            target->TakeDamage(M, BattleElement_Light);
+            target->TakeDamage(Self, M, BattleElement_Light);
             if (target->GetHP() <= 0)
             {
                 remaining = X - j;
@@ -139,7 +128,7 @@ void ZerachielUltimateEffect(BattleCharacter *Self, std::vector<int> TargetID, s
                 {
                     if (!Field.at(k)->IsFriendly())
                     {
-                        Field.at(k)->TakeDamage(residual_damage, BattleElement_Light);
+                        Field.at(k)->TakeDamage(Self, residual_damage, BattleElement_Light);
                     }
                 }
             }
@@ -163,6 +152,44 @@ BattleMoveActive *GetZerachielUltimate(void)
 
 void ZerachielPassive1Effect(std::vector<BattleCharacter *> Field)
 {
+    int ZerachielID = -1;
+    for (unsigned int i = 0; i < Field.size(); i++)
+    {
+        if (Field[i]->GetName() == "Zerachiel")
+        {
+            ZerachielID = i;
+            break;
+        }
+    }
+
+    std::vector<int> enemyIDs;
+    for (unsigned int i = 0; i < Field.size(); i++)
+    {
+        if (Field[i]->IsFriendly() != Field[ZerachielID]->IsFriendly() && Field[i]->GetHP() > 0)
+        {
+            enemyIDs.push_back(i);
+        }
+    }
+
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(enemyIDs.begin(), enemyIDs.end(), g);
+    Field[enemyIDs[0]]->AddStatus(new Status_DuelWithZerachiel(Field[ZerachielID]));
+}
+BattleMovePassive *GetZerachielPassive1(void)
+{
+    return new BattleMovePassive(
+        "C'est entre vous et moi",
+        "Au début du combat, Zerachiel cible un ennemi aléatoire : ce dernier rentre en duel avec lui. Le duel ne peut se terminer que par la chute de l'un des participants, ou à la fin du combat. À la mort de l'adversaire, aucun autre ennemi ne rentre en duel.",
+        MoveTargetCategory_OneEnemy,
+        ZerachielPassive1Effect,
+        PassiveTriggerCategory_OnBattleStart);
+}
+
+// ------------------------------------------------------------------------------------------------
+
+void ZerachielPassive2Effect(std::vector<BattleCharacter *> Field)
+{
     float HPLossPercentage = 0.1f;
     float UltimateChargeGained = 0.3f;
     float AttackIncreaseNotch = 0.1f;
@@ -179,13 +206,13 @@ void ZerachielPassive1Effect(std::vector<BattleCharacter *> Field)
         }
     }
 }
-BattleMovePassive *GetZerachielPassive1(void)
+BattleMovePassive *GetZerachielPassive2(void)
 {
     return new BattleMovePassive(
         "L'amour du travail bien fait",
         "À chaque fois qu'un ennemi en duel avec Zerachiel perd M% de ses PV maximums, Zerachiel récupère N% de charge d'ultime et augmente de P% son attaque.",
         MoveTargetCategory_OneEnemy,
-        ZerachielPassive1Effect,
+        ZerachielPassive2Effect,
         PassiveTriggerCategory_OnDamageDealtToEnemy);
 }
 
@@ -223,7 +250,7 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     this->Move3 = GetNullActiveMove();
     this->Ultimate = GetZerachielUltimate();
     this->Passive1 = GetZerachielPassive1();
-    this->Passive2 = GetNullPassiveMove();
+    this->Passive2 = GetZerachielPassive2();
 
     std::vector<BattleStatus *> affectedStatus;
     this->AffectedStatus = affectedStatus;
@@ -231,21 +258,33 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     this->SkillBar = 0;
     this->UltimateBar = 0;
 
-    GeneralHudInit();
+    GeneralHudInit("game/assets/images/ui/faded_bg_light_player.png");
+    this->battle_sprite = new BattleSprite("game/assets/images/characters/zerachiel/battle_sprite.png", 0, 0);
 
     // Personalized HUD elements //
-    SDL_Texture *bg = IMG_LoadTexture(Get_Renderer(), "game/assets/images/ui/faded_bg.png");
-    if (bg == NULL)
-    {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in ui_init, bg load: %s", SDL_GetError());
-        exit(-1);
-    }
-    this->HudBG = bg;
 
     // UI & Buttons //
     std::vector<BattleButton *> buttons = std::vector<BattleButton *>();
-    buttons.push_back(new BattleButton("BasicAtk", WIDTH - 10, HEIGHT - 10, SDLK_a));
-    buttons.push_back(new BattleButton("Skill 1", WIDTH - 35 - buttons[0]->GetWidth(), HEIGHT - 10, SDLK_e));
-    buttons.push_back(new BattleButton("Skill 2", WIDTH - 10, HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_f));
+    buttons.push_back(
+        new BattleButton("game/assets/images/characters/zerachiel/basic.png",
+                         "game/assets/images/ui/light_button_bg.png",
+                         WIDTH - 10, HEIGHT - 10, SDLK_a, 
+                         GetZerachielBaseMove()));
+    buttons.push_back(new BattleButton(
+        "game/assets/images/characters/zerachiel/skill1.png",
+        "game/assets/images/ui/light_button_bg.png",
+        WIDTH - 35 - buttons[0]->GetWidth(), HEIGHT - 10, SDLK_e,
+        GetZerachielMove1()));
+    buttons.push_back(new BattleButton(
+        "game/assets/images/characters/zerachiel/skill2.png",
+        "game/assets/images/ui/light_button_bg.png", WIDTH - 10,
+        HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_f,
+        GetZerachielMove2()));
+    buttons.push_back(
+        new UltimateButton("game/assets/images/characters/zerachiel/ult.png",
+                           "game/assets/images/ui/light_button_bg.png",
+                           WIDTH - 35 - buttons[0]->GetWidth(),
+                           HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_r,
+                           GetZerachielUltimate()));
     this->BattleButtons = buttons;
 }

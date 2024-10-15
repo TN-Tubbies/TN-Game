@@ -1,14 +1,17 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
 #include <vector>
 
+#include "defs.hpp"
 #include "static/delta_time.hpp"
 #include "static/renderer.hpp"
 #include "static/ttf.hpp"
 
+#include "tbc/characters/cicero.hpp"
 #include "tbc/characters/livya.hpp"
 #include "ui/ui_init.hpp"
 #include "ui/main_menu.hpp"
@@ -45,13 +48,17 @@ int main(void)
     // FIXME: Temporary :
     std::vector<BattleCharacter *> *playableCharacters = new std::vector<BattleCharacter *>();
     ZerachielUnit *zerachiel = new ZerachielUnit(1);
+    CiceroUnit *cicero = new CiceroUnit(1);
     playableCharacters->push_back(zerachiel);
+    playableCharacters->push_back(cicero);
+
     std::vector<BattleCharacter *> *enemyCharacters = new std::vector<BattleCharacter *>();
     LivyaUnit *livya = new LivyaUnit(0);
     enemyCharacters->push_back(livya);
     Battle_System *battle = StartBattle(playableCharacters, enemyCharacters, "game/assets/images/maps/entrance/full_img.png", 10);
 
     //  End of fix
+    OrganizeSpritesCoordinates(battle);
 
     SDL_Event event;
     bool running = true;
@@ -136,8 +143,12 @@ int main(void)
             }
         }
         //// States update ////
-        if (displayState == BATTLE)
+        switch (displayState)
         {
+        case QUIT:
+            running = 0;
+            break;
+        case BATTLE:
             RunBattleManager(battle);
         }
         if (current_world->GetPlayer()->GetIsWalking())

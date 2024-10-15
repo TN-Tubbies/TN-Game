@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 
-#define DEBUG_MODE true
+#define DEBUG_MODE false
 
 #define WIDTH 1707
 #define HEIGHT 960
@@ -19,7 +19,8 @@ enum DisplayState
 {
     DISPLAY_STATE_MENU,
     MAP,
-    BATTLE
+    BATTLE,
+    QUIT
 };
 
 enum SpriteDirection

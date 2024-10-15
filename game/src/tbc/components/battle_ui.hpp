@@ -13,18 +13,22 @@
 #include "../../static/renderer.hpp"
 #include "../../static/ttf.hpp"
 
+enum IsTarget { primary, secondary, none };
+
+class BattleMoveActive;
+
 class BattleButton
 {
-    private:
-        std::string text;
-        SDL_Texture *texture;
+    protected:
+        BattleMoveActive *move;
+        SDL_Texture *img_texture;
+        SDL_Texture *bg_texture;
         int button_width;
         int button_height;
-        int text_height;
         int x;
         int y;
-        int text_x;
-        int text_y;
+        int img_x;
+        int img_y;
         SDL_Texture *key_texture;
         int key_width;
         int key_height;
@@ -35,18 +39,53 @@ class BattleButton
         SDL_KeyCode key;
 
     public:
-        BattleButton(std::string text, int x2, int y2, SDL_KeyCode key);
+        BattleButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key, BattleMoveActive *move);
         ~BattleButton();
         
-        void Render();
+        virtual void Render(bool usable);
         void RenderHover();
         
         int GetWidth() { return this->button_width; }
         int GetHeight() { return this->button_height; }
         SDL_KeyCode GetKey() { return this->key; }
-        std::string GetText() { return this->text; }
+        BattleMoveActive *GetMove() { return this->move; }
         int GetX();
         int GetY();
+};
+
+class UltimateButton : public BattleButton
+{
+    public:
+        UltimateButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key, BattleMoveActive *move) : BattleButton(logo_path, bg_path, x2, y2, key, move) {}
+        ~UltimateButton();
+        void Render(int charge, bool usable);
+
+};
+
+class BattleSprite
+{
+    private:
+        SDL_Texture *sprite_texture;
+        SDL_Texture *primary_target_texture;
+        SDL_Texture *secondary_target_texture;
+        int sprite_width;
+        int sprite_height;
+        int x;
+        int y;
+
+    public:
+        BattleSprite(std::string sprite_path, int x, int y);
+        ~BattleSprite();
+        void Render(IsTarget isTarget);
+        int GetWidth() { return this->sprite_width; }
+        int GetHeight() { return this->sprite_height; }
+        int GetX() { return this->x; }
+        int GetY() { return this->y; }
+        void SetSprite(std::string sprite_path) { this->sprite_texture = IMG_LoadTexture(Get_Renderer(), sprite_path.c_str()); }
+        void SetX(int x) { this->x = x; }
+        void SetY(int y) { this->y = y; }
+        void SetWidth(int width) { this->sprite_width = width; }
+        void SetHeight(int height) { this->sprite_height = height; }
 };
 
 #endif // BATTLE_UI_HPP

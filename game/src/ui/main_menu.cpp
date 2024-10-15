@@ -114,7 +114,8 @@ void MainMenu::HandleKeyUp(SDL_Event event, DisplayState *displayState)
     }
     break;
     case SDLK_ESCAPE:
-    exit(0);
+        *displayState = QUIT;
+        break;
     }
 }
 

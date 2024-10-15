@@ -2,17 +2,20 @@
 
 void LivyaBaseMoveEffect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter *> Field)
 {
-    int M = 15;
+    int Damage = 0;
 
-    Field[TargetID[0]]->ChangeStat(CharacterStat_Atk, M);
+    for (unsigned int i = 0; i < TargetID.size(); i++)
+    {
+        Field[TargetID[i]]->TakeDamage(Self, Damage, BattleElement_Lightening);
+    }
 }
 BattleMoveActive *GetLivyaBaseMove(void)
 {
     return new BattleMoveActive(
-        "Sois utile, d'accord ?",
-        "Restaure 15 % de la BS.\nAugmente de M % l'attaque de la cible pendant N tours.",
-        BattleElement_Null,
-        MoveTargetCategory_OneAlly,
+        "Léger différent",
+        "Restaure M% de la BS. Inflige N% de dégâts à tous les ennemis.",
+        BattleElement_Lightening,
+        MoveTargetCategory_AllEnemies,
         LivyaBaseMoveEffect,
         -15,
         true,
@@ -23,14 +26,19 @@ BattleMoveActive *GetLivyaBaseMove(void)
 
 void LivyaMove1Effect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter *> Field)
 {
+    int HPConsumedPercentage = 0;
+    int healingAmount = 0;
+
+    Self->TakeDamage(Self, HPConsumedPercentage);
+    Field[TargetID[0]]->TakeDamage(Self, -(HPConsumedPercentage * healingAmount));
 }
 BattleMoveActive *GetLivyaMove1(void)
 {
     return new BattleMoveActive(
-        "Lames de Duel",
-        "Consomme 20% de la BS.\nAugmente de N% la vitesse de Livya. Si la cible a plus de P% de ses PV max au début du duel contre Livya, elle ne pourra plus récupérer de PV jusqu'à la fin du duel, au bout de Q tours.",
-        BattleElement_Light,
-        MoveTargetCategory_Self,
+        "Je te maintiendrai en vie",
+        "Consomme M% de la BS. Consomme N% de ses PV maximums pour soigner la cible à hauteur de O fois les PV consommés.",
+        BattleElement_Lightening,
+        MoveTargetCategory_OneAlly,
         LivyaMove1Effect,
         20,
         false,
@@ -41,14 +49,20 @@ BattleMoveActive *GetLivyaMove1(void)
 
 void LivyaMove2Effect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter *> Field)
 {
+    // FIXME: Edit the status duration in its file (default 1)
+
+    int HPHealPercentage = 0;
+
+    Field[TargetID[0]]->TakeDamage(Self, -HPHealPercentage);
+    Field[TargetID[0]]->AddStatus(new Status_ContractWithLivya(Self, Field[TargetID[0]]->IsFriendly() == Self->IsFriendly()));
 }
 BattleMoveActive *GetLivyaMove2(void)
 {
     return new BattleMoveActive(
-        "Infaillible",
-        "Consomme 20% de la BS.\nNettoie ses lunettes en plein combat, retirant la majorité des malus qui l'incombent et augmentant de M% son attaque.",
-        BattleElement_Light,
-        MoveTargetCategory_Self,
+        "Nous avions un accord",
+        "Consomme M% de la BS. Cible un ennemi. Lui restaure N% de ses PV maximums, mais durant les O prochains tours, tous les PV censés être récupérés par la cible sont récupérés par Livya.",
+        BattleElement_Lightening,
+        MoveTargetCategory_OneEnemy,
         LivyaMove2Effect,
         20,
         false,
@@ -59,14 +73,22 @@ BattleMoveActive *GetLivyaMove2(void)
 
 void LivyaUltimateEffect(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter *> Field)
 {
+    // FIXME: Edit the status duration in its file (default 1)
+
+    int AtkIncreaseNotch = 0;
+    int SpeedIncreaseNotch = 0;
+
+    Field[TargetID[0]]->ChangeStat(CharacterStat_Atk, AtkIncreaseNotch);
+    Field[TargetID[0]]->ChangeStat(CharacterStat_Speed, SpeedIncreaseNotch);
+    Field[TargetID[0]]->AddStatus(new Status_ContractWithLivya(Self, Field[TargetID[0]]->IsFriendly() == Self->IsFriendly()));
 }
 BattleMoveActive *GetLivyaUltimate(void)
 {
     return new BattleMoveActive(
-        "Question d'habitude, voyons !",
-        "Inflige M% de dégâts à un ennemi X fois. Si la cible est vaincue avant que tous les coups soient portés, les dégâts restants sont distribués à tous les ennemis.",
-        BattleElement_Light,
-        MoveTargetCategory_OneEnemy,
+        "Ne me déçois pas",
+        "Cible un allié. Augmente son attaque de M% de l'attaque d'origine de la cible, sa vitesse de N% de la vitesse d'origine de la cible pendant P tours, et lui octroie jusqu'à la fin du combat les effets de son passif.",
+        BattleElement_Lightening,
+        MoveTargetCategory_OneAlly,
         LivyaUltimateEffect,
         0,
         false,
@@ -77,12 +99,47 @@ BattleMoveActive *GetLivyaUltimate(void)
 
 void LivyaPassive1Effect(std::vector<BattleCharacter *> Field)
 {
+    int HPStealPercentage = 0;
+    int ShieldStealChancePercentage = 0;
+    int UltimateStealChancePercentage = 0;
+    int UltimateChargeStealPercentage = 0;
+
+    // Preparing for random value generation
+    std::random_device rd;
+    std::uniform_int_distribution<> distribution(0, 100);
+
+    int LivyaID = -1;
+    for (unsigned int i = 0; i < Field.size(); i++)
+    {
+        if (Field[i]->GetName() == "Livya")
+        {
+            LivyaID = i;
+            break;
+        }
+    }
+
+    Field[LivyaID]->TakeDamage(Field[LivyaID], -(Field[LivyaID]->GetLastDamageDealt() * HPStealPercentage));
+
+    // TODO: Shield system before implementing stealing shield
+    std::mt19937 gen1(rd());
+    int shieldRandomValue = distribution(gen1);
+    if (shieldRandomValue <= ShieldStealChancePercentage)
+    {
+    }
+
+    std::mt19937 gen2(rd());
+    int ultimateRandomValue = distribution(gen2);
+    if (ultimateRandomValue <= UltimateStealChancePercentage)
+    {
+        Field[LivyaID]->AddToUltimateBar(UltimateChargeStealPercentage);
+        Field[LivyaID]->GetLastTarget()->AddToUltimateBar(-UltimateChargeStealPercentage);
+    }
 }
 BattleMovePassive *GetLivyaPassive1(void)
 {
     return new BattleMovePassive(
-        "L'amour du travail bien fait",
-        "À chaque fois qu'un ennemi en duel avec Livya perd M% de ses PV maximums, Livya récupère N% de charge d'ultime et augmente de P% son attaque.",
+        "Tu as quelque chose qui m'intéresse",
+        "Les attaques de Livya volent M% des PV de la cible, ont N% de chances de voler une charge de bouclier et P% de chances de voler Q% de charge de compétence ultime.",
         MoveTargetCategory_OneEnemy,
         LivyaPassive1Effect,
         PassiveTriggerCategory_OnDamageDealtToEnemy);
@@ -101,7 +158,7 @@ LivyaUnit::LivyaUnit(bool isFriendly)
     int Def = 5;
 
     this->name = "Livya";
-    this->Type = CharacterType_DPS;
+    this->Type = CharacterType_Support;
     this->Element = BattleElement_Lightening;
     this->isFriendly = isFriendly;
     this->HP = HP;
@@ -130,21 +187,34 @@ LivyaUnit::LivyaUnit(bool isFriendly)
     this->SkillBar = 0;
     this->UltimateBar = 0;
 
-    GeneralHudInit();
+    this->battle_sprite = new BattleSprite("game/assets/images/characters/livya/battle_sprite.png", 0, 0);
+
+    GeneralHudInit("game/assets/images/ui/faded_bg_lightning_enemy.png");
 
     // Personalized HUD elements //
-    SDL_Texture *bg = IMG_LoadTexture(Get_Renderer(), "game/assets/images/ui/faded_bg.png");
-    if (bg == NULL)
-    {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in ui_init, bg load: %s", SDL_GetError());
-        exit(-1);
-    }
-    this->HudBG = bg;
 
     // UI & Buttons //
     std::vector<BattleButton *> buttons = std::vector<BattleButton *>();
-    buttons.push_back(new BattleButton("BasicAtk", WIDTH - 10, HEIGHT - 10, SDLK_a));
-    buttons.push_back(new BattleButton("Skill 1", WIDTH - 35 - buttons[0]->GetWidth(), HEIGHT - 10, SDLK_e));
-    buttons.push_back(new BattleButton("Skill 2", WIDTH - 10, HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_f));
+    buttons.push_back(
+        new BattleButton("game/assets/images/characters/livya/basic.png",
+                         "game/assets/images/ui/lightning_button_bg.png",
+                         WIDTH - 10, HEIGHT - 10, SDLK_a,
+                         GetLivyaBaseMove()));
+    buttons.push_back(new BattleButton(
+        "game/assets/images/characters/livya/skill1.png",
+        "game/assets/images/ui/lightning_button_bg.png",
+        WIDTH - 35 - buttons[0]->GetWidth(), HEIGHT - 10, SDLK_e,
+        GetLivyaMove1()));
+    buttons.push_back(new BattleButton(
+        "game/assets/images/characters/livya/skill2.png",
+        "game/assets/images/ui/lightning_button_bg.png", WIDTH - 10,
+        HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_f,
+        GetLivyaMove2()));
+    buttons.push_back(
+        new UltimateButton("game/assets/images/characters/livya/ult.png",
+                           "game/assets/images/ui/lightning_button_bg.png",
+                           WIDTH - 35 - buttons[0]->GetWidth(),
+                           HEIGHT - 33 - buttons[0]->GetHeight(), SDLK_r,
+                           GetLivyaUltimate()));
     this->BattleButtons = buttons;
 }

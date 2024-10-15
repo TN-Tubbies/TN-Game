@@ -43,7 +43,10 @@ public:
     BattleMoveActive(std::string name, std::string description, enum BattleElement element, enum MoveTargetCategory moveTarget,
                      std::function<void(BattleCharacter *Self, std::vector<int> TargetID, std::vector<BattleCharacter *> Field)> sideEffect, int cost, bool isBM, bool isU);
 
-    // TODO: Les getters arrivent fort
+    // TODO: Les getters arrivent fort (ils ont interet... en attendant, j'en crée pour le frontend)
+    int getCost() { return this->cost; }
+    bool IsUltimate() { return this->isUltimate; }
+
 
 private:
     enum BattleElement element;
