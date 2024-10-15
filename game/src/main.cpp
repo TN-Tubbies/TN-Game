@@ -5,6 +5,7 @@
 
 #include <vector>
 
+#include "static/delta_time.hpp"
 #include "static/renderer.hpp"
 #include "static/ttf.hpp"
 
@@ -27,12 +28,13 @@ int main(void)
     Init_TTF();
     Init_IMG();
     Init_MIX();
+    InitDeltaTime(SDL_GetTicks64());
 
     MainMenu *main_menu = new MainMenu();
 
     int player_x = 0;
     int player_y = 0;
-    int player_speed = 2; // In pixels per frame
+    int player_speed = 7; // In pixels per frame
     std::string player_sprite_path = "game/assets/images/sprites/Conference_woman_32x32.bmp";
     Player *player = new Player(player_x, player_y, player_speed, player_sprite_path, SPRITE_SHEET_MAIN_CHARACTER);
     World *hub_world = new World("game/data/worlds/hub.json", player);
@@ -47,9 +49,9 @@ int main(void)
     std::vector<BattleCharacter *> *enemyCharacters = new std::vector<BattleCharacter *>();
     LivyaUnit *livya = new LivyaUnit(0);
     enemyCharacters->push_back(livya);
-    //  End of fix
-
     Battle_System *battle = StartBattle(playableCharacters, enemyCharacters, "game/assets/images/maps/entrance/full_img.png", 10);
+
+    //  End of fix
 
     SDL_Event event;
     bool running = true;
@@ -85,6 +87,19 @@ int main(void)
                     break;
                 }
                 break;
+            case SDL_KEYDOWN:
+                switch (displayState)
+                {
+                case MAP:
+                    if (event.key.keysym.sym != SDLK_ESCAPE)
+                    {
+                        current_world->HandleKeyDown(event);
+                    }
+                    break;
+                default:
+                    break;
+                }
+                break;
             case SDL_MOUSEMOTION:
                 switch (displayState)
                 {
@@ -94,7 +109,7 @@ int main(void)
                 case DISPLAY_STATE_MENU:
                     main_menu->HandleMouseHover(event);
                     break;
-                case MAP:
+                default:
                     break;
                 }
                 break;
@@ -107,18 +122,13 @@ int main(void)
                 case DISPLAY_STATE_MENU:
                     main_menu->HandleMouseClick(event, &displayState);
                     break;
-                case MAP:
-                    current_world->GetPlayer()->SetIsWalking(false);
-                    current_world->HandleMouseClickUp(event);
+                default:
                     break;
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 switch (displayState)
                 {
-                case MAP:
-                    current_world->GetPlayer()->SetIsWalking(true);
-                    break;
                 default:
                     break;
                 }
@@ -132,9 +142,7 @@ int main(void)
         }
         if (current_world->GetPlayer()->GetIsWalking())
         {
-            int mouse_x, mouse_y;
-            SDL_GetMouseState(&mouse_x, &mouse_y);
-            current_world->GetPlayer()->MoveTo(mouse_x, mouse_y);
+            current_world->GetPlayer()->Move();
         }
 
         //// Rendering ////
@@ -154,6 +162,9 @@ int main(void)
             break;
         }
         SDL_RenderPresent(Get_Renderer());
+
+        //// Update Delta ////
+        SetDeltaTime(SDL_GetTicks64());
     }
 
     // SDL_DestroyTexture(modernUI);

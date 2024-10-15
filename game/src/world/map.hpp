@@ -60,6 +60,7 @@ public:
     std::vector<std::vector<Tile>> GetMapTiles() { return MapTiles; }
     std::vector<std::vector<int>> GetLinkedMaps() { return LinkedMaps; }
 
+    bool IsAtEdge(std::string orientation);
     bool IsAtEdge();
 
     std::array<int, 2> GetTile(int mouse_x, int mouse_y);

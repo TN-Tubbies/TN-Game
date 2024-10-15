@@ -1,7 +1,7 @@
 # Global Files
 TARGET = main
 MAINSRCS = main.cpp
-STATICSRCS = ttf.cpp renderer.cpp
+STATICSRCS = delta_time.cpp ttf.cpp renderer.cpp
 UTILITYSRCS = sdl_compare_surfaces.cpp
 UISRCS = ui_init.cpp main_menu.cpp
 WORLDSRCS = world.cpp map.cpp tile.cpp entity.cpp player.cpp

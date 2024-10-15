@@ -57,51 +57,78 @@ World::~World()
 
 // ------------------------------------------------------------------------------------------------
 
-void World::HandleKeyUp(SDL_Event event)
+void World::HandleKeyDown(SDL_Event event)
 {
-    // FIXME: Add controls
+    int x_notch = 0;
+    int y_notch = 0;
     switch (event.key.keysym.sym)
     {
     case SDLK_LEFT:
+    case SDLK_q:
+        if (DEBUG_MODE)
+        {
+            std::clog << "Key press: " << SDL_GetKeyName(event.key.keysym.sym) << std::endl;
+        }
+        x_notch = -1;
         break;
     case SDLK_RIGHT:
+    case SDLK_d:
+        if (DEBUG_MODE)
+        {
+            std::clog << "Key press: " << SDL_GetKeyName(event.key.keysym.sym) << std::endl;
+        }
+        x_notch = 1;
         break;
     case SDLK_UP:
+    case SDLK_z:
+        if (DEBUG_MODE)
+        {
+            std::clog << "Key press: " << SDL_GetKeyName(event.key.keysym.sym) << std::endl;
+        }
+        y_notch = -1;
         break;
     case SDLK_DOWN:
+    case SDLK_s:
+        if (DEBUG_MODE)
+        {
+            std::clog << "Key press: " << SDL_GetKeyName(event.key.keysym.sym) << std::endl;
+        }
+        y_notch = 1;
+        break;
+    default:
+        if (DEBUG_MODE)
+        {
+            std::clog << "Unhandled key press: " << SDL_GetKeyName(event.key.keysym.sym) << std::endl;
+        }
+        break;
+    }
+
+    this->player->SetMoveNotches({x_notch, y_notch});
+    this->player->SetIsWalking(x_notch != 0 || y_notch != 0);
+}
+
+void World::HandleKeyUp(SDL_Event event)
+{
+    int x_notch = this->player->GetMoveNotches()[0];
+    int y_notch = this->player->GetMoveNotches()[1];
+    switch (event.key.keysym.sym)
+    {
+    case SDLK_LEFT:
+    case SDLK_q:
+    case SDLK_RIGHT:
+    case SDLK_d:
+        x_notch = 0;
+        break;
+    case SDLK_UP:
+    case SDLK_z:
+    case SDLK_DOWN:
+    case SDLK_s:
+        y_notch = 0;
         break;
     default:
         break;
     }
-}
 
-void World::HandleMouseClickUp(SDL_Event event)
-{
-    int mouse_x, mouse_y;
-    SDL_GetMouseState(&mouse_x, &mouse_y);
-
-    if (event.button.button == SDL_BUTTON_RIGHT)
-    {
-        if (DEBUG_MODE)
-        {
-            std::clog << "Mouse right-button clicked up: " << mouse_x << ", " << mouse_y << std::endl;
-        }
-        // FIXME: Adding interactivity if right click
-    }
-}
-
-void World::HandleMouseClickDown(SDL_Event event)
-{
-    int mouse_x, mouse_y;
-    SDL_GetMouseState(&mouse_x, &mouse_y);
-
-    if (event.button.button == SDL_BUTTON_LEFT)
-    {
-        if (DEBUG_MODE)
-        {
-            std::clog << "Mouse left-button clicked down: " << mouse_x << ", " << mouse_y << std::endl;
-        }
-
-        this->player->MoveTo(mouse_x, mouse_y);
-    }
+    this->player->SetMoveNotches({x_notch, y_notch});
+    this->player->SetIsWalking(x_notch != 0 || y_notch != 0);
 }

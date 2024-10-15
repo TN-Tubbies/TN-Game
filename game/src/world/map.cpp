@@ -358,6 +358,21 @@ std::array<int, 2> Map::GetTile(int mouse_x, int mouse_y)
 
 // ------------------------------------------------------------------------------------------------
 
+bool Map::IsAtEdge(std::string orientation)
+{
+    if (orientation == "x")
+    {
+        return TL_TileID[0] == 0 || BR_TileID[0] == WIDTH * TILE_SIZE;
+    }
+    else if (orientation == "y")
+    {
+        return TL_TileID[1] == 0 || BR_TileID[1] == HEIGHT * TILE_SIZE;
+    }
+    else
+    {
+        return false;
+    }
+}
 bool Map::IsAtEdge()
 {
     return TL_TileID[0] == 0 || TL_TileID[1] == 0 || BR_TileID[0] == WIDTH * TILE_SIZE || BR_TileID[1] == HEIGHT * TILE_SIZE;
