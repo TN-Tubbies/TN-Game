@@ -1,7 +1,7 @@
 #include "battle_ui.hpp"
 
 BattleButton::BattleButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key, BattleMoveActive *move)
-{   
+{
     this->move = move;
     this->img_texture = IMG_LoadTexture(Get_Renderer(), logo_path.c_str());
     if (this->img_texture == NULL)
@@ -15,12 +15,13 @@ BattleButton::BattleButton(std::string logo_path, std::string bg_path, int x2, i
     }
     this->button_width = 95;
     this->button_height = 95;
-    this->x = x2- button_width / 2;
+    this->x = x2 - button_width / 2;
     this->y = y2 - button_height / 2;
     this->img_x = x2 - button_width;
     this->img_y = y2 - button_height;
     this->key = key;
-    if (this->key == NULL) {
+    if (this->key == NULL)
+    {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to get key: %s", SDL_GetError());
     }
     SDL_Surface *key_surf = TTF_RenderUTF8_Blended(Get_Roboto(16), SDL_GetKeyName(key), {255, 255, 255});
@@ -37,7 +38,7 @@ BattleButton::BattleButton(std::string logo_path, std::string bg_path, int x2, i
     this->key_height = key_surf->h;
     this->key_x = x + button_width / 2.5 - key_width / 2;
     this->key_y = y - button_height / 2.5 - key_width / 2;
-    this->key_text_x = x + button_width / 2.5 - key_width/1.25;
+    this->key_text_x = x + button_width / 2.5 - key_width / 1.25;
     this->key_text_y = y - button_height / 2.5 - key_width / 2 - key_height / 2;
     SDL_FreeSurface(key_surf);
 }
@@ -46,12 +47,14 @@ BattleButton::~BattleButton()
 {
     SDL_DestroyTexture(this->img_texture);
     SDL_DestroyTexture(this->key_texture);
+    SDL_DestroyTexture(this->bg_texture);
 }
 
 UltimateButton::~UltimateButton()
 {
     SDL_DestroyTexture(this->img_texture);
     SDL_DestroyTexture(this->key_texture);
+    SDL_DestroyTexture(this->bg_texture);
 }
 
 void BattleButton::Render(bool usable)
@@ -60,11 +63,13 @@ void BattleButton::Render(bool usable)
     if (usable)
     {
         SDL_RenderCopy(Get_Renderer(), this->bg_texture, NULL, &bg_rect);
-    } else {
+    }
+    else
+    {
         filledCircleRGBA(Get_Renderer(), this->x, this->y, (this->button_width + 4) / 2, 50, 50, 50, 75);
     }
-    //ATTENTION : Les marges sont hardcodées (25 de chaque coté, c'est lié aux images)
-    SDL_Rect img_rect = {img_x-25, img_y-25, this->button_width+50, this->button_height+50};
+    // ATTENTION : Les marges sont hardcodées (25 de chaque coté, c'est lié aux images)
+    SDL_Rect img_rect = {img_x - 25, img_y - 25, this->button_width + 50, this->button_height + 50};
     SDL_RenderCopy(Get_Renderer(), this->img_texture, NULL, &img_rect);
     SDL_Rect key_text_rect = {key_text_x, key_text_y, this->key_width, this->key_height};
     if (usable)
@@ -74,17 +79,19 @@ void BattleButton::Render(bool usable)
     }
 }
 
-void UltimateButton::Render(int charge, bool usable) {
-    filledCircleRGBA(Get_Renderer(), this->x, this->y, (this->button_width+4)/2, 50, 50, 50, 75);
+void UltimateButton::Render(int charge, bool usable)
+{
+    filledCircleRGBA(Get_Renderer(), this->x, this->y, (this->button_width + 4) / 2, 50, 50, 50, 75);
     int y_filling_offset = 128 - (128 * charge / 100);
-    SDL_Rect bg_rect_src = {0,y_filling_offset,128,128};
-    SDL_Rect bg_rect_dest = {this->img_x, this->img_y + (button_height - button_height*charge/100), this->button_width, this->button_height * charge / 100};
+    SDL_Rect bg_rect_src = {0, y_filling_offset, 128, 128};
+    SDL_Rect bg_rect_dest = {this->img_x, this->img_y + (button_height - button_height * charge / 100), this->button_width, this->button_height * charge / 100};
     SDL_RenderCopy(Get_Renderer(), this->bg_texture, &bg_rect_src, &bg_rect_dest);
-    //ATTENTION : Les marges sont hardcodées (25 de chaque coté, c'est lié aux images)
-    SDL_Rect img_rect = {img_x-15, img_y-15, this->button_width+30, this->button_height+30};
+    // ATTENTION : Les marges sont hardcodées (25 de chaque coté, c'est lié aux images)
+    SDL_Rect img_rect = {img_x - 15, img_y - 15, this->button_width + 30, this->button_height + 30};
     SDL_RenderCopy(Get_Renderer(), this->img_texture, NULL, &img_rect);
     SDL_Rect key_text_rect = {key_text_x, key_text_y, this->key_width, this->key_height};
-    if (usable) {
+    if (usable)
+    {
         filledCircleRGBA(Get_Renderer(), key_x, key_y, key_width + 2, 0, 0, 0, 255);
         SDL_RenderCopy(Get_Renderer(), this->key_texture, NULL, &key_text_rect);
     }
@@ -143,7 +150,7 @@ void BattleSprite::Render(IsTarget isTarget)
     {
     case primary:
     {
-        SDL_Rect target_rect = {this->x+this->sprite_width/2 - 64 , this->y+this->sprite_height/2 - 64, 128, 128};
+        SDL_Rect target_rect = {this->x + this->sprite_width / 2 - 64, this->y + this->sprite_height / 2 - 64, 128, 128};
         SDL_RenderCopy(Get_Renderer(), this->primary_target_texture, NULL, &target_rect);
         break;
     }

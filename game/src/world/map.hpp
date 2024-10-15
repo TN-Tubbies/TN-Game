@@ -17,13 +17,9 @@
 #include "../audio/audio.hpp"
 #include "tile.hpp"
 
-static int LastMapID = 0;
-
 class Map
 {
 private:
-    int ID;
-
     // Height and width are in tiles
     std::string MapName;
     int Height, Width;
@@ -38,9 +34,9 @@ private:
     SDL_Texture *SkyTexture;
     int SkyTextureWidth, SkyTextureHeight;
 
-    // Each std::vector<int> in LinkedMaps represents a link:
-    //              [Map_ID, source_x, source_y, destination_x, destination_y]
-    std::vector<std::vector<int>> LinkedMaps;
+    // Each std::vector<std::any> in LinkedMaps represents a link:
+    //              [MapName, source_x, source_y, destination_x, destination_y]
+    std::vector<std::vector<std::any>> LinkedMaps;
 
     Music *MapTheme;
 
@@ -49,7 +45,6 @@ public:
     Map(std::string data_file_path, std::string img_folder_path);
     ~Map();
 
-    int GetID() const { return ID; }
     int GetHeight() const { return Height; }
     int GetWidth() const { return Width; }
     int GetTLTileXIndex() { return TL_TileID[0]; }
@@ -58,7 +53,7 @@ public:
     int GetBRTileYIndex() { return BR_TileID[1]; }
     std::string GetMapName() const { return MapName; }
     std::vector<std::vector<Tile>> GetMapTiles() { return MapTiles; }
-    std::vector<std::vector<int>> GetLinkedMaps() { return LinkedMaps; }
+    std::vector<std::vector<std::any>> GetLinkedMaps() { return LinkedMaps; }
 
     bool IsAtEdge(std::string orientation);
     bool IsAtEdge();

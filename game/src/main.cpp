@@ -92,6 +92,8 @@ int main(void)
                         current_world->HandleKeyUp(event);
                     }
                     break;
+                default:
+                    break;
                 }
                 break;
             case SDL_KEYDOWN:
@@ -114,7 +116,7 @@ int main(void)
                     BattleHandleMouseHover(battle, event);
                     break;
                 case DISPLAY_STATE_MENU:
-                    main_menu->HandleMouseHover(event);
+                    main_menu->HandleMouseHover();
                     break;
                 default:
                     break;
@@ -127,7 +129,7 @@ int main(void)
                     BattleHandleMouseClick(battle, event);
                     break;
                 case DISPLAY_STATE_MENU:
-                    main_menu->HandleMouseClick(event, &displayState);
+                    main_menu->HandleMouseClick(&displayState);
                     break;
                 default:
                     break;
@@ -150,6 +152,8 @@ int main(void)
             break;
         case BATTLE:
             RunBattleManager(battle);
+        default:
+            break;
         }
         if (current_world->GetPlayer()->GetIsWalking())
         {
@@ -170,6 +174,8 @@ int main(void)
             break;
         case BATTLE:
             RenderBattle(battle);
+            break;
+        default:
             break;
         }
         SDL_RenderPresent(Get_Renderer());
