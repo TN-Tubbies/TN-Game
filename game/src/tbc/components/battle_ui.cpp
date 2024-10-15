@@ -141,13 +141,13 @@ void BattleSprite::Render(IsTarget isTarget)
     SDL_RenderCopy(Get_Renderer(), this->sprite_texture, NULL, &sprite_rect);
     switch (isTarget)
     {
-    case primary:
+    case IsPrimaryTarget:
     {
         SDL_Rect target_rect = {this->x+this->sprite_width/2 - 64 , this->y+this->sprite_height/2 - 64, 128, 128};
         SDL_RenderCopy(Get_Renderer(), this->primary_target_texture, NULL, &target_rect);
         break;
     }
-    case secondary:
+    case IsSecondaryTarget:
     {
         SDL_Rect target_rect = {this->x + this->sprite_width / 2 - 64, this->y + this->sprite_height / 2 - 64, 128, 128};
         SDL_RenderCopy(Get_Renderer(), this->secondary_target_texture, NULL, &target_rect);

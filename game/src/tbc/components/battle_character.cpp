@@ -4,7 +4,8 @@
 
 BattleCharacter::BattleCharacter() {
     this->currentBattleButton = NULL;
-    this->isTarget = none;
+    this->isTarget = IsNotTarget;
+    this->LastTarget = NULL;
 }
 
 BattleCharacter::~BattleCharacter()
