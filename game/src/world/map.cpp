@@ -49,11 +49,7 @@ Map::Map(std::string normalize_map_name)
     this->MapName = map_name;
     this->Height = height;
     this->Width = width;
-    this->TL_TileID = {0, 0};
-
-    this->BR_TileID = {0, 0};
-    this->BR_TileID[0] = std::min(this->Width, (int)std::floor(WIDTH / TILE_SIZE));
-    this->BR_TileID[1] = std::min(this->Height, (int)std::floor(HEIGHT / TILE_SIZE));
+    this->TopLeftCoordinates = {0, 0};
 
     this->LinkedMaps = processed_links;
     this->MapTheme = new Music(music_path);
@@ -212,9 +208,7 @@ Map::Map(std::string data_file_path, std::string img_folder_path)
     this->Height = height;
     this->Width = width;
 
-    this->BR_TileID = {0, 0};
-    this->BR_TileID[0] = std::min(this->Width, (int)std::floor(WIDTH / TILE_SIZE));
-    this->BR_TileID[1] = std::min(this->Height, (int)std::floor(HEIGHT / TILE_SIZE));
+    this->TopLeftCoordinates = {0, 0};
 
     this->LinkedMaps = processed_links;
     this->MapTheme = new Music(music_path);
@@ -341,11 +335,11 @@ Map::~Map(void)
 // Getters
 std::array<int, 2> Map::GetTile(int mouse_x, int mouse_y)
 {
-    int x = (int)mouse_x / TILE_SIZE;
-    int y = (int)mouse_y / TILE_SIZE;
+    int x = (int)std::floor((mouse_x + TopLeftCoordinates[0]) / TILE_SIZE);
+    int y = (int)std::floor((mouse_y + TopLeftCoordinates[1]) / TILE_SIZE);
 
-    int tile_XID = std::min((int)(x + TL_TileID[0]), Width * TILE_SIZE);
-    int tile_YID = std::min((int)(y + TL_TileID[1]), Height * TILE_SIZE);
+    int tile_XID = std::min(x, Width * TILE_SIZE);
+    int tile_YID = std::min(y, Height * TILE_SIZE);
 
     return std::array<int, 2>{tile_XID, tile_YID};
 }
@@ -356,11 +350,27 @@ bool Map::IsAtEdge(std::string orientation)
 {
     if (orientation == "x")
     {
-        return TL_TileID[0] == 0 || BR_TileID[0] == WIDTH * TILE_SIZE;
+        return TopLeftCoordinates[0] == 0 || TopLeftCoordinates[0] + WIDTH >= this->Width * TILE_SIZE;
     }
     else if (orientation == "y")
     {
-        return TL_TileID[1] == 0 || BR_TileID[1] == HEIGHT * TILE_SIZE;
+        return TopLeftCoordinates[1] == 0 || TopLeftCoordinates[1] + HEIGHT >= this->Height * TILE_SIZE;
+    }
+    else if (orientation == "x+")
+    {
+        return TopLeftCoordinates[0] + WIDTH >= this->Width * TILE_SIZE;
+    }
+    else if (orientation == "y+")
+    {
+        return TopLeftCoordinates[1] + HEIGHT >= this->Height * TILE_SIZE;
+    }
+    else if (orientation == "x-")
+    {
+        return TopLeftCoordinates[0] == 0;
+    }
+    else if (orientation == "y-")
+    {
+        return TopLeftCoordinates[1] == 0;
     }
     else
     {
@@ -369,15 +379,13 @@ bool Map::IsAtEdge(std::string orientation)
 }
 bool Map::IsAtEdge()
 {
-    return TL_TileID[0] == 0 || TL_TileID[1] == 0 || BR_TileID[0] == WIDTH * TILE_SIZE || BR_TileID[1] == HEIGHT * TILE_SIZE;
+    return TopLeftCoordinates[0] == 0 || TopLeftCoordinates[0] + WIDTH >= this->Width * TILE_SIZE || TopLeftCoordinates[1] == 0 || TopLeftCoordinates[1] + HEIGHT == this->Height * TILE_SIZE;
 }
 
 void Map::MoveMap(int delta_x, int delta_y)
 {
-    TL_TileID[0] += (int)std::floor(delta_x / TILE_SIZE);
-    TL_TileID[1] += (int)std::floor(delta_y / TILE_SIZE);
-    BR_TileID[0] += (int)std::floor(delta_x / TILE_SIZE);
-    BR_TileID[1] += (int)std::floor(delta_y / TILE_SIZE);
+    TopLeftCoordinates[0] -= delta_x;
+    TopLeftCoordinates[1] -= delta_y;
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -385,7 +393,7 @@ void Map::MoveMap(int delta_x, int delta_y)
 // Render
 void Map::Render(void)
 {
-    SDL_Rect dest = {.x = (int)TL_TileID[0] * TILE_SIZE, .y = (int)TL_TileID[1] * TILE_SIZE, .w = Width * TILE_SIZE, .h = Height * TILE_SIZE};
+    SDL_Rect dest = {.x = TopLeftCoordinates[0], .y = TopLeftCoordinates[1], .w = TopLeftCoordinates[0] + Width * TILE_SIZE, .h = TopLeftCoordinates[1] + Height * TILE_SIZE};
     SDL_RenderCopy(Get_Renderer(), FloorTexture, NULL, &dest);
     SDL_RenderCopy(Get_Renderer(), WallTexture, NULL, &dest);
     SDL_RenderCopy(Get_Renderer(), SkyTexture, NULL, &dest);

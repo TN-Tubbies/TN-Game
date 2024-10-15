@@ -23,8 +23,7 @@ private:
     // Height and width are in tiles
     std::string MapName;
     int Height, Width;
-    std::array<unsigned int, 2> TL_TileID;
-    std::array<unsigned int, 2> BR_TileID;
+    std::array<int, 2> TopLeftCoordinates;
     std::vector<std::vector<Tile>> MapTiles;
 
     SDL_Texture *FloorTexture;
@@ -47,10 +46,7 @@ public:
 
     int GetHeight() const { return Height; }
     int GetWidth() const { return Width; }
-    int GetTLTileXIndex() { return TL_TileID[0]; }
-    int GetTLTileYIndex() { return TL_TileID[1]; }
-    int GetBRTileXIndex() { return BR_TileID[0]; }
-    int GetBRTileYIndex() { return BR_TileID[1]; }
+    std::array<int, 2> GetTopLeftCoordinates() { return TopLeftCoordinates; }
     std::string GetMapName() const { return MapName; }
     std::vector<std::vector<Tile>> GetMapTiles() { return MapTiles; }
     std::vector<std::vector<std::any>> GetLinkedMaps() { return LinkedMaps; }

@@ -59,8 +59,8 @@ World::~World()
 
 void World::HandleKeyDown(SDL_Event event)
 {
-    int x_notch = 0;
-    int y_notch = 0;
+    int x_notch = this->player->GetMoveNotches()[0];
+    int y_notch = this->player->GetMoveNotches()[1];
     switch (event.key.keysym.sym)
     {
     case SDLK_LEFT:
