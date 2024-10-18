@@ -20,7 +20,7 @@
 class Map
 {
 private:
-    // Height and width are in tiles
+    // Height and width are in tiles, TL Coords are in pixels
     std::string MapName;
     int Height, Width;
     std::array<int, 2> TopLeftCoordinates;

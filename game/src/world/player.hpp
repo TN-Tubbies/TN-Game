@@ -29,6 +29,7 @@ public:
     void SetIsWalking(bool is_walking) { this->IsWalking = is_walking; }
 
     void Move();
+    void UpdateDisplayedPosition();
 
     void Render();
 };

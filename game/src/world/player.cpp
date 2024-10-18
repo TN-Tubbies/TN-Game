@@ -36,30 +36,10 @@ void Player::Move()
 {
     // TODO: Collision detection
 
-    // Get Ticks
-    Uint32 delta_time_before_move = GetDeltaTime();
+    // ------------------------------------------
 
     int x_notch = this->move_notches[0];
     int y_notch = this->move_notches[1];
-    std::string orientation_x = "";
-    std::string orientation_y = "";
-    if (x_notch < 0)
-    {
-        orientation_x = "x-";
-    }
-    else if (x_notch > 0)
-    {
-        orientation_x = "x+";
-    }
-    if (y_notch < 0)
-    {
-        orientation_y = "y-";
-    }
-    else if (y_notch > 0)
-    {
-        orientation_y = "y+";
-    }
-
     // In pixels
     SDL_Rect src = this->SpriteRect[this->direction][this->CurrentSpriteIndex];
     int x_dest = this->DisplayedX + x_notch * this->Speed;
@@ -93,40 +73,69 @@ void Player::Move()
         this->x += x_notch;
         this->y += y_notch;
 
-        // Update relative positions
-        if (this->CurrentMap->IsAtEdge(orientation_x) && this->CurrentMap->IsAtEdge(orientation_y)) // Both sides
-        {
-            this->DisplayedX = x_dest;
-            this->DisplayedY = y_dest;
-        }
-        else if (this->CurrentMap->IsAtEdge(orientation_x)) // Only x side
-        {
-            this->DisplayedX = x_dest;
-            this->DisplayedY = std::min(y_dest, (int)std::floor(HEIGHT / 2 - src.h / 2));
-            this->CurrentMap->MoveMap(0, y_notch * this->Speed);
-        }
-        else if (this->CurrentMap->IsAtEdge(orientation_y)) // Only y side
-        {
-            this->DisplayedX = std::min(x_dest, (int)std::floor(WIDTH / 2 - src.w / 2));
-            this->DisplayedY = y_dest;
-            this->CurrentMap->MoveMap(x_notch * this->Speed, 0);
-        }
-        else // Neither side
-        {
-            this->DisplayedX = std::min(x_dest, (int)std::floor(WIDTH / 2 - src.w / 2));
-            this->DisplayedY = std::min(y_dest, (int)std::floor(HEIGHT / 2 - src.h / 2));
-            this->CurrentMap->MoveMap(x_notch * this->Speed, y_notch * this->Speed);
-        }
+        this->UpdateDisplayedPosition();
     }
 
-    this->UpdateSprite();
+    // ------------------------------------------
 
-    // Wait
-    Uint32 delta_time_after_move = GetDeltaTime();
-    while (delta_time_after_move - delta_time_before_move <= FRAMERATE)
+    this->UpdateSprite();
+}
+
+// ------------------------------------------------------------------------------------------------
+
+void Player::UpdateDisplayedPosition()
+{
+    SDL_Rect src = this->SpriteRect[this->direction][this->CurrentSpriteIndex];
+    int x_notch = this->move_notches[0];
+    int y_notch = this->move_notches[1];
+    std::string orientation_x = "";
+    std::string orientation_y = "";
+    if (x_notch < 0)
     {
-        SetDeltaTime(SDL_GetTicks64());
-        delta_time_after_move = GetDeltaTime();
+        orientation_x = "x-";
+    }
+    else if (x_notch > 0)
+    {
+        orientation_x = "x+";
+    }
+    if (y_notch < 0)
+    {
+        orientation_y = "y-";
+    }
+    else if (y_notch > 0)
+    {
+        orientation_y = "y+";
+    }
+
+    // ------------------------------------------
+
+    int x_dest = this->DisplayedX + x_notch * this->Speed;
+    int y_dest = this->DisplayedY + y_notch * this->Speed;
+
+    // ------------------------------------------
+
+    if (this->CurrentMap->IsAtEdge(orientation_x) && this->CurrentMap->IsAtEdge(orientation_y)) // Both sides
+    {
+        this->DisplayedX = x_dest;
+        this->DisplayedY = y_dest;
+    }
+    else if (this->CurrentMap->IsAtEdge(orientation_x)) // Only x side
+    {
+        this->DisplayedX = x_dest;
+        this->DisplayedY = std::min(y_dest, (int)std::floor(HEIGHT / 2 - src.h / 2));
+        this->CurrentMap->MoveMap(0, y_notch * this->Speed);
+    }
+    else if (this->CurrentMap->IsAtEdge(orientation_y)) // Only y side
+    {
+        this->DisplayedX = std::min(x_dest, (int)std::floor(WIDTH / 2 - src.w / 2));
+        this->DisplayedY = y_dest;
+        this->CurrentMap->MoveMap(x_notch * this->Speed, 0);
+    }
+    else // Neither side
+    {
+        this->DisplayedX = std::min(x_dest, (int)std::floor(WIDTH / 2 - src.w / 2));
+        this->DisplayedY = std::min(y_dest, (int)std::floor(HEIGHT / 2 - src.h / 2));
+        this->CurrentMap->MoveMap(x_notch * this->Speed, y_notch * this->Speed);
     }
 }
 
