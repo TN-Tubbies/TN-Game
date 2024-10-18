@@ -38,9 +38,11 @@ void BattleHandleKeyUp(Battle_System *battle, SDL_Event event, DisplayState *dis
 {
     if (battle->currentPriorityList->size > 0)
     {
+        std::cout << "Handling key up" << std::endl;
         BattleCharacter *currentCharacter = GetCharacterFromList(battle->currentPriorityList, 1);
         if (currentCharacter->IsFriendly()) {
             currentCharacter->HandleKeyUp(event, displayState);
+            SetTargets(battle);
         }
     }
 }
@@ -53,6 +55,7 @@ void BattleHandleMouseHover(Battle_System *battle, SDL_Event event)
         if (currentCharacter->IsFriendly())
         {
             currentCharacter->HandleMouseHover(event);
+            SetTargets(battle);
         }
     }
 }
@@ -107,5 +110,56 @@ void OrganizeSpritesCoordinates(Battle_System *battle) {
         character->GetSprite()->SetX(enemies_x - character->GetSprite()->GetWidth());
         character->GetSprite()->SetY(HEIGHT/2 - character->GetSprite()->GetHeight());
         enemies_x -= character->GetSprite()->GetWidth() + spacing;
+    }
+}
+
+void SetTargets(Battle_System *battle) {
+    BattleCharacter *currentCharacter = GetCharacterFromList(battle->currentPriorityList, 1);
+
+    if (currentCharacter->GetCurrentBattleButton()) {
+        for (BattleCharacter *character : *battle->playableCharacters)
+        {
+            character->SetIsTarget(IsNotTarget);
+        }
+        for (BattleCharacter *character : *battle->enemyCharacters)
+        {
+            character->SetIsTarget(IsNotTarget);
+        }
+        switch (currentCharacter->GetCurrentBattleButton()->GetMove()->getMoveTarget()) {
+            case MoveTargetCategory_Self:
+                currentCharacter->SetLastTarget(currentCharacter);
+                currentCharacter->SetIsTarget(IsPrimaryTarget);
+                break;
+            case MoveTargetCategory_AllEnemies:
+                for (BattleCharacter *enemy : *battle->enemyCharacters) {
+                    enemy->SetIsTarget(IsPrimaryTarget);
+                }
+                currentCharacter->SetLastTarget(battle->enemyCharacters->at(0));
+                break;
+            case MoveTargetCategory_AllAlly:
+                for (BattleCharacter *ally : *battle->playableCharacters) {
+                    ally->SetIsTarget(IsPrimaryTarget);
+                }
+                currentCharacter->SetLastTarget(battle->playableCharacters->at(0));
+                break;
+            case MoveTargetCategory_OneAlly:
+                if (currentCharacter->GetLastTarget()) {
+                    if (currentCharacter->GetLastTarget()->IsFriendly()) {
+                        currentCharacter->GetLastTarget()->SetIsTarget(IsPrimaryTarget);
+                    } else {
+                        currentCharacter->SetLastTarget(battle->playableCharacters->at(0));
+                    }
+                }
+            case MoveTargetCategory_OneEnemy:
+                if (currentCharacter->GetLastTarget()) {
+                    if (!currentCharacter->GetLastTarget()->IsFriendly()) {
+                        currentCharacter->GetLastTarget()->SetIsTarget(IsPrimaryTarget);
+                    } else {
+                        currentCharacter->SetLastTarget(battle->enemyCharacters->at(0));
+                    }
+                }
+            case MoveTargetCategory_None:
+                break;
+        }
     }
 }

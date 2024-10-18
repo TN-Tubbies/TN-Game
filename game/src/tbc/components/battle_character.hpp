@@ -115,6 +115,11 @@ public:
     int GetLastDamageDealt() { return LastDamageDealt; }
     int GetLastDamageReceived();
     BattleCharacter *GetLastTarget() { return LastTarget; }
+    int GetHudWidth() { return HudWidth; }
+    int GetHudHeight() { return HudHeight; }
+    IsTarget GetIsTarget() { return isTarget; }
+    BattleSprite *GetSprite() { return battle_sprite; }
+    BattleButton *GetCurrentBattleButton() { return currentBattleButton; }
 
     // Setters ------------------------------------------------------------------------------------
     void SetName(std::string name) { this->name = name; }
@@ -134,7 +139,9 @@ public:
     void SetLastDamageDealt(int LastDamageDealt) { this->LastDamageDealt = LastDamageDealt; }
     void SetLastDamageReceived(int LastDamageReceived) { this->LastDamageReceived = LastDamageReceived; }
     void SetLastTarget(BattleCharacter *LastTarget) { this->LastTarget = LastTarget; }
+    void SetIsTarget(IsTarget isTarget) { this->isTarget = isTarget; }
 
+    // Methods ------------------------------------------------------------------------------------
     void TakeDamage(BattleCharacter *launcher, int damage);
     void TakeDamage(BattleCharacter *launcher, int damage, enum BattleElement IncomingElement);
     float GetElementReactionCoefficient(enum BattleElement IncomingElement);
@@ -153,13 +160,11 @@ public:
 
     void GeneralHudInit(std::string bg_path);
     void RenderHud(int x, int y);
-    int GetHudWidth() { return HudWidth; }
-    int GetHudHeight() { return HudHeight; }
 
     void RenderButtons();
 
     void RenderSprite();
-    BattleSprite *GetSprite() { return battle_sprite; }
+
 
     void HandleKeyUp(SDL_Event event, DisplayState *displayState);
     void HandleMouseHover(SDL_Event event);
