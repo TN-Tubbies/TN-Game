@@ -122,19 +122,69 @@ void Player::UpdateDisplayedPosition()
     else if (this->CurrentMap->IsAtEdge(orientation_x)) // Only x side
     {
         this->DisplayedX = x_dest;
-        this->DisplayedY = std::min(y_dest, (int)std::floor(HEIGHT / 2 - src.h / 2));
+
+        if (y_notch > 0)
+        {
+            this->DisplayedY = std::min(y_dest, (int)std::floor(HEIGHT / 2 - src.h / 2));
+        }
+        else if (y_notch < 0)
+        {
+            this->DisplayedY = std::max(y_dest, (int)std::floor(HEIGHT / 2 - src.h / 2));
+        }
+        else
+        {
+            this->DisplayedY = y_dest;
+        }
+
         this->CurrentMap->MoveMap(0, y_notch * this->Speed);
     }
     else if (this->CurrentMap->IsAtEdge(orientation_y)) // Only y side
     {
-        this->DisplayedX = std::min(x_dest, (int)std::floor(WIDTH / 2 - src.w / 2));
+        if (x_notch > 0)
+        {
+            this->DisplayedX = std::min(x_dest, (int)std::floor(WIDTH / 2 - src.h / 2));
+        }
+        else if (x_notch < 0)
+        {
+            this->DisplayedX = std::max(x_dest, (int)std::floor(WIDTH / 2 - src.h / 2));
+        }
+        else
+        {
+            this->DisplayedX = x_dest;
+        }
+
         this->DisplayedY = y_dest;
+
         this->CurrentMap->MoveMap(x_notch * this->Speed, 0);
     }
     else // Neither side
     {
-        this->DisplayedX = std::min(x_dest, (int)std::floor(WIDTH / 2 - src.w / 2));
-        this->DisplayedY = std::min(y_dest, (int)std::floor(HEIGHT / 2 - src.h / 2));
+        if (x_notch > 0)
+        {
+            this->DisplayedX = std::min(x_dest, (int)std::floor(WIDTH / 2 - src.w / 2));
+        }
+        else if (x_notch < 0)
+        {
+            this->DisplayedX = std::max(x_dest, (int)std::floor(WIDTH / 2 - src.w / 2));
+        }
+        else
+        {
+            this->DisplayedX = x_dest;
+        }
+
+        if (y_notch > 0)
+        {
+            this->DisplayedY = std::min(y_dest, (int)std::floor(HEIGHT / 2 - src.h / 2));
+        }
+        else if (y_notch < 0)
+        {
+            this->DisplayedY = std::max(y_dest, (int)std::floor(HEIGHT / 2 - src.h / 2));
+        }
+        else
+        {
+            this->DisplayedY = y_dest;
+        }
+
         this->CurrentMap->MoveMap(x_notch * this->Speed, y_notch * this->Speed);
     }
 }

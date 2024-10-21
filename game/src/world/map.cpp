@@ -350,19 +350,19 @@ bool Map::IsAtEdge(std::string orientation)
 {
     if (orientation == "x")
     {
-        return TopLeftCoordinates[0] == 0 || TopLeftCoordinates[0] + WIDTH >= this->Width * TILE_SIZE;
+        return TopLeftCoordinates[0] == 0 || -TopLeftCoordinates[0] + WIDTH >= this->Width * TILE_SIZE;
     }
     else if (orientation == "y")
     {
-        return TopLeftCoordinates[1] == 0 || TopLeftCoordinates[1] + HEIGHT >= this->Height * TILE_SIZE;
+        return TopLeftCoordinates[1] == 0 || -TopLeftCoordinates[1] + HEIGHT >= this->Height * TILE_SIZE;
     }
     else if (orientation == "x+")
     {
-        return TopLeftCoordinates[0] + WIDTH >= this->Width * TILE_SIZE;
+        return -TopLeftCoordinates[0] + WIDTH >= this->Width * TILE_SIZE;
     }
     else if (orientation == "y+")
     {
-        return TopLeftCoordinates[1] + HEIGHT >= this->Height * TILE_SIZE;
+        return -TopLeftCoordinates[1] + HEIGHT >= this->Height * TILE_SIZE;
     }
     else if (orientation == "x-")
     {
@@ -393,7 +393,7 @@ void Map::MoveMap(int delta_x, int delta_y)
 // Render
 void Map::Render(void)
 {
-    SDL_Rect dest = {.x = TopLeftCoordinates[0], .y = TopLeftCoordinates[1], .w = TopLeftCoordinates[0] + Width * TILE_SIZE, .h = TopLeftCoordinates[1] + Height * TILE_SIZE};
+    SDL_Rect dest = {.x = TopLeftCoordinates[0], .y = TopLeftCoordinates[1], .w = Width * TILE_SIZE, .h = Height * TILE_SIZE};
     SDL_RenderCopy(Get_Renderer(), FloorTexture, NULL, &dest);
     SDL_RenderCopy(Get_Renderer(), WallTexture, NULL, &dest);
     SDL_RenderCopy(Get_Renderer(), SkyTexture, NULL, &dest);
