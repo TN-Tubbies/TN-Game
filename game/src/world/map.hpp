@@ -15,6 +15,7 @@
 #include "../static/renderer.hpp"
 #include "../utility/sdl_compare_surfaces.hpp"
 #include "../audio/audio.hpp"
+#include "entity.hpp"
 #include "tile.hpp"
 
 class Map
@@ -34,14 +35,15 @@ private:
     int SkyTextureWidth, SkyTextureHeight;
 
     // Each std::vector<std::any> in LinkedMaps represents a link:
-    //              [MapName, source_x, source_y, destination_x, destination_y]
+    //       [MapName (std::string), source_x (int), source_y (int), destination_x (int), destination_y (int)]
     std::vector<std::vector<std::any>> LinkedMaps;
+
+    std::vector<Entity *> NPCs;
 
     Music *MapTheme;
 
 public:
     Map(std::string normalize_map_name);
-    Map(std::string data_file_path, std::string img_folder_path);
     ~Map();
 
     int GetHeight() const { return Height; }

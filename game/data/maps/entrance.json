@@ -14,5 +14,6 @@
 			"source": { "x": 8, "y": 8 },
 			"destination": { "x": 9, "y": 9 }
 		}
-	]
+	],
+	"NPCs": ["npc_test"]
 }

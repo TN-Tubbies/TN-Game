@@ -1,0 +1,7 @@
+{
+	"npc_name": "<npc name>",
+	"sprite_sheet_type": 0,
+	"sprite_path": "game/assets/images/sprites/<sprite name>.bmp",
+	"coordinates": [5, 5],
+	"speed": 3
+}

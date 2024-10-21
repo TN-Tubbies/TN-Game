@@ -1,8 +1,92 @@
 #include "player.hpp"
 
 Player::Player(int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType)
-    : Entity("Player", x, y, speed, sprite_path, SheetType)
 {
+    this->name = "Player";
+    this->x = x;
+    this->y = y;
+    this->IsWalking = false;
+    this->Speed = speed;
+    this->direction = SpriteDirection_Down;
+
+    // Selecting what are the sprite sizes --------------------------------------------------------
+
+    int ***sprite_sizes = NULL;
+
+    if (SheetType == SPRITE_SHEET_MAIN_CHARACTER)
+    {
+        int base_sprite_sizes[4][3][4] = {
+            {{66, 0, 26, 44}, {386, 128, 26, 44}, {416, 126, 28, 44}},
+            {{30, 0, 32, 44}, {254, 128, 30, 44}, {222, 126, 32, 46}},
+            {{2, 0, 26, 44}, {4, 128, 26, 44}, {35, 126, 28, 44}},
+            {{94, 0, 52, 44}, {576, 126, 30, 44}, {608, 128, 30, 44}}};
+
+        sprite_sizes = (int ***)malloc(4 * sizeof(int **));
+        for (int i = 0; i < 4; ++i)
+        {
+            sprite_sizes[i] = (int **)malloc(3 * sizeof(int *));
+            for (int j = 0; j < 3; ++j)
+            {
+                sprite_sizes[i][j] = (int *)malloc(4 * sizeof(int));
+                for (int k = 0; k < 4; ++k)
+                {
+                    sprite_sizes[i][j][k] = base_sprite_sizes[i][j][k];
+                }
+            }
+        }
+    }
+
+    // Load texture ------------------------------------------------------------------------------
+
+    SDL_Surface *surface = IMG_Load(sprite_path.c_str());
+    if (!surface)
+    {
+        std::cerr << "Error loading sprite: " << IMG_GetError() << std::endl;
+        return;
+    }
+    this->Sprites = SDL_CreateTextureFromSurface(Get_Renderer(), surface);
+    if (!this->Sprites)
+    {
+        std::cerr << "Error creating texture from sprite: " << SDL_GetError() << std::endl;
+        return;
+    }
+    SDL_QueryTexture(this->Sprites, NULL, NULL, &this->SpriteWidth, &this->SpriteHeight);
+    SDL_FreeSurface(surface);
+
+    SDL_Rect **srcs = (SDL_Rect **)malloc(4 * sizeof(SDL_Rect *));
+
+    for (int i = 0; i < 4; i++)
+    {
+        srcs[i] = (SDL_Rect *)malloc(3 * sizeof(SDL_Rect));
+    }
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            srcs[i][j].x = sprite_sizes[i][j][0];
+            srcs[i][j].y = sprite_sizes[i][j][1];
+            srcs[i][j].w = sprite_sizes[i][j][2];
+            srcs[i][j].h = sprite_sizes[i][j][3];
+        }
+    }
+    this->SpriteRect = srcs;
+    this->CurrentSpriteIndex = 0;
+
+    // Freeing allocated memory
+    if (SheetType == SPRITE_SHEET_MAIN_CHARACTER)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            for (int j = 0; j < 3; ++j)
+            {
+                free(sprite_sizes[i][j]);
+            }
+            free(sprite_sizes[i]);
+        }
+        free(sprite_sizes);
+    }
+
     this->CurrentMap = nullptr;
 
     SDL_Rect src = this->SpriteRect[this->direction][this->CurrentSpriteIndex];

@@ -1,6 +1,7 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
+#include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,6 +10,8 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+
+#include "../lib/json.hpp"
 
 #include "../static/renderer.hpp"
 #include "../defs.hpp"
@@ -21,9 +24,7 @@ protected:
     std::string name;
     // X and Y coordinates are in tiles
     // speed is in pixels
-    // angle is in radians
     int x, y;
-    float angle;
     bool IsWalking;
     int Speed;
     enum SpriteDirection direction;
@@ -35,14 +36,15 @@ protected:
 
 public:
     Entity();
+    Entity(std::string file_name);
     Entity(std::string _name, int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType);
+    ~Entity();
 
     std::string GetName() const { return name; }
     int GetX() const { return x; }
     int GetY() const { return y; }
     int GetXTile() const;
     int GetYTile() const;
-    float GetAngle() const { return angle; }
 
     void Render();
     void UpdateSprite();
