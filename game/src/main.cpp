@@ -39,7 +39,7 @@ int main(void)
     int player_y = 0;
     int player_speed = 7; // In pixels per frame
     std::string player_sprite_path = "game/assets/images/sprites/Conference_woman_32x32.bmp";
-    Player *player = new Player(player_x, player_y, player_speed, player_sprite_path, SPRITE_SHEET_MAIN_CHARACTER);
+    Player *player = new Player(player_x, player_y, player_speed, player_sprite_path, SpriteSheetType_MainCharacter);
     World *hub_world = new World("game/data/worlds/hub.json", player);
     World *current_world = hub_world;
     player->TeleportTo(DEFAULT_POSITION_X, DEFAULT_POSITION_Y);

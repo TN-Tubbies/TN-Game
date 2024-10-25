@@ -17,7 +17,7 @@ private:
     Map *CurrentMap;
 
 public:
-    Player(int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType);
+    Player(int x, int y, int speed, std::string sprite_path, enum SpriteSheetType SheetType);
     ~Player();
 
     std::array<int, 2> GetMoveNotches() { return move_notches; }

@@ -15,25 +15,4 @@
 #define DEFAULT_POSITION_X 5
 #define DEFAULT_POSITION_Y 5
 
-enum DisplayState
-{
-    DISPLAY_STATE_MENU,
-    MAP,
-    BATTLE,
-    QUIT
-};
-
-enum SpriteDirection
-{
-    SpriteDirection_Left,
-    SpriteDirection_Right,
-    SpriteDirection_Up,
-    SpriteDirection_Down
-};
-
-enum SpriteSheetTypes
-{
-    SPRITE_SHEET_MAIN_CHARACTER
-};
-
 #endif

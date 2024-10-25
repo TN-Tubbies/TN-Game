@@ -11,7 +11,7 @@
 #include <SDL2/SDL_image.h>
 
 #include "../static/renderer.hpp"
-#include "../defs.hpp"
+#include "world_enums.hpp"
 
 // ------------------------------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ protected:
 
 public:
     Entity();
-    Entity(std::string _name, int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType);
+    Entity(std::string _name, int x, int y, int speed, std::string sprite_path, enum SpriteSheetType SheetType);
 
     std::string GetName() const { return name; }
     int GetX() const { return x; }

@@ -1,6 +1,6 @@
 #include "player.hpp"
 
-Player::Player(int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType)
+Player::Player(int x, int y, int speed, std::string sprite_path, enum SpriteSheetType SheetType)
     : Entity("Player", x, y, speed, sprite_path, SheetType)
 {
     this->CurrentMap = nullptr;

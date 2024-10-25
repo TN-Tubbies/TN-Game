@@ -17,7 +17,7 @@ Entity::Entity()
     this->CurrentSpriteIndex = 0;
     this->direction = SpriteDirection_Down;
 }
-Entity::Entity(std::string _name, int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType)
+Entity::Entity(std::string _name, int x, int y, int speed, std::string sprite_path, enum SpriteSheetType SheetType)
 {
     this->name = _name;
     this->x = x;
@@ -31,7 +31,7 @@ Entity::Entity(std::string _name, int x, int y, int speed, std::string sprite_pa
 
     int ***sprite_sizes = NULL;
 
-    if (SheetType == SPRITE_SHEET_MAIN_CHARACTER)
+    if (SheetType == SpriteSheetType_MainCharacter)
     {
         int base_sprite_sizes[4][3][4] = {
             {{66, 0, 26, 44}, {386, 128, 26, 44}, {416, 126, 28, 44}},
@@ -92,7 +92,7 @@ Entity::Entity(std::string _name, int x, int y, int speed, std::string sprite_pa
     this->CurrentSpriteIndex = 0;
 
     // Freeing allocated memory
-    if (SheetType == SPRITE_SHEET_MAIN_CHARACTER)
+    if (SheetType == SpriteSheetType_MainCharacter)
     {
         for (int i = 0; i < 4; ++i)
         {
