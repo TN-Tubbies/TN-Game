@@ -12,13 +12,7 @@
 
 #include "../../static/renderer.hpp"
 #include "../../static/ttf.hpp"
-
-enum IsTarget
-{
-    primary,
-    secondary,
-    none
-};
+#include "../battle_enumerators.hpp"
 
 class BattleMoveActive;
 

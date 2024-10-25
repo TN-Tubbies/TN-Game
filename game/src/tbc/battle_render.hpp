@@ -10,6 +10,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 
 #include "battle_system.hpp"
+#include "battle_enumerators.hpp"
 
 void RenderBattle(Battle_System *battle);
 
@@ -18,5 +19,7 @@ void BattleHandleMouseHover(Battle_System *battle, SDL_Event event);
 void BattleHandleMouseClick(Battle_System *battle, SDL_Event event);
 
 void OrganizeSpritesCoordinates(Battle_System *battle);
+
+void SetTargets(Battle_System *battle);
 
 #endif // BATTLE_RENDER_HPP

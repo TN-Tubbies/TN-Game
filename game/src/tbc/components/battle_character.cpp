@@ -5,7 +5,8 @@
 BattleCharacter::BattleCharacter()
 {
     this->currentBattleButton = NULL;
-    this->isTarget = none;
+    this->isTarget = IsNotTarget;
+    this->LastTarget = NULL;
 }
 
 BattleCharacter::~BattleCharacter()
@@ -525,7 +526,7 @@ void BattleCharacter::RenderHud(int x, int y)
                 int cost_height = bar_height + (min_bar_height - max_bar_height) * currentBattleButton->GetMove()->getCost() / 100;
                 boxRGBA(Get_Renderer(), x + x_offset - 28, bar_height, x + x_offset - 28 + bar_thickness - 5, cost_height, 255, 0, 0, 100);
             }
-            if (currentBattleButton->GetMove()->getCost() < 0)
+            if (currentBattleButton->GetMove()->getCost() < 0 && (SkillBar - currentBattleButton->GetMove()->getCost()) <= 100)
             {
                 int cost_height = bar_height + (min_bar_height - max_bar_height) * currentBattleButton->GetMove()->getCost() / 100;
                 boxRGBA(Get_Renderer(), x + x_offset - 28, bar_height, x + x_offset - 28 + bar_thickness - 5, cost_height, 0, 255, 0, 100);
