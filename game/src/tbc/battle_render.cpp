@@ -1,7 +1,5 @@
 #include "battle_render.hpp"
 #include "battle_declarations.hpp"
-#include <SDL2/SDL_render.h>
-#include <iostream>
 
 void RenderBattle(Battle_System *battle)
 {
@@ -150,6 +148,7 @@ void SetTargets(Battle_System *battle) {
                         currentCharacter->SetLastTarget(battle->playableCharacters->at(0));
                     }
                 }
+                break;
             case MoveTargetCategory_OneEnemy:
                 if (currentCharacter->GetLastTarget()) {
                     if (!currentCharacter->GetLastTarget()->IsFriendly()) {
@@ -158,6 +157,7 @@ void SetTargets(Battle_System *battle) {
                         currentCharacter->SetLastTarget(battle->enemyCharacters->at(0));
                     }
                 }
+                break;
             case MoveTargetCategory_None:
                 break;
         }

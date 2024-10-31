@@ -20,11 +20,12 @@ BattleButton::BattleButton(std::string logo_path, std::string bg_path, int x2, i
     this->img_x = x2 - button_width;
     this->img_y = y2 - button_height;
     this->key = key;
-    if (this->key == NULL)
+    if (this->key == SDLK_UNKNOWN)
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to get key: %s", SDL_GetError());
     }
-    SDL_Surface *key_surf = TTF_RenderUTF8_Blended(Get_Roboto(16), SDL_GetKeyName(key), {255, 255, 255});
+    SDL_Color color = {255, 255, 255, 255};
+    SDL_Surface *key_surf = TTF_RenderUTF8_Blended(Get_Roboto(16), SDL_GetKeyName(key), color);
     if (key_surf == NULL)
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to render text: %s", SDL_GetError());

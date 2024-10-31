@@ -57,6 +57,7 @@ class UltimateButton : public BattleButton
 public:
     UltimateButton(std::string logo_path, std::string bg_path, int x2, int y2, SDL_KeyCode key, BattleMoveActive *move) : BattleButton(logo_path, bg_path, x2, y2, key, move) {}
     ~UltimateButton();
+    using BattleButton::Render;
     void Render(int charge, bool usable);
 };
 
