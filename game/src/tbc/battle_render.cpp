@@ -146,7 +146,11 @@ void SetTargets(Battle_System *battle) {
                         currentCharacter->GetLastTarget()->SetIsTarget(IsPrimaryTarget);
                     } else {
                         currentCharacter->SetLastTarget(battle->playableCharacters->at(0));
+                        currentCharacter->GetLastTarget()->SetIsTarget(IsPrimaryTarget);
                     }
+                } else {
+                    currentCharacter->SetLastTarget(battle->playableCharacters->at(0));
+                    currentCharacter->GetLastTarget()->SetIsTarget(IsPrimaryTarget);
                 }
                 break;
             case MoveTargetCategory_OneEnemy:
@@ -155,7 +159,11 @@ void SetTargets(Battle_System *battle) {
                         currentCharacter->GetLastTarget()->SetIsTarget(IsPrimaryTarget);
                     } else {
                         currentCharacter->SetLastTarget(battle->enemyCharacters->at(0));
+                        currentCharacter->GetLastTarget()->SetIsTarget(IsPrimaryTarget);
                     }
+                } else {
+                    currentCharacter->SetLastTarget(battle->enemyCharacters->at(0));
+                    currentCharacter->GetLastTarget()->SetIsTarget(IsPrimaryTarget);
                 }
                 break;
             case MoveTargetCategory_None:
