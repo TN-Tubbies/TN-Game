@@ -66,6 +66,8 @@ int main(void)
 
     while (running)
     {
+        Uint32 delta_time_before_loop = GetDeltaTime();
+
         if (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -182,6 +184,12 @@ int main(void)
 
         //// Update Delta ////
         SetDeltaTime(SDL_GetTicks64());
+        Uint32 delta_time_after_loop = GetDeltaTime();
+        while (delta_time_after_loop - delta_time_before_loop <= FRAMERATE)
+        {
+            SetDeltaTime(SDL_GetTicks64());
+            delta_time_after_loop = GetDeltaTime();
+        }
     }
 
     // SDL_DestroyTexture(modernUI);
