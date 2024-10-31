@@ -82,7 +82,7 @@ BattleMoveActive *GetZerachielMove2(void)
         "Infaillible",
         "Consomme 20% de la BS.\nNettoie ses lunettes en plein combat, retirant la majorité des malus qui l'incombent et augmentant de M% son attaque.",
         BattleElement_Light,
-        MoveTargetCategory_Self,
+        MoveTargetCategory_OneAlly,
         ZerachielMove2Effect,
         20,
         false,

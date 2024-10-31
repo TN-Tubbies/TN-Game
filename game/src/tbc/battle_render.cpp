@@ -1,5 +1,6 @@
 #include "battle_render.hpp"
 #include "battle_declarations.hpp"
+#include "battle_enumerators.hpp"
 
 void RenderBattle(Battle_System *battle)
 {
@@ -69,10 +70,43 @@ void BattleHandleMouseHover(Battle_System *battle, SDL_Event event)
     }
 }
 
+bool isMouseHovering(int mouse_x, int mouse_y, BattleCharacter *character) {
+    return (mouse_x >= character->GetSprite()->GetX() && mouse_x <= character->GetSprite()->GetX() + character->GetSprite()->GetWidth() && mouse_y >= character->GetSprite()->GetY() && mouse_y <= character->GetSprite()->GetY() + character->GetSprite()->GetHeight());
+}
+
+void selectTargetwithMouse(Battle_System *battle, SDL_Event event) {
+    int x = event.motion.x;
+    int y = event.motion.y;
+
+    BattleCharacter *currentCharacter = GetCharacterFromList(battle->currentPriorityList, 1);
+    
+    switch (currentCharacter->GetCurrentBattleButton()->GetMove()->getMoveTarget()) {
+        case MoveTargetCategory_OneAlly:
+            for (BattleCharacter *character : *battle->playableCharacters) {
+                if (isMouseHovering(x, y, character)) {
+                    character->SetIsTarget(IsPrimaryTarget);
+                    currentCharacter->SetLastTarget(character);
+                }
+            }
+            break;
+        case MoveTargetCategory_OneEnemy:
+            for (BattleCharacter *character : *battle->enemyCharacters) {
+                if (isMouseHovering(x, y, character)) {
+                    character->SetIsTarget(IsPrimaryTarget);
+                    currentCharacter->SetLastTarget(character);
+                }
+            }
+            break;
+        default:
+            break;
+    }
+}
+
 void BattleHandleMouseClick(Battle_System *battle, SDL_Event event)
 {
     if (battle->currentPriorityList->size > 0)
     {
+        selectTargetwithMouse(battle, event);
         BattleCharacter *currentCharacter = GetCharacterFromList(battle->currentPriorityList, 1);
         if (currentCharacter->IsFriendly())
         {
