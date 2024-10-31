@@ -225,19 +225,19 @@ void BattleCharacter::ChangeStat(enum CharacterStat stat, int notch)
         switch (notch)
         {
         case -1:
-            coef = 2 / 3;
+            coef = (float)2 / 3;
             break;
         case -2:
-            coef = 1 / 2;
+            coef = (float)1 / 2;
             break;
         case -3:
-            coef = 2 / 5;
+            coef = (float)2 / 5;
             break;
         case -4:
-            coef = 1 / 3;
+            coef = (float)1 / 3;
             break;
         case -5:
-            coef = 2 / 7;
+            coef = (float)2 / 7;
             break;
         default:
             coef = 1;
@@ -595,8 +595,8 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
         *displayState = DISPLAY_STATE_MENU;
         break;
     default:
-        if (currentBattleButton)
-        {
+        //if (currentBattleButton) (PLEASE GIT, DON'T ADD THIS LINE AT EACH MERGE : that's why i don't delete it and comment it instead)
+        //{
             if (currentBattleButton)
             {
                 if (currentBattleButton->GetKey() == event.key.keysym.sym)
@@ -638,7 +638,7 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
                 }
                 break;
             }
-        }
+        //} (REALLY GIT IF YOU DO IT AGAIN...)
     }
 }
 
