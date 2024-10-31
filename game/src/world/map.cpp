@@ -14,9 +14,6 @@ Map::Map(std::string normalize_map_name)
     std::string data_file_path = "game/data/maps/" + normalize_map_name + ".json";
     std::string img_folder_path = "game/assets/images/maps/" + normalize_map_name;
 
-    this->ID = LastMapID;
-    LastMapID++;
-
     // Extract the data ---------------------------------------------------------------------------
 
     std::ifstream json_file_unparsed(data_file_path.c_str());
@@ -35,10 +32,10 @@ Map::Map(std::string normalize_map_name)
 
     // Processing links
     std::vector<nlohmann::json> links = json_file["links"];
-    std::vector<std::vector<int>> processed_links;
+    std::vector<std::vector<std::any>> processed_links;
     for (unsigned int i = 0; i < links.size(); i++)
     {
-        std::vector<int> processed_link;
+        std::vector<std::any> processed_link;
         processed_link.push_back(links[i]["Map_ID"]);
         processed_link.push_back(links[i]["source"]["x"]);
         processed_link.push_back(links[i]["source"]["y"]);
@@ -179,9 +176,6 @@ Map::Map(std::string normalize_map_name)
  */
 Map::Map(std::string data_file_path, std::string img_folder_path)
 {
-    this->ID = LastMapID;
-    LastMapID++;
-
     // Extract the data ---------------------------------------------------------------------------
 
     std::ifstream json_file_unparsed(data_file_path.c_str());
@@ -200,10 +194,10 @@ Map::Map(std::string data_file_path, std::string img_folder_path)
 
     // Processing links
     std::vector<nlohmann::json> links = json_file["links"];
-    std::vector<std::vector<int>> processed_links;
+    std::vector<std::vector<std::any>> processed_links;
     for (unsigned int i = 0; i < links.size(); i++)
     {
-        std::vector<int> processed_link;
+        std::vector<std::any> processed_link;
         processed_link.push_back(links[i]["Map_ID"]);
         processed_link.push_back(links[i]["source"]["x"]);
         processed_link.push_back(links[i]["source"]["y"]);
@@ -358,6 +352,21 @@ std::array<int, 2> Map::GetTile(int mouse_x, int mouse_y)
 
 // ------------------------------------------------------------------------------------------------
 
+bool Map::IsAtEdge(std::string orientation)
+{
+    if (orientation == "x")
+    {
+        return TL_TileID[0] == 0 || BR_TileID[0] == WIDTH * TILE_SIZE;
+    }
+    else if (orientation == "y")
+    {
+        return TL_TileID[1] == 0 || BR_TileID[1] == HEIGHT * TILE_SIZE;
+    }
+    else
+    {
+        return false;
+    }
+}
 bool Map::IsAtEdge()
 {
     return TL_TileID[0] == 0 || TL_TileID[1] == 0 || BR_TileID[0] == WIDTH * TILE_SIZE || BR_TileID[1] == HEIGHT * TILE_SIZE;

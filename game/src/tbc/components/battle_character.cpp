@@ -2,7 +2,8 @@
 
 // ------------------------------------------------------------------------------------------------
 
-BattleCharacter::BattleCharacter() {
+BattleCharacter::BattleCharacter()
+{
     this->currentBattleButton = NULL;
     this->isTarget = IsNotTarget;
     this->LastTarget = NULL;
@@ -187,11 +188,13 @@ void BattleCharacter::AddToHP(int quantity)
     SDL_Surface *hp_surf;
     if (HP < MaxHP / 4)
     {
-        hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(10), hp_string.c_str(), (SDL_Color){255, 0, 0, 255});
+        SDL_Color color = {255, 0, 0, 255};
+        hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(10), hp_string.c_str(), color);
     }
     else
     {
-        hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(10), hp_string.c_str(), (SDL_Color){255, 255, 255, 255});
+        SDL_Color color = {255, 255, 255, 255};
+        hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(10), hp_string.c_str(), color);
     }
     this->DisplayedHPHeight = hp_surf->h;
     this->DisplayedHPWidth = hp_surf->w;
@@ -403,13 +406,16 @@ void BattleCharacter::GeneralHudInit(std::string bg_path)
     this->HudBG = bg;
 
     SDL_Surface *name_surf;
+    SDL_Color color;
     if (isFriendly)
     {
-        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(32), this->name.c_str(), (SDL_Color){255, 255, 255, 255});
+        color = {255, 255, 255, 255};
+        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(32), this->name.c_str(), color);
     }
     else
     {
-        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(32), this->name.c_str(), (SDL_Color){255, 0, 0, 255});
+        color = {255, 0, 0, 255};
+        name_surf = TTF_RenderUTF8_Solid(Get_Jersey(32), this->name.c_str(), color);
     }
     if (name_surf == NULL)
     {
@@ -428,7 +434,8 @@ void BattleCharacter::GeneralHudInit(std::string bg_path)
     SDL_FreeSurface(name_surf);
 
     std::string hp_string = std::to_string(HP);
-    SDL_Surface *hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(14), hp_string.c_str(), (SDL_Color){255, 255, 255, 255});
+    color = {255, 255, 255, 255};
+    SDL_Surface *hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(14), hp_string.c_str(), color);
     if (hp_surf == NULL)
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit, hp_surf: %s", SDL_GetError());
@@ -445,7 +452,8 @@ void BattleCharacter::GeneralHudInit(std::string bg_path)
     SDL_FreeSurface(hp_surf);
 
     std::string max_hp_string = " / " + std::to_string(MaxHP);
-    SDL_Surface *max_hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(14), max_hp_string.c_str(), (SDL_Color){255, 255, 255, 255});
+    color = {255, 255, 255, 255};
+    SDL_Surface *max_hp_surf = TTF_RenderUTF8_Blended(Get_Roboto(14), max_hp_string.c_str(), color);
     if (max_hp_surf == NULL)
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error in BattleCharacter::GeneralHudInit, max_hp_surf: %s", SDL_GetError());
@@ -468,18 +476,15 @@ void BattleCharacter::RenderHud(int x, int y)
     int bar_thickness = 12;
     int x_offset = 64;
 
-
     // BG //
     SDL_Rect bg_rect = {x, y, HudWidth, HudHeight};
     SDL_RenderCopy(Get_Renderer(), HudBG, NULL, &bg_rect);
-
 
     // Name //
     int center_name_x = x + HudWidth / 2 - DisplayedNameWidth / 2;
     SDL_Rect name_rect = {center_name_x, y + y_offset, DisplayedNameWidth, DisplayedNameHeight};
     SDL_RenderCopy(Get_Renderer(), DisplayedName, NULL, &name_rect);
     y_offset += DisplayedNameHeight + 10;
-
 
     // HP //
     rectangleColor(Get_Renderer(), x + x_offset + 5, y + y_offset, x + HudWidth - x_offset - 5, y + y_offset + bar_thickness, 0xFFFFFFFF);
@@ -514,7 +519,8 @@ void BattleCharacter::RenderHud(int x, int y)
         {
             boxColor(Get_Renderer(), x + x_offset - 28, min_bar_height, x + x_offset - 28 + bar_thickness - 5, bar_height, 0xFFFFFFFF);
         }
-        if (currentBattleButton) {
+        if (currentBattleButton)
+        {
             if (currentBattleButton->GetMove()->getCost() > 0)
             {
                 int cost_height = bar_height + (min_bar_height - max_bar_height) * currentBattleButton->GetMove()->getCost() / 100;
@@ -527,23 +533,23 @@ void BattleCharacter::RenderHud(int x, int y)
             }
         }
     }
-
-
 }
-
 
 void BattleCharacter::RenderButtons()
 {
-    for (BattleButton *battleButton:BattleButtons)
+    for (BattleButton *battleButton : BattleButtons)
     {
         if (currentBattleButton == battleButton)
         {
             battleButton->RenderHover();
         }
-        if (dynamic_cast<UltimateButton*>(battleButton)){
-            UltimateButton* ultimateButton = dynamic_cast<UltimateButton*>(battleButton);
+        if (dynamic_cast<UltimateButton *>(battleButton))
+        {
+            UltimateButton *ultimateButton = dynamic_cast<UltimateButton *>(battleButton);
             ultimateButton->Render(UltimateBar, buttonIsUsable(ultimateButton));
-        } else {
+        }
+        else
+        {
             battleButton->Render(buttonIsUsable(battleButton));
         }
     }
@@ -554,7 +560,8 @@ void BattleCharacter::RenderSprite()
     battle_sprite->Render(isTarget);
 }
 
-bool BattleCharacter::buttonIsUsable(BattleButton *button) {
+bool BattleCharacter::buttonIsUsable(BattleButton *button)
+{
     if (button->GetMove()->getCost() > 0)
     {
         if (SkillBar >= button->GetMove()->getCost())
@@ -574,7 +581,7 @@ bool BattleCharacter::buttonIsUsable(BattleButton *button) {
     {
         return true;
     }
-    else 
+    else
     {
         return false;
     }
@@ -590,42 +597,49 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
     default:
         if (currentBattleButton)
         {
-        if (currentBattleButton->GetKey() == event.key.keysym.sym)
-        {
-            std::cout << "Button Pressed: " << currentBattleButton->GetMove()->getName().c_str() << std::endl;
-        } else {
-            for (unsigned int i = 0; i < BattleButtons.size(); i++)
+            if (currentBattleButton)
             {
-            if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
-            {
-                if (buttonIsUsable(BattleButtons[i]))
+                if (currentBattleButton->GetKey() == event.key.keysym.sym)
                 {
-                    currentBattleButton = BattleButtons[i];
+                    std::cout << "Button Pressed: " << currentBattleButton->GetMove()->getName().c_str() << std::endl;
+                }
+                else
+                {
+                    for (unsigned int i = 0; i < BattleButtons.size(); i++)
+                    {
+                        if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
+                        {
+                            if (buttonIsUsable(BattleButtons[i]))
+                            {
+                                currentBattleButton = BattleButtons[i];
+                            }
+                        }
+                    }
                 }
             }
+            else
+            {
+                for (unsigned int i = 0; i < BattleButtons.size(); i++)
+                {
+                    for (unsigned int i = 0; i < BattleButtons.size(); i++)
+                    {
+                        if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
+                        {
+                            currentBattleButton = BattleButtons[i];
+                        }
+                    }
+                    for (unsigned int i = 0; i < BattleButtons.size(); i++)
+                    {
+                        if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
+                        {
+                            currentBattleButton = BattleButtons[i];
+                        }
+                    }
+                }
+                break;
             }
         }
-        } else {
-        for (unsigned int i = 0; i < BattleButtons.size(); i++)
-        {
-            for (unsigned int i = 0; i < BattleButtons.size(); i++)
-            {
-                if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
-                {
-                    currentBattleButton = BattleButtons[i];
-                }
-            }
-            for (unsigned int i = 0; i < BattleButtons.size(); i++)
-            {
-                if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
-                {
-                    currentBattleButton = BattleButtons[i];
-                }
-            }
-        }
-        break;
     }
-}
 }
 
 bool isMouseHovering(int mouse_x, int mouse_y, BattleButton *button)
@@ -638,16 +652,16 @@ void BattleCharacter::HandleMouseHover(SDL_Event event)
     int x = event.motion.x;
     int y = event.motion.y;
     for (unsigned int i = 0; i < BattleButtons.size(); i++)
-    for (unsigned int i = 0; i < BattleButtons.size(); i++)
-    {
-        if (isMouseHovering(x,y,BattleButtons[i]))
+        for (unsigned int i = 0; i < BattleButtons.size(); i++)
         {
-            if (buttonIsUsable(BattleButtons[i]))
+            if (isMouseHovering(x, y, BattleButtons[i]))
             {
-                currentBattleButton = BattleButtons[i];
+                if (buttonIsUsable(BattleButtons[i]))
+                {
+                    currentBattleButton = BattleButtons[i];
+                }
             }
         }
-    }
 }
 
 void BattleCharacter::HandleMouseClick(SDL_Event event)
@@ -655,15 +669,15 @@ void BattleCharacter::HandleMouseClick(SDL_Event event)
     int x = event.button.x;
     int y = event.button.y;
     for (unsigned int i = 0; i < BattleButtons.size(); i++)
-    for (unsigned int i = 0; i < BattleButtons.size(); i++)
-    {
-        if (isMouseHovering(x, y, BattleButtons[i]))
-        if (isMouseHovering(x, y, BattleButtons[i]))
+        for (unsigned int i = 0; i < BattleButtons.size(); i++)
         {
-            if (buttonIsUsable(BattleButtons[i]))
-            {
-                std::cout << "Button Pressed: " << BattleButtons[i]->GetMove()->getName().c_str() << std::endl;
-            }
+            if (isMouseHovering(x, y, BattleButtons[i]))
+                if (isMouseHovering(x, y, BattleButtons[i]))
+                {
+                    if (buttonIsUsable(BattleButtons[i]))
+                    {
+                        std::cout << "Button Pressed: " << BattleButtons[i]->GetMove()->getName().c_str() << std::endl;
+                    }
+                }
         }
-    }
 }

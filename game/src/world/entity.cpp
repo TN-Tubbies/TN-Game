@@ -161,7 +161,7 @@ void Entity::MoveTo(int x, int y)
         this->IsWalking = true;
 
         // Normalize the direction vector
-        float vector_length = (float)sqrt(MoveVector[0] ^ 2 + MoveVector[1] ^ 2);
+        float vector_length = (float)sqrt((MoveVector[0] ^ 2) + (MoveVector[1] ^ 2));
         MoveVector[0] /= vector_length;
         MoveVector[1] /= vector_length;
 

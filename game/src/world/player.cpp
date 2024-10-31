@@ -8,6 +8,8 @@ Player::Player(int x, int y, int speed, std::string sprite_path, enum SpriteShee
     SDL_Rect src = this->SpriteRect[this->direction][this->CurrentSpriteIndex];
     this->DisplayedX = std::floor(WIDTH / 2 - src.w / 2);
     this->DisplayedY = std::floor(HEIGHT / 2 - src.h / 2);
+
+    this->move_notches = {0, 0};
 }
 
 Player::~Player()
@@ -30,86 +32,81 @@ Player::~Player()
 
 // ------------------------------------------------------------------------------------------------
 
-void Player::MoveTo(int mouse_x, int mouse_y)
+void Player::Move()
 {
-    // TODO: Implement the collision detection
+    // TODO: Collision detection
 
-    std::array<int, 2> TargettedTile = this->CurrentMap->GetTile(mouse_x, mouse_y);
-    std::array<float, 2> MoveVector = {(float)(TargettedTile[0] - this->x), (float)(TargettedTile[1] - this->y)};
+    // Get Ticks
+    Uint32 delta_time_before_move = GetDeltaTime();
 
-    if (DEBUG_MODE)
+    int x_notch = this->move_notches[0];
+    int y_notch = this->move_notches[1];
+
+    // In pixels
+    SDL_Rect src = this->SpriteRect[this->direction][this->CurrentSpriteIndex];
+    int x_dest = this->DisplayedX + x_notch * this->Speed;
+    int y_dest = this->DisplayedY + y_notch * this->Speed;
+
+    // Get the destination tile
+    int x_dest_tile = (int)std::floor(x_dest / TILE_SIZE);
+    int y_dest_tile = (int)std::floor(y_dest / TILE_SIZE);
+
+    if (x_dest_tile < 0 || x_dest + src.w >= this->CurrentMap->GetWidth() * TILE_SIZE)
     {
-        std::clog << "Player previously at (" << this->x << ", " << this->y << ")" << std::endl;
-        std::clog << "Targetted Tile (" << TargettedTile[0] << ", " << TargettedTile[1] << ")" << std::endl;
-        std::clog << "MoveVector (" << MoveVector[0] << ", " << MoveVector[1] << ")" << std::endl;
-    }
-
-    if (MoveVector[0] != 0 || MoveVector[1] != 0)
-    {
-        this->angle = std::atan((float)(MoveVector[1] / MoveVector[0]));
-
-        // Calculating notches
-        int x_notch = 0;
-        if (std::abs(MoveVector[0] * TILE_SIZE) >= this->Speed)
-        {
-            x_notch = std::floor(this->Speed * copysign(1.0, MoveVector[0]));
-            std::clog << "x_notch corresponds to speed" << std::endl;
-        }
-        else
-        {
-            x_notch = std::floor(MoveVector[0] * TILE_SIZE);
-            std::clog << "x_notch corresponds to MoveVector" << std::endl;
-        }
-        int y_notch = 0;
-        if (std::abs(MoveVector[1] * TILE_SIZE) >= this->Speed)
-        {
-            y_notch = std::floor(this->Speed * copysign(1.0, MoveVector[1]));
-            std::clog << "y_notch corresponds to speed" << std::endl;
-        }
-        else
-        {
-            y_notch = std::floor(MoveVector[1] * TILE_SIZE);
-            std::clog << "y_notch corresponds to MoveVector" << std::endl;
-        }
-
-        // Different prompts depending on the placement of the map
-        if (this->CurrentMap->IsAtEdge())
-        {
-            std::clog << "Map edge detected. Player will move." << std::endl;
-
-            this->DisplayedX += x_notch;
-            this->DisplayedY += y_notch;
-
-            SDL_Rect src = this->SpriteRect[this->direction][this->CurrentSpriteIndex];
-            this->x = (int)std::floor(this->DisplayedX / TILE_SIZE);
-            this->y = (int)std::floor((this->DisplayedY + (src.h - TILE_SIZE)) / TILE_SIZE);
-        }
-        else
-        {
-            std::clog << "Map edge  not detected." << std::endl;
-
-            this->x = this->CurrentMap->GetTLTileXIndex() + (int)(std::floor(WIDTH / 2) * TILE_SIZE);
-            this->y = this->CurrentMap->GetTLTileYIndex() + (int)(std::floor(HEIGHT / 2) * TILE_SIZE);
-
-            SDL_Rect src = this->SpriteRect[this->direction][this->CurrentSpriteIndex];
-            this->DisplayedX = std::floor(WIDTH / 2 - src.w / 2);
-            this->DisplayedY = std::floor(HEIGHT / 2 - src.h / 2);
-            this->CurrentMap->MoveMap(x_notch, y_notch);
-        }
-
-        // To prevent overlapping
-        SDL_Delay(FRAMERATE);
-
         if (DEBUG_MODE)
         {
-            std::clog << "Mouse clicked at (" << TargettedTile[0] << "," << TargettedTile[1] << ")" << std::endl;
-            std::clog << "Player moved to (" << this->x << ", " << this->y << ")" << std::endl;
-            std::clog << "Angle: " << this->angle << ", X Notch: " << x_notch << ", Y Notch: " << y_notch << std::endl;
-            std::clog << std::endl;
+            std::clog << "Player: Destination tile out of map bounds (x)." << std::endl;
+        }
+    }
+    else if (y_dest_tile < 0 || y_dest + src.h >= this->CurrentMap->GetHeight() * TILE_SIZE)
+    {
+        if (DEBUG_MODE)
+        {
+            std::clog << "Player: Destination tile out of map bounds (y)." << std::endl;
+        }
+    }
+    else
+    {
+        if (DEBUG_MODE)
+        {
+            std::clog << "Player: Moving to tile (" << x_dest_tile << ", " << y_dest_tile << ")." << std::endl;
+        }
+
+        this->x += x_notch;
+        this->y += y_notch;
+
+        // Update relative positions
+        if (this->CurrentMap->IsAtEdge()) // Both sides
+        {
+            this->DisplayedX = x_dest;
+            this->DisplayedY = y_dest;
+        }
+        else if (this->CurrentMap->IsAtEdge("x")) // Only x side
+        {
+            this->DisplayedX = x_dest;
+            this->DisplayedY = std::floor(HEIGHT / 2 - src.h / 2);
+        }
+        else if (this->CurrentMap->IsAtEdge("y")) // Only y side
+        {
+            this->DisplayedX = std::floor(WIDTH / 2 - src.w / 2);
+            this->DisplayedY = y_dest;
+        }
+        else // Neither side
+        {
+            this->DisplayedX = std::floor(WIDTH / 2 - src.w / 2);
+            this->DisplayedY = std::floor(HEIGHT / 2 - src.h / 2);
         }
     }
 
     this->UpdateSprite();
+
+    // Wait
+    Uint32 delta_time_after_move = GetDeltaTime();
+    while (delta_time_after_move - delta_time_before_move <= FRAMERATE)
+    {
+        SetDeltaTime(SDL_GetTicks64());
+        delta_time_after_move = GetDeltaTime();
+    }
 }
 
 // ------------------------------------------------------------------------------------------------

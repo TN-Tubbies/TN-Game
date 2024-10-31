@@ -23,9 +23,8 @@ public:
 
     Player *GetPlayer() const { return player; }
 
+    void HandleKeyDown(SDL_Event event);
     void HandleKeyUp(SDL_Event event);
-    void HandleMouseClickUp(SDL_Event event);
-    void HandleMouseClickDown(SDL_Event event);
 };
 
 #endif

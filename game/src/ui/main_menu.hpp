@@ -42,14 +42,15 @@ private:
     int title_width;
     int title_height;
     std::vector<MenuButton> *buttons;
-    int current_selection;
+    unsigned int current_selection;
+
 public:
     MainMenu();
     ~MainMenu();
     void Render();
     void HandleKeyUp(SDL_Event event, DisplayState *displayState);
-    void HandleMouseHover(SDL_Event event);
-    void HandleMouseClick(SDL_Event event, DisplayState *displayState);
+    void HandleMouseHover();
+    void HandleMouseClick(DisplayState *displayState);
 };
 
 #endif // MAIN_MENU_HPP
