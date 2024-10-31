@@ -21,5 +21,6 @@ void BattleHandleMouseClick(Battle_System *battle, SDL_Event event);
 void OrganizeSpritesCoordinates(Battle_System *battle);
 
 void SetTargets(Battle_System *battle);
+void ChangeMainTarget(Battle_System *battle, SDL_Event event);
 
 #endif // BATTLE_RENDER_HPP

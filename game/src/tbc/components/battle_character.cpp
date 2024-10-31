@@ -589,56 +589,45 @@ bool BattleCharacter::buttonIsUsable(BattleButton *button)
 
 void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
 {
-    switch (event.key.keysym.sym)
+    if (currentBattleButton)
     {
-    case SDLK_ESCAPE:
-        *displayState = DISPLAY_STATE_MENU;
-        break;
-    default:
-        //if (currentBattleButton) (PLEASE GIT, DON'T ADD THIS LINE AT EACH MERGE : that's why i don't delete it and comment it instead)
-        //{
-            if (currentBattleButton)
+        if (currentBattleButton->GetKey() == event.key.keysym.sym)
+        {
+            std::cout << "Move activated: " << currentBattleButton->GetMove()->getName().c_str() << std::endl;
+        }
+        else
+        {
+            for (unsigned int i = 0; i < BattleButtons.size(); i++)
             {
-                if (currentBattleButton->GetKey() == event.key.keysym.sym)
+                if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
                 {
-                    std::cout << "Button Pressed: " << currentBattleButton->GetMove()->getName().c_str() << std::endl;
-                }
-                else
-                {
-                    for (unsigned int i = 0; i < BattleButtons.size(); i++)
+                    if (buttonIsUsable(BattleButtons[i]))
                     {
-                        if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
-                        {
-                            if (buttonIsUsable(BattleButtons[i]))
-                            {
-                                currentBattleButton = BattleButtons[i];
-                            }
-                        }
+                        currentBattleButton = BattleButtons[i];
                     }
                 }
             }
-            else
+        }
+    }
+    else
+    {
+        for (unsigned int i = 0; i < BattleButtons.size(); i++)
+        {
+            for (unsigned int i = 0; i < BattleButtons.size(); i++)
             {
-                for (unsigned int i = 0; i < BattleButtons.size(); i++)
+                if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
                 {
-                    for (unsigned int i = 0; i < BattleButtons.size(); i++)
-                    {
-                        if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
-                        {
-                            currentBattleButton = BattleButtons[i];
-                        }
-                    }
-                    for (unsigned int i = 0; i < BattleButtons.size(); i++)
-                    {
-                        if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
-                        {
-                            currentBattleButton = BattleButtons[i];
-                        }
-                    }
+                    currentBattleButton = BattleButtons[i];
                 }
-                break;
             }
-        //} (REALLY GIT IF YOU DO IT AGAIN...)
+            for (unsigned int i = 0; i < BattleButtons.size(); i++)
+            {
+                if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
+                {
+                    currentBattleButton = BattleButtons[i];
+                }
+            }
+        }
     }
 }
 

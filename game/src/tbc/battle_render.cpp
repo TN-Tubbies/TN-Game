@@ -34,13 +34,24 @@ void RenderBattle(Battle_System *battle)
 
 void BattleHandleKeyUp(Battle_System *battle, SDL_Event event, DisplayState *displayState)
 {
-    if (battle->currentPriorityList->size > 0)
-    {
-        std::cout << "Handling key up" << std::endl;
-        BattleCharacter *currentCharacter = GetCharacterFromList(battle->currentPriorityList, 1);
-        if (currentCharacter->IsFriendly()) {
-            currentCharacter->HandleKeyUp(event, displayState);
-            SetTargets(battle);
+    switch (event.key.keysym.sym) {
+    case SDLK_ESCAPE:
+        *displayState = DISPLAY_STATE_MENU;
+        break;
+    case SDLK_LEFT:
+    case SDLK_q:
+    case SDLK_RIGHT:
+    case SDLK_d:
+        ChangeMainTarget(battle, event);
+        break;
+    default:
+    if (battle->currentPriorityList->size > 0) {
+            std::cout << "Handling key up" << std::endl;
+            BattleCharacter *currentCharacter = GetCharacterFromList(battle->currentPriorityList, 1);
+            if (currentCharacter->IsFriendly()) {
+                currentCharacter->HandleKeyUp(event, displayState);
+                SetTargets(battle);
+            }
         }
     }
 }
@@ -171,3 +182,90 @@ void SetTargets(Battle_System *battle) {
         }
     }
 }
+
+int GetCharacterIndexFromParty(std::vector<BattleCharacter*> *party, BattleCharacter *character) {
+    for (int i = 0; i < party->size(); i++) {
+        if (party->at(i) == character) {
+            return i;
+        }
+    }
+    return 0;
+}
+
+BattleCharacter *GetCharacterFromDirection(Battle_System *battle, SDL_Event event) {
+    BattleCharacter *currentCharacter = GetCharacterFromList(battle->currentPriorityList, 1);
+    BattleCharacter *currentTarget = currentCharacter->GetLastTarget();
+
+    if (currentTarget && currentCharacter->GetCurrentBattleButton()) {
+        switch (event.key.keysym.sym) {
+            case SDLK_LEFT:
+            case SDLK_q:
+                switch (currentCharacter->GetCurrentBattleButton()->GetMove()->getMoveTarget()) {
+                    case MoveTargetCategory_OneAlly: {
+                        int index = GetCharacterIndexFromParty(battle->playableCharacters, currentTarget);
+                        if (index == 0) {
+                            return battle->playableCharacters->at(battle->playableCharacters->size() - 1);
+                        } else {
+                            return battle->playableCharacters->at(index - 1);
+                        }
+                        break;
+                    }
+                    case MoveTargetCategory_OneEnemy: {
+                        int index = GetCharacterIndexFromParty(battle->enemyCharacters, currentTarget);
+                        if (index == 0) {
+                            return battle->enemyCharacters->at(battle->enemyCharacters->size() - 1);
+                        } else {
+                            return battle->enemyCharacters->at(index - 1);
+                        }
+                        break;
+                    }
+                    default:
+                        return NULL;
+                        break;
+                }
+                break;
+            case SDLK_RIGHT:
+            case SDLK_d:
+                switch (currentCharacter->GetCurrentBattleButton()->GetMove()->getMoveTarget()) {
+                    case MoveTargetCategory_OneAlly: {
+                        int index = GetCharacterIndexFromParty(battle->playableCharacters, currentTarget);
+                        if (index == battle->playableCharacters->size() - 1) {
+                            return battle->playableCharacters->at(0);
+                        } else {
+                            return battle->playableCharacters->at(index + 1);
+                        }
+                        break;
+                    }
+                    case MoveTargetCategory_OneEnemy: {
+                        int index = GetCharacterIndexFromParty(battle->enemyCharacters, currentTarget);
+                        if (index == battle->enemyCharacters->size() - 1) {
+                            return battle->enemyCharacters->at(0);
+                        } else {
+                            return battle->enemyCharacters->at(index + 1);
+                        }
+                        break;
+                    }
+                    default:
+                        return NULL;
+                        break;
+                }
+                break;
+        }
+    } else {
+        return NULL;
+    }
+}
+
+void ChangeMainTarget(Battle_System *battle, SDL_Event event) {
+    std::cout << "Changing target triggered to: " << (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_q ? "left" : "right") << std::endl;
+
+    BattleCharacter *currentCharacter = GetCharacterFromList(battle->currentPriorityList, 1);
+    BattleCharacter *newTarget = GetCharacterFromDirection(battle, event);
+
+    if (newTarget) {
+        std::cout << "Changing target to :" << newTarget->GetName() << std::endl;
+        currentCharacter->GetLastTarget()->SetIsTarget(IsNotTarget);
+        newTarget->SetIsTarget(IsPrimaryTarget);
+        currentCharacter->SetLastTarget(newTarget);
+    }
+}    
