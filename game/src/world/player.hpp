@@ -12,8 +12,6 @@ class Player : public Entity
 {
 private:
     std::array<int, 2> move_notches;
-    int DisplayedX;
-    int DisplayedY;
     Map *CurrentMap;
 
 public:

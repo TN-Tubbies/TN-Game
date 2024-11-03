@@ -242,6 +242,11 @@ void Map::MoveMap(int delta_x, int delta_y)
 {
     TopLeftCoordinates[0] -= delta_x;
     TopLeftCoordinates[1] -= delta_y;
+
+    for (unsigned int i = 0; i < this->NPCs.size(); i++)
+    {
+        this->NPCs[i]->SlideDisplayedCoordinates(delta_x, delta_y);
+    }
 }
 
 // ------------------------------------------------------------------------------------------------

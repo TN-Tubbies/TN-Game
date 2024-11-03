@@ -25,6 +25,8 @@ protected:
     // X and Y coordinates are in tiles
     // speed is in pixels
     int x, y;
+    int DisplayedX;
+    int DisplayedY;
     bool IsWalking;
     int Speed;
     enum SpriteDirection direction;
@@ -51,6 +53,7 @@ public:
 
     void TeleportTo(int x, int y);
     void MoveTo(int x, int y);
+    void SlideDisplayedCoordinates(int delta_x, int delta_y);
 };
 
 #endif

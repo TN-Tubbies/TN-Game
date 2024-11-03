@@ -61,6 +61,8 @@ Entity::Entity(std::string file_name)
     this->name = npc_name;
     this->x = coordinates[0];
     this->y = coordinates[1];
+    this->DisplayedX = this->x * TILE_SIZE;
+    this->DisplayedY = this->y * TILE_SIZE;
     this->IsWalking = false;
     this->Speed = speed;
     this->direction = SpriteDirection_Down;
@@ -145,6 +147,8 @@ Entity::Entity(std::string _name, int x, int y, int speed, std::string sprite_pa
     this->name = _name;
     this->x = x;
     this->y = y;
+    this->DisplayedX = this->x * TILE_SIZE;
+    this->DisplayedY = this->y * TILE_SIZE;
     this->IsWalking = false;
     this->Speed = speed;
     this->direction = SpriteDirection_Down;
@@ -252,8 +256,8 @@ void Entity::Render()
     SDL_Rect src = this->SpriteRect[this->direction][this->CurrentSpriteIndex];
 
     SDL_Rect dst;
-    dst.x = this->x * TILE_SIZE;
-    dst.y = this->y * TILE_SIZE;
+    dst.x = this->DisplayedX;
+    dst.y = this->DisplayedY;
     dst.w = src.w;
     dst.h = src.h;
 
@@ -290,6 +294,12 @@ void Entity::MoveTo(int x, int y)
     }
 
     // FIXME: Implement the selection of the path
+}
+
+void Entity::SlideDisplayedCoordinates(int delta_x, int delta_y)
+{
+    this->DisplayedX -= delta_x;
+    this->DisplayedY -= delta_y;
 }
 
 // ------------------------------------------------------------------------------------------------
