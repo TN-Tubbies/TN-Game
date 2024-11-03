@@ -15,13 +15,17 @@ private:
     std::string FullText;
     std::vector<std::string> Lines;
     int currentLineIndex;
-    enum DialogShowType ShowType;
 
-    SDL_Texture *Box;
-    int BoxWidth, BoxHeight;
-    // TODO: add textable part data
+    SDL_Texture *SpeakerTexture;
+    SDL_Texture *BoxTexture;
+    SDL_Texture *TextTexture;
+    int x_box, y_box;
+    int box_width, box_height;
+    int x_speaker, y_speaker, speaker_size;
+    int x_text, y_text, text_width;
+
 public:
-    Dialog(std::string file_name, enum DialogBoxType boxType, enum DialogShowType showType);
+    Dialog();
 };
 
 #endif
