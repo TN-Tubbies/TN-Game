@@ -72,4 +72,11 @@ enum CharacterStat
     CharacterStat_Speed
 };
 
+enum IsTarget
+{
+    IsPrimaryTarget,
+    IsSecondaryTarget,
+    IsNotTarget
+};
+
 #endif

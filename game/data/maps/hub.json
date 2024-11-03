@@ -3,5 +3,6 @@
 	"height": 31,
 	"width": 31,
 	"music_path": "game/assets/audio/music/trial.wav",
-	"links": []
+	"links": [],
+	"NPCs": ["npc_test"]
 }

@@ -1,0 +1,7 @@
+{
+	"npc_name": "npc_test",
+	"sprite_sheet_type": 0,
+	"sprite_path": "game/assets/images/sprites/Conference_woman_32x32.bmp",
+	"coordinates": [5, 5],
+	"speed": 3
+}
