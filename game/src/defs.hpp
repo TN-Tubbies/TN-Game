@@ -15,4 +15,12 @@
 #define DEFAULT_POSITION_X 5
 #define DEFAULT_POSITION_Y 5
 
+enum DisplayState
+{
+    DISPLAY_STATE_MENU,
+    MAP,
+    BATTLE,
+    QUIT
+};
+
 #endif

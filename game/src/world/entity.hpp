@@ -37,7 +37,7 @@ protected:
 public:
     Entity();
     Entity(std::string file_name);
-    Entity(std::string _name, int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType);
+    Entity(std::string _name, int x, int y, int speed, std::string sprite_path, enum SpriteSheetType SheetType);
     ~Entity();
 
     std::string GetName() const { return name; }

@@ -1,6 +1,6 @@
 #include "player.hpp"
 
-Player::Player(int x, int y, int speed, std::string sprite_path, enum SpriteSheetTypes SheetType)
+Player::Player(int x, int y, int speed, std::string sprite_path, enum SpriteSheetType SheetType)
 {
     this->name = "Player";
     this->x = x;
@@ -13,7 +13,7 @@ Player::Player(int x, int y, int speed, std::string sprite_path, enum SpriteShee
 
     int ***sprite_sizes = NULL;
 
-    if (SheetType == SPRITE_SHEET_MAIN_CHARACTER)
+    if (SheetType == SpriteSheetType_MainCharacter)
     {
         int base_sprite_sizes[4][3][4] = {
             {{66, 0, 26, 44}, {386, 128, 26, 44}, {416, 126, 28, 44}},
@@ -74,7 +74,7 @@ Player::Player(int x, int y, int speed, std::string sprite_path, enum SpriteShee
     this->CurrentSpriteIndex = 0;
 
     // Freeing allocated memory
-    if (SheetType == SPRITE_SHEET_MAIN_CHARACTER)
+    if (SheetType == SpriteSheetType_MainCharacter)
     {
         for (int i = 0; i < 4; ++i)
         {
@@ -98,20 +98,6 @@ Player::Player(int x, int y, int speed, std::string sprite_path, enum SpriteShee
 
 Player::~Player()
 {
-    if (this->Sprites != nullptr)
-    {
-        SDL_DestroyTexture(this->Sprites);
-        this->Sprites = nullptr;
-    }
-
-    if (this->SpriteRect != nullptr)
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            free(this->SpriteRect[i]);
-        }
-        free(this->SpriteRect);
-    }
 }
 
 // ------------------------------------------------------------------------------------------------
