@@ -89,8 +89,13 @@ void RunTurn(Battle_System *CurrentBattle)
 
         if (currentCharacter->IsFriendly())
         {
-            // User turn code here
-            // TODO: Player choose action code
+            if (currentCharacter->GetLaunchMove()) {
+                currentCharacter->SetLaunchMove(false);
+                std::cout << "BACKEND : Move activated: " << currentCharacter->GetCurrentBattleButton()->GetMove()->getName().c_str() << ", target = " << currentCharacter->GetLastTarget()->GetName() << std::endl;
+                currentCharacter->AddToSkillBar(currentCharacter->GetCurrentBattleButton()->GetMove()->getCost());
+                std::cout << "SkillBar: " << currentCharacter->GetSkillBar() << std::endl;
+                //TODO: Implement move launch
+            }
         }
         else
         {

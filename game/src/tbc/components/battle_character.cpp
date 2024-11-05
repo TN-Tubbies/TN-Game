@@ -342,7 +342,7 @@ void BattleCharacter::RemoveStatus(std::string statusName)
     }
 }
 
-void BattleCharacter::AddToSkillBar(int adding) { SkillBar += adding; }
+void BattleCharacter::AddToSkillBar(int adding) { SkillBar -= adding; }
 void BattleCharacter::AddToUltimateBar(int adding) { UltimateBar += adding; }
 
 // ------------------------------------------------------------------------------------------------

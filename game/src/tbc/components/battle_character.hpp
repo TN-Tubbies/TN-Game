@@ -121,6 +121,8 @@ public:
     IsTarget GetIsTarget() { return isTarget; }
     BattleSprite *GetSprite() { return battle_sprite; }
     BattleButton *GetCurrentBattleButton() { return currentBattleButton; }
+    bool GetLaunchMove() { return launchMove; }
+    int GetSkillBar() { return SkillBar; }
 
     // Setters ------------------------------------------------------------------------------------
     void SetName(std::string name) { this->name = name; }
@@ -141,6 +143,7 @@ public:
     void SetLastDamageReceived(int LastDamageReceived) { this->LastDamageReceived = LastDamageReceived; }
     void SetLastTarget(BattleCharacter *LastTarget) { this->LastTarget = LastTarget; }
     void SetIsTarget(IsTarget isTarget) { this->isTarget = isTarget; }
+    void SetLaunchMove(bool launchMove) { this->launchMove = launchMove; }
 
     // Methods ------------------------------------------------------------------------------------
     void TakeDamage(BattleCharacter *launcher, int damage);
