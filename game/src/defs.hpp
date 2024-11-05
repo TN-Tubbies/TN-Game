@@ -15,6 +15,8 @@
 #define DEFAULT_POSITION_X 5
 #define DEFAULT_POSITION_Y 5
 
+#define DIALOG_BOX_BORDER 10
+
 enum DisplayState
 {
     DISPLAY_STATE_MENU,

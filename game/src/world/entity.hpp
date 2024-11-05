@@ -14,12 +14,16 @@
 #include "../lib/json.hpp"
 
 #include "../static/renderer.hpp"
+#include "dialogs/dialog.hpp"
 #include "world_enums.hpp"
 
 // ------------------------------------------------------------------------------------------------
 
 class Entity
 {
+private:
+    Dialog *NPCDialog;
+
 protected:
     std::string name;
     // X and Y coordinates are in tiles

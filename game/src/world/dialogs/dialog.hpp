@@ -1,20 +1,24 @@
 #ifndef DIALOG_HPP
 #define DIALOG_HPP
 
+#include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "../lib/json.hpp"
+
+#include "../../static/ttf.hpp"
+#include "dialog_line.hpp"
 #include "../world_enums.hpp"
 
 class Dialog
 {
 private:
-    std::string FullText;
-    std::vector<std::string> Lines;
-    int currentLineIndex;
+    std::vector<DialogLine> lines;
 
     SDL_Texture *SpeakerTexture;
     SDL_Texture *BoxTexture;
@@ -25,7 +29,8 @@ private:
     int x_text, y_text, text_width;
 
 public:
-    Dialog();
+    Dialog(std::string file_name);
+    ~Dialog();
 };
 
 #endif

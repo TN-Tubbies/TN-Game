@@ -15,6 +15,7 @@ Entity::Entity()
     this->SpriteRect = nullptr;
     this->CurrentSpriteIndex = 0;
     this->direction = SpriteDirection_Down;
+    this->NPCDialog = nullptr;
 }
 Entity::Entity(std::string file_name)
 {
@@ -66,6 +67,7 @@ Entity::Entity(std::string file_name)
     this->IsWalking = false;
     this->Speed = speed;
     this->direction = SpriteDirection_Down;
+    this->NPCDialog = new Dialog(file_name);
 
     // Generate the SDL_Rect sizes
     int ***sprite_sizes = NULL;
@@ -152,6 +154,7 @@ Entity::Entity(std::string _name, int x, int y, int speed, std::string sprite_pa
     this->IsWalking = false;
     this->Speed = speed;
     this->direction = SpriteDirection_Down;
+    this->NPCDialog = NULL;
 
     // Selecting what are the sprite sizes --------------------------------------------------------
 
@@ -246,6 +249,11 @@ Entity::~Entity()
             free(this->SpriteRect[i]);
         }
         free(this->SpriteRect);
+    }
+
+    if (this->NPCDialog != nullptr)
+    {
+        delete this->NPCDialog;
     }
 }
 

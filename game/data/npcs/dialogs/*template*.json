@@ -1,0 +1,12 @@
+{
+	"Text" : "<full text>",
+	
+}
+
+    SDL_Texture *SpeakerTexture;
+    SDL_Texture *BoxTexture;
+    SDL_Texture *TextTexture;
+    int x_box, y_box;
+    int box_width, box_height;
+    int x_speaker, y_speaker, speaker_size;
+    int x_text, y_text, text_width;
