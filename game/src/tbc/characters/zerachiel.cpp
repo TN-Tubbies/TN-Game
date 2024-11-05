@@ -82,7 +82,7 @@ BattleMoveActive *GetZerachielMove2(void)
         "Infaillible",
         "Consomme 20% de la BS.\nNettoie ses lunettes en plein combat, retirant la majorité des malus qui l'incombent et augmentant de M% son attaque.",
         BattleElement_Light,
-        MoveTargetCategory_OneAlly,
+        MoveTargetCategory_Self,
         ZerachielMove2Effect,
         20,
         false,
@@ -255,8 +255,8 @@ ZerachielUnit::ZerachielUnit(bool isFriendly)
     std::vector<BattleStatus *> affectedStatus;
     this->AffectedStatus = affectedStatus;
 
-    this->SkillBar = 100;
-    this->UltimateBar = 100;
+    this->SkillBar = 0;
+    this->UltimateBar = 0;
 
     GeneralHudInit("game/assets/images/ui/faded_bg_light_player.png");
     this->battle_sprite = new BattleSprite("game/assets/images/characters/zerachiel/battle_sprite.png", 0, 0);

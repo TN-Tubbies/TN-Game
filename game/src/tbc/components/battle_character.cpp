@@ -593,7 +593,7 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
     {
         if (currentBattleButton->GetKey() == event.key.keysym.sym)
         {
-            std::cout << "Move activated: " << currentBattleButton->GetMove()->getName().c_str() << std::endl;
+            std::cout << "Move activated: " << currentBattleButton->GetMove()->getName().c_str() << ", target = " << LastTarget->GetName() << std::endl;
         }
         else
         {
@@ -613,17 +613,9 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
     {
         for (unsigned int i = 0; i < BattleButtons.size(); i++)
         {
-            for (unsigned int i = 0; i < BattleButtons.size(); i++)
+            if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
             {
-                if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
-                {
-                    currentBattleButton = BattleButtons[i];
-                }
-            }
-            for (unsigned int i = 0; i < BattleButtons.size(); i++)
-            {
-                if (BattleButtons[i]->GetKey() == event.key.keysym.sym)
-                {
+                if (buttonIsUsable(BattleButtons[i])) {
                     currentBattleButton = BattleButtons[i];
                 }
             }

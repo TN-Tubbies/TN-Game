@@ -80,6 +80,10 @@ void selectTargetwithMouse(Battle_System *battle, SDL_Event event) {
 
     BattleCharacter *currentCharacter = GetCharacterFromList(battle->currentPriorityList, 1);
     
+    if (currentCharacter->GetCurrentBattleButton() == NULL) {
+        return;
+    }
+    
     switch (currentCharacter->GetCurrentBattleButton()->GetMove()->getMoveTarget()) {
         case MoveTargetCategory_OneAlly:
             for (BattleCharacter *character : *battle->playableCharacters) {
