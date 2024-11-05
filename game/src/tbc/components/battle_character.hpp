@@ -76,6 +76,7 @@ protected:
     BattleButton *currentBattleButton;
     BattleSprite *battle_sprite;
     IsTarget isTarget;
+    bool launchMove;
 
     // Methods
     void AddToHP(int quantity);

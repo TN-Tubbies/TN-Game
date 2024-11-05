@@ -7,6 +7,7 @@ BattleCharacter::BattleCharacter()
     this->currentBattleButton = NULL;
     this->isTarget = IsNotTarget;
     this->LastTarget = NULL;
+    this->launchMove = false;
 }
 
 BattleCharacter::~BattleCharacter()
@@ -594,6 +595,7 @@ void BattleCharacter::HandleKeyUp(SDL_Event event, DisplayState *displayState)
         if (currentBattleButton->GetKey() == event.key.keysym.sym)
         {
             std::cout << "Move activated: " << currentBattleButton->GetMove()->getName().c_str() << ", target = " << LastTarget->GetName() << std::endl;
+            launchMove = true;
         }
         else
         {
@@ -657,7 +659,8 @@ void BattleCharacter::HandleMouseClick(SDL_Event event)
                 {
                     if (buttonIsUsable(BattleButtons[i]))
                     {
-                        std::cout << "Button Pressed: " << BattleButtons[i]->GetMove()->getName().c_str() << std::endl;
+                        std::cout << "Button Pressed: " << BattleButtons[i]->GetMove()->getName().c_str() << ", target : " << LastTarget->GetName() << std::endl;
+                        launchMove = true;
                     }
                 }
         }
